@@ -1,0 +1,1188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rei Icons — Material Icon Studio</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=IBM+Plex+Mono:wght@400;500&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f4f2ee;
+    --surface: #ffffff;
+    --surface2: #eceae5;
+    --border: #d8d4cc;
+    --text: #1a1814;
+    --muted: #8a867d;
+    --accent: #c8532a;
+    --accent2: #2a6fc8;
+    --ink: #1a1814;
+    --radius-ui: 12px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Noise texture overlay */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    opacity: 0.6;
+    z-index: 9999;
+  }
+
+  /* Header */
+  header {
+    padding: 18px 36px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+    position: relative;
+    z-index: 10;
+  }
+
+  .brand {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+  }
+
+  .brand-name {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 20px;
+    letter-spacing: -0.02em;
+    color: var(--text);
+  }
+
+  .brand-name span {
+    color: var(--accent);
+  }
+
+  .brand-tagline {
+    font-size: 12px;
+    color: var(--muted);
+    font-style: italic;
+  }
+
+  .header-badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 5px 12px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+  }
+
+  .header-badge .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: #4caf50;
+  }
+
+  /* Layout */
+  .workspace {
+    display: grid;
+    grid-template-columns: 1fr 360px;
+    flex: 1;
+    min-height: calc(100vh - 61px);
+  }
+
+  /* Preview (LEFT) */
+  .preview-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 48px 40px;
+    gap: 32px;
+    position: relative;
+    background: var(--bg);
+    overflow: hidden;
+  }
+
+  /* Subtle radial bg effect */
+  .preview-area::before {
+    content: '';
+    position: absolute;
+    width: 480px; height: 480px;
+    background: radial-gradient(circle, rgba(200,83,42,0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  #iconCanvas {
+    position: relative;
+    z-index: 1;
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    cursor: pointer;
+  }
+
+  #iconCanvas:hover { transform: scale(1.04) rotate(-1deg); }
+  #iconCanvas:active { transform: scale(0.97); }
+
+  .icon-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.25s ease;
+    position: relative;
+  }
+
+  .icon-wrapper .material-icons-round {
+    line-height: 1;
+    user-select: none;
+    transition: all 0.25s ease;
+  }
+
+  /* Error state */
+  .icon-not-found {
+    position: absolute;
+    bottom: -28px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 11px;
+    color: var(--accent);
+    white-space: nowrap;
+    font-family: 'IBM Plex Mono', monospace;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+  .icon-not-found.show { opacity: 1; }
+
+  /* Size mini previews */
+  .size-previews {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: flex-end;
+    gap: 16px;
+    padding: 16px 20px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-ui);
+  }
+
+  .size-preview-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    opacity: 0.5;
+    transition: opacity 0.2s;
+    cursor: pointer;
+  }
+
+  .size-preview-item:hover { opacity: 1; }
+
+  .size-tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    color: var(--muted);
+  }
+
+  /* Info strip */
+  .info-strip {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    gap: 0;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-ui);
+    overflow: hidden;
+    background: var(--surface);
+  }
+
+  .info-cell {
+    padding: 10px 16px;
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .info-cell:last-child { border-right: none; }
+
+  .info-cell-label {
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    font-family: 'IBM Plex Mono', monospace;
+  }
+
+  .info-cell-val {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  /* Controls panel (RIGHT) */
+  .controls {
+    background: var(--surface);
+    border-left: 1px solid var(--border);
+    overflow-y: auto;
+    padding: 24px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+  }
+
+  .controls::-webkit-scrollbar { width: 3px; }
+  .controls::-webkit-scrollbar-track { background: transparent; }
+  .controls::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+  .ctrl-section {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .section-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+
+  /* Divider */
+  .ctrl-divider {
+    height: 1px;
+    background: var(--border);
+    margin: 2px 0;
+  }
+
+  /* Icon input */
+  .input-wrap {
+    position: relative;
+  }
+
+  .input-wrap .material-icons-round {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 16px;
+    color: var(--muted);
+    pointer-events: none;
+  }
+
+  .icon-input {
+    width: 100%;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-ui);
+    padding: 11px 12px 11px 38px;
+    color: var(--text);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  .icon-input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(200,83,42,0.1);
+  }
+
+  .icon-input::placeholder { color: var(--muted); }
+
+  /* Quick suggestions */
+  .suggestions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+  }
+
+  .chip {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 10px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    font-size: 11px;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .chip .material-icons-round { font-size: 12px; }
+
+  .chip:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(200,83,42,0.05);
+  }
+
+  /* Sliders */
+  .slider-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+  }
+
+  .slider-label {
+    font-size: 12px;
+    color: var(--text);
+  }
+
+  .slider-val {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    background: rgba(200,83,42,0.08);
+    padding: 3px 8px;
+    border-radius: 6px;
+    min-width: 48px;
+    text-align: center;
+  }
+
+  input[type=range] {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 3px;
+    background: var(--border);
+    border-radius: 3px;
+    outline: none;
+    cursor: pointer;
+  }
+
+  input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 15px; height: 15px;
+    background: var(--accent);
+    border-radius: 50%;
+    transition: transform 0.15s;
+    box-shadow: 0 2px 8px rgba(200,83,42,0.3);
+  }
+
+  input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.25); }
+
+  /* BG Tabs */
+  .tab-row {
+    display: flex;
+    background: var(--surface2);
+    border-radius: 8px;
+    padding: 3px;
+    gap: 2px;
+  }
+
+  .tab-btn {
+    flex: 1;
+    padding: 6px;
+    text-align: center;
+    font-size: 11px;
+    color: var(--muted);
+    cursor: pointer;
+    border-radius: 6px;
+    transition: all 0.15s;
+    font-family: 'DM Sans', sans-serif;
+    border: none;
+    background: none;
+  }
+
+  .tab-btn.active {
+    background: var(--surface);
+    color: var(--text);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+    font-weight: 500;
+  }
+
+  /* Color pickers */
+  .color-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .color-btn {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-ui);
+    padding: 10px;
+    cursor: pointer;
+    transition: border-color 0.15s;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .color-btn:hover { border-color: var(--accent); }
+
+  .color-btn-label {
+    font-size: 10px;
+    color: var(--muted);
+  }
+
+  .color-btn-preview {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+
+  .color-swatch {
+    width: 24px; height: 24px;
+    border-radius: 6px;
+    border: 1px solid rgba(0,0,0,0.1);
+    flex-shrink: 0;
+  }
+
+  .color-hex {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--text);
+  }
+
+  input[type=color] { position: absolute; opacity: 0; width: 0; height: 0; }
+
+  /* Gradient presets */
+  .grad-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 6px;
+  }
+
+  .grad-swatch {
+    height: 32px;
+    border-radius: 8px;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all 0.15s;
+  }
+
+  .grad-swatch:hover, .grad-swatch.active {
+    border-color: var(--text);
+    transform: scale(1.08);
+  }
+
+  /* Radius buttons */
+  .radius-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 6px;
+  }
+
+  .radius-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    padding: 8px 4px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 10px;
+    color: var(--muted);
+    font-family: 'DM Sans', sans-serif;
+    transition: all 0.15s;
+  }
+
+  .radius-btn .rbox {
+    width: 22px; height: 22px;
+    background: var(--muted);
+    opacity: 0.4;
+  }
+
+  .radius-btn:hover, .radius-btn.active {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(200,83,42,0.05);
+  }
+
+  .radius-btn.active .rbox { opacity: 1; background: var(--accent); }
+
+  /* Toggles */
+  .toggle-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 9px 12px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-ui);
+  }
+
+  .toggle-row-label { font-size: 12px; color: var(--text); }
+
+  .toggle {
+    width: 36px; height: 20px;
+    background: var(--border);
+    border-radius: 20px;
+    position: relative;
+    cursor: pointer;
+    transition: background 0.2s;
+    flex-shrink: 0;
+  }
+
+  .toggle.on { background: var(--accent); }
+
+  .toggle::after {
+    content: '';
+    position: absolute;
+    width: 14px; height: 14px;
+    background: white;
+    border-radius: 50%;
+    top: 3px; left: 3px;
+    transition: transform 0.2s;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  }
+
+  .toggle.on::after { transform: translateX(16px); }
+
+  /* Export */
+  .export-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 6px;
+  }
+
+  .btn {
+    padding: 11px 8px;
+    border-radius: var(--radius-ui);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    transition: all 0.15s;
+  }
+
+  .btn .material-icons-round { font-size: 14px; }
+
+  .btn-primary {
+    background: var(--accent);
+    color: white;
+  }
+
+  .btn-primary:hover {
+    background: #b0421d;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 16px rgba(200,83,42,0.35);
+  }
+
+  .btn-primary:active { transform: translateY(0); }
+
+  .btn-primary.loading {
+    opacity: 0.7;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  .btn-secondary {
+    background: var(--surface2);
+    color: var(--text);
+    border: 1px solid var(--border);
+  }
+
+  .btn-secondary:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(200,83,42,0.05);
+  }
+
+  /* Toast */
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(12px);
+    background: var(--text);
+    color: var(--bg);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    padding: 9px 18px;
+    border-radius: 20px;
+    opacity: 0;
+    transition: all 0.25s;
+    z-index: 10000;
+    pointer-events: none;
+    white-space: nowrap;
+  }
+
+  .toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  .toast.error { background: var(--accent); color: white; }
+
+  @media (max-width: 860px) {
+    .workspace {
+      grid-template-columns: 1fr;
+      grid-template-rows: auto auto;
+    }
+    .preview-area { min-height: 380px; }
+    .controls { border-left: none; border-top: 1px solid var(--border); }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">
+    <div class="brand-name">Rei<span>Icons</span></div>
+    <div class="brand-tagline">craft material icons, export anywhere</div>
+  </div>
+  <div class="header-badge">
+    <div class="dot"></div>
+    Material Icons Round
+  </div>
+</header>
+
+<div class="workspace">
+
+  <!-- LEFT: Preview -->
+  <div class="preview-area">
+
+    <div id="iconCanvas">
+      <div class="icon-wrapper" id="iconWrapper">
+        <span class="material-icons-round" id="mainIcon">auto_awesome</span>
+      </div>
+      <div class="icon-not-found" id="iconError">icon not found</div>
+    </div>
+
+    <div class="size-previews" id="sizePreviews"></div>
+
+    <div class="info-strip">
+      <div class="info-cell">
+        <div class="info-cell-label">Icon</div>
+        <div class="info-cell-val" id="infoName">auto_awesome</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-cell-label">Size</div>
+        <div class="info-cell-val" id="infoSize">64px</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-cell-label">Canvas</div>
+        <div class="info-cell-val" id="infoCanvas">112×112</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-cell-label">Radius</div>
+        <div class="info-cell-val" id="infoRadius">22%</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- RIGHT: Controls -->
+  <div class="controls">
+
+    <!-- Icon name -->
+    <div class="ctrl-section">
+      <div class="section-label">Icon Name</div>
+      <div class="input-wrap">
+        <span class="material-icons-round">tag</span>
+        <input type="text" class="icon-input" id="iconSearch"
+               value="auto_awesome" placeholder="home, star, bolt..." autocomplete="off">
+      </div>
+      <div class="suggestions" id="suggestions">
+        <div class="chip" data-icon="home"><span class="material-icons-round">home</span>home</div>
+        <div class="chip" data-icon="auto_awesome"><span class="material-icons-round">auto_awesome</span>auto_awesome</div>
+        <div class="chip" data-icon="favorite"><span class="material-icons-round">favorite</span>favorite</div>
+        <div class="chip" data-icon="bolt"><span class="material-icons-round">bolt</span>bolt</div>
+        <div class="chip" data-icon="rocket_launch"><span class="material-icons-round">rocket_launch</span>rocket_launch</div>
+        <div class="chip" data-icon="diamond"><span class="material-icons-round">diamond</span>diamond</div>
+        <div class="chip" data-icon="palette"><span class="material-icons-round">palette</span>palette</div>
+        <div class="chip" data-icon="cloud"><span class="material-icons-round">cloud</span>cloud</div>
+        <div class="chip" data-icon="settings"><span class="material-icons-round">settings</span>settings</div>
+        <div class="chip" data-icon="notifications"><span class="material-icons-round">notifications</span>notif</div>
+      </div>
+    </div>
+
+    <div class="ctrl-divider"></div>
+
+    <!-- Size -->
+    <div class="ctrl-section">
+      <div class="section-label">Icon Size</div>
+      <div class="slider-row">
+        <span class="slider-label">Size</span>
+        <span class="slider-val" id="sizeVal">64px</span>
+      </div>
+      <input type="range" id="iconSize" min="16" max="128" value="64" step="4">
+    </div>
+
+    <!-- Padding -->
+    <div class="ctrl-section">
+      <div class="section-label">Padding</div>
+      <div class="slider-row">
+        <span class="slider-label">Canvas padding</span>
+        <span class="slider-val" id="paddingVal">24px</span>
+      </div>
+      <input type="range" id="iconPadding" min="0" max="64" value="24" step="4">
+    </div>
+
+    <div class="ctrl-divider"></div>
+
+    <!-- Background -->
+    <div class="ctrl-section">
+      <div class="section-label">Background</div>
+      <div class="tab-row" id="bgTabs">
+        <button class="tab-btn active" data-type="solid">Solid</button>
+        <button class="tab-btn" data-type="gradient">Gradient</button>
+        <button class="tab-btn" data-type="transparent">None</button>
+      </div>
+
+      <div id="solidPanel">
+        <div class="color-row">
+          <div class="color-btn" id="bgColorBtn" onclick="document.getElementById('bgPicker').click()">
+            <div class="color-btn-label">Background</div>
+            <div class="color-btn-preview">
+              <div class="color-swatch" id="bgSwatch" style="background:#c8532a"></div>
+              <span class="color-hex" id="bgHex">#c8532a</span>
+            </div>
+          </div>
+          <div class="color-btn" onclick="document.getElementById('iconPicker').click()">
+            <div class="color-btn-label">Icon</div>
+            <div class="color-btn-preview">
+              <div class="color-swatch" id="iconSwatch" style="background:#ffffff"></div>
+              <span class="color-hex" id="iconHex">#ffffff</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="gradientPanel" style="display:none">
+        <div class="grad-grid" id="gradGrid">
+          <div class="grad-swatch active" data-g="linear-gradient(135deg,#c8532a,#f0a06e)" style="background:linear-gradient(135deg,#c8532a,#f0a06e)"></div>
+          <div class="grad-swatch" data-g="linear-gradient(135deg,#2a6fc8,#6eadf0)" style="background:linear-gradient(135deg,#2a6fc8,#6eadf0)"></div>
+          <div class="grad-swatch" data-g="linear-gradient(135deg,#7c6af7,#f06e6e)" style="background:linear-gradient(135deg,#7c6af7,#f06e6e)"></div>
+          <div class="grad-swatch" data-g="linear-gradient(135deg,#1a1814,#4a4540)" style="background:linear-gradient(135deg,#1a1814,#4a4540)"></div>
+          <div class="grad-swatch" data-g="linear-gradient(135deg,#4ade9a,#2196f3)" style="background:linear-gradient(135deg,#4ade9a,#2196f3)"></div>
+          <div class="grad-swatch" data-g="linear-gradient(135deg,#ff6eb4,#ff9f4a)" style="background:linear-gradient(135deg,#ff6eb4,#ff9f4a)"></div>
+          <div class="grad-swatch" data-g="linear-gradient(135deg,#00c9ff,#92fe9d)" style="background:linear-gradient(135deg,#00c9ff,#92fe9d)"></div>
+          <div class="grad-swatch" data-g="linear-gradient(135deg,#fc4a1a,#f7b733)" style="background:linear-gradient(135deg,#fc4a1a,#f7b733)"></div>
+          <div class="grad-swatch" data-g="linear-gradient(135deg,#a8edea,#fed6e3)" style="background:linear-gradient(135deg,#a8edea,#fed6e3)"></div>
+          <div class="grad-swatch" data-g="linear-gradient(135deg,#0d1117,#2d2d3a)" style="background:linear-gradient(135deg,#0d1117,#2d2d3a)"></div>
+        </div>
+        <div style="margin-top:8px">
+          <div class="color-btn" onclick="document.getElementById('iconPicker').click()" style="max-width:140px">
+            <div class="color-btn-label">Icon color</div>
+            <div class="color-btn-preview">
+              <div class="color-swatch" id="iconSwatchGrad" style="background:#ffffff"></div>
+              <span class="color-hex" id="iconHexGrad">#ffffff</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ctrl-divider"></div>
+
+    <!-- Radius -->
+    <div class="ctrl-section">
+      <div class="section-label">Corner Radius</div>
+      <div class="radius-grid" id="radiusGrid">
+        <button class="radius-btn" data-r="0%">
+          <div class="rbox" style="border-radius:0"></div>None
+        </button>
+        <button class="radius-btn" data-r="10%">
+          <div class="rbox" style="border-radius:10%"></div>Small
+        </button>
+        <button class="radius-btn active" data-r="22%">
+          <div class="rbox" style="border-radius:22%"></div>Med
+        </button>
+        <button class="radius-btn" data-r="36%">
+          <div class="rbox" style="border-radius:36%"></div>Large
+        </button>
+        <button class="radius-btn" data-r="50%">
+          <div class="rbox" style="border-radius:50%"></div>Circle
+        </button>
+      </div>
+    </div>
+
+    <div class="ctrl-divider"></div>
+
+    <!-- Effects -->
+    <div class="ctrl-section">
+      <div class="section-label">Effects</div>
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <div class="toggle-row">
+          <span class="toggle-row-label">Drop shadow</span>
+          <div class="toggle on" id="shadowToggle"></div>
+        </div>
+        <div class="toggle-row">
+          <span class="toggle-row-label">Inner border</span>
+          <div class="toggle" id="borderToggle"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ctrl-divider"></div>
+
+    <!-- Export -->
+    <div class="ctrl-section">
+      <div class="section-label">Export</div>
+      <div class="export-grid">
+        <button class="btn btn-primary" id="pngBtn" onclick="downloadPNG()">
+          <span class="material-icons-round">download</span> PNG
+        </button>
+        <button class="btn btn-secondary" onclick="copyCSS()">
+          <span class="material-icons-round">code</span> CSS
+        </button>
+        <button class="btn btn-secondary" onclick="copySVG()">
+          <span class="material-icons-round">data_object</span> SVG
+        </button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Hidden inputs -->
+<input type="color" id="bgPicker" value="#c8532a">
+<input type="color" id="iconPicker" value="#ffffff">
+
+<div class="toast" id="toast"></div>
+
+<script>
+const state = {
+  icon: 'auto_awesome',
+  size: 64,
+  padding: 24,
+  bgType: 'solid',
+  bgColor: '#c8532a',
+  bgGradient: 'linear-gradient(135deg,#c8532a,#f0a06e)',
+  iconColor: '#ffffff',
+  radius: '22%',
+  shadow: true,
+  border: false,
+};
+
+function cs() { return state.size + state.padding * 2; }
+
+function updatePreview() {
+  const wrapper = document.getElementById('iconWrapper');
+  const icon = document.getElementById('mainIcon');
+  const size = cs();
+
+  wrapper.style.width = size + 'px';
+  wrapper.style.height = size + 'px';
+  icon.style.fontSize = state.size + 'px';
+  icon.style.color = state.iconColor;
+  icon.textContent = state.icon;
+
+  // Background
+  if (state.bgType === 'solid') wrapper.style.background = state.bgColor;
+  else if (state.bgType === 'gradient') wrapper.style.background = state.bgGradient;
+  else wrapper.style.background = 'rgba(0,0,0,0.04)';
+
+  // Radius
+  wrapper.style.borderRadius = state.radius;
+
+  // Shadow
+  if (state.shadow && state.bgType !== 'transparent') {
+    wrapper.style.boxShadow = '0 16px 48px rgba(0,0,0,0.18), 0 4px 16px rgba(0,0,0,0.12)';
+  } else {
+    wrapper.style.boxShadow = 'none';
+  }
+
+  // Border
+  wrapper.style.outline = state.border ? '1.5px solid rgba(255,255,255,0.25)' : 'none';
+  wrapper.style.outlineOffset = '-1.5px';
+
+  // Info
+  document.getElementById('infoName').textContent = state.icon;
+  document.getElementById('infoSize').textContent = state.size + 'px';
+  document.getElementById('infoCanvas').textContent = `${size}×${size}`;
+  document.getElementById('infoRadius').textContent = state.radius;
+
+  renderMiniPreviews();
+}
+
+function renderMiniPreviews() {
+  const c = document.getElementById('sizePreviews');
+  const ratio = state.size > 0 ? state.padding / state.size : 0.375;
+  const sizes = [16, 24, 32, 48];
+  c.innerHTML = sizes.map(s => {
+    const pad = Math.round(s * ratio);
+    const csize = s + pad * 2;
+    let bg = '';
+    if (state.bgType === 'solid') bg = `background:${state.bgColor};`;
+    else if (state.bgType === 'gradient') bg = `background:${state.bgGradient};`;
+    else bg = 'background:rgba(0,0,0,0.06);';
+    return `<div class="size-preview-item">
+      <div style="width:${csize}px;height:${csize}px;${bg}border-radius:${state.radius};display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+        <span class="material-icons-round" style="font-size:${s}px;color:${state.iconColor};line-height:1">${state.icon}</span>
+      </div>
+      <span class="size-tag">${s}px</span>
+    </div>`;
+  }).join('');
+}
+
+// Icon search
+let debounce;
+document.getElementById('iconSearch').addEventListener('input', e => {
+  clearTimeout(debounce);
+  debounce = setTimeout(() => {
+    const val = e.target.value.trim().toLowerCase().replace(/\s+/g, '_');
+    if (val) { state.icon = val; updatePreview(); }
+  }, 250);
+});
+
+// Chips
+document.querySelectorAll('.chip').forEach(c => {
+  c.addEventListener('click', () => {
+    state.icon = c.dataset.icon;
+    document.getElementById('iconSearch').value = state.icon;
+    updatePreview();
+  });
+});
+
+// Sliders
+document.getElementById('iconSize').addEventListener('input', e => {
+  state.size = +e.target.value;
+  document.getElementById('sizeVal').textContent = state.size + 'px';
+  updatePreview();
+});
+document.getElementById('iconPadding').addEventListener('input', e => {
+  state.padding = +e.target.value;
+  document.getElementById('paddingVal').textContent = state.padding + 'px';
+  updatePreview();
+});
+
+// BG Tabs
+document.querySelectorAll('#bgTabs .tab-btn').forEach(t => {
+  t.addEventListener('click', () => {
+    document.querySelectorAll('#bgTabs .tab-btn').forEach(x => x.classList.remove('active'));
+    t.classList.add('active');
+    state.bgType = t.dataset.type;
+    document.getElementById('solidPanel').style.display = state.bgType === 'solid' ? '' : 'none';
+    document.getElementById('gradientPanel').style.display = state.bgType === 'gradient' ? '' : 'none';
+    updatePreview();
+  });
+});
+
+// Color pickers
+const bgPicker = document.getElementById('bgPicker');
+bgPicker.addEventListener('input', e => {
+  state.bgColor = e.target.value;
+  document.getElementById('bgSwatch').style.background = state.bgColor;
+  document.getElementById('bgHex').textContent = state.bgColor;
+  updatePreview();
+});
+
+const iconPicker = document.getElementById('iconPicker');
+iconPicker.addEventListener('input', e => {
+  state.iconColor = e.target.value;
+  ['iconSwatch','iconSwatchGrad'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.style.background = state.iconColor;
+  });
+  ['iconHex','iconHexGrad'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = state.iconColor;
+  });
+  updatePreview();
+});
+
+// Gradient swatches
+document.querySelectorAll('.grad-swatch').forEach(s => {
+  s.addEventListener('click', () => {
+    document.querySelectorAll('.grad-swatch').forEach(x => x.classList.remove('active'));
+    s.classList.add('active');
+    state.bgGradient = s.dataset.g;
+    updatePreview();
+  });
+});
+
+// Radius buttons
+document.querySelectorAll('#radiusGrid .radius-btn').forEach(b => {
+  b.addEventListener('click', () => {
+    document.querySelectorAll('#radiusGrid .radius-btn').forEach(x => x.classList.remove('active'));
+    b.classList.add('active');
+    state.radius = b.dataset.r;
+    updatePreview();
+  });
+});
+
+// Toggles
+document.getElementById('shadowToggle').addEventListener('click', function() {
+  state.shadow = !state.shadow;
+  this.classList.toggle('on', state.shadow);
+  updatePreview();
+});
+document.getElementById('borderToggle').addEventListener('click', function() {
+  state.border = !state.border;
+  this.classList.toggle('on', state.border);
+  updatePreview();
+});
+
+// Toast
+function showToast(msg, isError) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast' + (isError ? ' error' : '');
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2400);
+}
+
+// ─── PNG Download ──────────────────────────────────────────
+// Renders icon using the already-loaded Material Icons Round font — no external requests,
+// works for every valid icon name.
+async function downloadPNG() {
+  const btn = document.getElementById('pngBtn');
+  btn.classList.add('loading');
+  btn.innerHTML = '<span class="material-icons-round">hourglass_top</span> …';
+
+  try {
+    const size = cs();
+    const scale = 3;
+    const canvas = document.createElement('canvas');
+    canvas.width  = size * scale;
+    canvas.height = size * scale;
+    const ctx = canvas.getContext('2d');
+    ctx.scale(scale, scale);
+
+    const radiusPx = parseFloat(state.radius) / 100 * size;
+
+    function clipRounded() {
+      ctx.beginPath();
+      ctx.roundRect(0, 0, size, size, radiusPx);
+      ctx.closePath();
+      ctx.clip();
+    }
+
+    // ── 1. Background ──
+    if (state.bgType !== 'transparent') {
+      ctx.save();
+      clipRounded();
+      if (state.bgType === 'solid') {
+        ctx.fillStyle = state.bgColor;
+        ctx.fill();
+      } else {
+        const [c1, c2] = extractGradColors(state.bgGradient);
+        const grad = ctx.createLinearGradient(0, 0, size, size);
+        grad.addColorStop(0, c1);
+        grad.addColorStop(1, c2);
+        ctx.fillStyle = grad;
+        ctx.fill();
+      }
+      ctx.restore();
+    }
+
+    // ── 2. Make sure the font is loaded ──
+    await document.fonts.load(`${state.size * scale}px "Material Icons Round"`);
+
+    // ── 3. Draw icon glyph (ligature) ──
+    ctx.save();
+    clipRounded();
+    ctx.fillStyle   = state.iconColor;
+    ctx.font        = `${state.size}px "Material Icons Round"`;
+    ctx.textAlign   = 'center';
+    ctx.textBaseline = 'middle';
+    // Material Icons use font-feature-settings: 'liga' — canvas supports this automatically
+    ctx.fillText(state.icon, size / 2, size / 2);
+    ctx.restore();
+
+    // ── 4. Download ──
+    const link = document.createElement('a');
+    link.download = `${state.icon}_rei_icon.png`;
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+    showToast('✓ PNG saved at 3× resolution');
+
+  } catch (err) {
+    console.error(err);
+    showToast('Something went wrong, try again', true);
+  }
+
+  btn.classList.remove('loading');
+  btn.innerHTML = '<span class="material-icons-round">download</span> PNG';
+}
+
+function extractGradColors(grad) {
+  const m = grad.match(/#[0-9a-fA-F]{3,6}/g);
+  return m && m.length >= 2 ? [m[0], m[1]] : ['#c8532a', '#f0a06e'];
+}
+
+// ─── CSS Copy ──────────────────────────────────────────────
+function copyCSS() {
+  const size = cs();
+  const radiusPx = Math.round(parseFloat(state.radius) / 100 * size);
+  let bg = '';
+  if (state.bgType === 'solid') bg = `background-color: ${state.bgColor};`;
+  else if (state.bgType === 'gradient') bg = `background: ${state.bgGradient};`;
+  else bg = `background: transparent;`;
+
+  const shadow = state.shadow ? `\n  box-shadow: 0 16px 48px rgba(0,0,0,0.18);` : '';
+  const border = state.border ? `\n  outline: 1.5px solid rgba(255,255,255,0.25);\n  outline-offset: -1.5px;` : '';
+
+  const css =
+`.icon-container {
+  width: ${size}px;
+  height: ${size}px;
+  ${bg}
+  border-radius: ${radiusPx}px;
+  display: flex;
+  align-items: center;
+  justify-content: center;${shadow}${border}
+}
+
+/* Material Icons Round */
+.icon-container .material-icons-round {
+  font-size: ${state.size}px;
+  color: ${state.iconColor};
+}`;
+
+  navigator.clipboard.writeText(css).then(() => showToast('✓ CSS copied'));
+}
+
+// ─── SVG Copy ──────────────────────────────────────────────
+function copySVG() {
+  const size = cs();
+  const radiusPx = Math.round(parseFloat(state.radius) / 100 * size);
+  let bgEl = '';
+
+  if (state.bgType === 'solid') {
+    bgEl = `<rect width="${size}" height="${size}" rx="${radiusPx}" fill="${state.bgColor}"/>`;
+  } else if (state.bgType === 'gradient') {
+    const [c1, c2] = extractGradColors(state.bgGradient);
+    bgEl = `<defs><linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
+  <stop offset="0%" stop-color="${c1}"/>
+  <stop offset="100%" stop-color="${c2}"/>
+</linearGradient></defs>
+<rect width="${size}" height="${size}" rx="${radiusPx}" fill="url(#g)"/>`;
+  }
+
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}">
+${bgEl}
+<!-- Icon: ${state.icon} @ ${state.size}px | Material Icons Round -->
+<text x="${size/2}" y="${size/2}" text-anchor="middle" dominant-baseline="central"
+  font-family="Material Icons Round" font-size="${state.size}" fill="${state.iconColor}">${state.icon}</text>
+</svg>`;
+
+  navigator.clipboard.writeText(svg).then(() => showToast('✓ SVG copied'));
+}
+
+// Init
+updatePreview();
+</script>
+</body>
+</html>
