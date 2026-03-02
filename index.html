@@ -1,0 +1,1063 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rei Icons</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=IBM+Plex+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+<script src="https://unpkg.com/@phosphor-icons/web@2.1.1/src/index.js"></script>
+<style>
+:root {
+  --bg: #111113;
+  --surface: #18181b;
+  --surface2: #222227;
+  --surface3: #2a2a30;
+  --border: #2e2e35;
+  --text: #f0eff4;
+  --muted: #7a7a8a;
+  --accent: #e05c2a;
+  --accent-glow: rgba(224,92,42,0.18);
+  --r: 10px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+}
+
+/* ── Header ── */
+header {
+  padding: 13px 22px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+  z-index: 20;
+  flex-shrink: 0;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.brand {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 18px;
+  letter-spacing: -0.02em;
+  flex-shrink: 0;
+}
+.brand span { color: var(--accent); }
+.source-tabs {
+  display: flex; gap: 3px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 3px;
+}
+.source-tab {
+  padding: 5px 10px;
+  font-size: 11px;
+  font-family: 'IBM Plex Mono', monospace;
+  color: var(--muted);
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.15s;
+  border: none;
+  background: none;
+  white-space: nowrap;
+}
+.source-tab.active { background: var(--accent); color: white; }
+
+/* ── Layout ── */
+.workspace {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  flex: 1;
+  min-height: 0;
+  height: calc(100vh - 53px);
+  overflow: hidden;
+}
+
+/* ── Preview ── */
+.preview-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 26px;
+  padding: 40px;
+  position: relative;
+  overflow: hidden;
+}
+.preview-area::before {
+  content: '';
+  position: absolute;
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(224,92,42,0.05) 0%, transparent 65%);
+  pointer-events: none;
+}
+#iconCanvas {
+  position: relative;
+  z-index: 1;
+  transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1);
+  cursor: pointer;
+}
+#iconCanvas:hover { transform: scale(1.04) rotate(-1.5deg); }
+#iconCanvas:active { transform: scale(0.96); }
+.icon-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.25s;
+}
+.icon-wrapper .material-icons-round,
+.icon-wrapper .material-symbols-rounded,
+.icon-wrapper i.ph { line-height: 1; user-select: none; display: block; }
+
+.info-strip {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  overflow: hidden;
+  background: var(--surface);
+}
+.info-cell {
+  padding: 9px 13px;
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.info-cell:last-child { border-right: none; }
+.info-cell-label {
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  font-family: 'IBM Plex Mono', monospace;
+}
+.info-cell-val {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: var(--text);
+  font-weight: 500;
+  max-width: 90px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ── Controls ── */
+.controls {
+  background: var(--surface);
+  border-left: 1px solid var(--border);
+  overflow-y: auto;
+  padding: 18px 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.controls::-webkit-scrollbar { width: 3px; }
+.controls::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+.ctrl-section { display: flex; flex-direction: column; gap: 7px; }
+.sec-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  color: var(--muted);
+  text-transform: uppercase;
+}
+.ctrl-divider { height: 1px; background: var(--border); margin: 2px 0; }
+
+/* Input */
+.input-wrap { position: relative; }
+.input-wrap .material-icons-round {
+  position: absolute; left: 10px; top: 50%;
+  transform: translateY(-50%);
+  font-size: 15px; color: var(--muted); pointer-events: none;
+}
+.icon-input {
+  width: 100%;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 10px 10px 10px 32px;
+  color: var(--text);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.icon-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow); }
+.icon-input::placeholder { color: var(--muted); }
+
+/* Browse button */
+.browse-btn {
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  width: 100%; padding: 9px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  color: var(--muted); font-size: 12px;
+  font-family: 'DM Sans', sans-serif;
+  cursor: pointer; transition: all 0.15s;
+}
+.browse-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-glow); }
+.browse-btn .material-icons-round { font-size: 14px; }
+
+/* Chips */
+.chips { display: flex; flex-wrap: wrap; gap: 4px; }
+.chip {
+  display: flex; align-items: center; gap: 3px;
+  padding: 3px 8px;
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: 20px; font-size: 10px; color: var(--muted);
+  cursor: pointer; transition: all 0.15s;
+}
+.chip:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-glow); }
+.chip .material-icons-round { font-size: 11px; }
+
+/* Sliders */
+.slider-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
+.slider-label { font-size: 12px; color: var(--text); }
+.slider-val {
+  font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--accent);
+  background: var(--accent-glow); padding: 2px 7px; border-radius: 5px;
+  min-width: 42px; text-align: center;
+}
+input[type=range] {
+  -webkit-appearance: none; width: 100%; height: 3px;
+  background: var(--border); border-radius: 3px; outline: none; cursor: pointer;
+}
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none; width: 14px; height: 14px;
+  background: var(--accent); border-radius: 50%;
+  box-shadow: 0 0 8px var(--accent-glow); transition: transform 0.15s;
+}
+input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.3); }
+
+/* Tabs */
+.tab-row {
+  display: flex; background: var(--surface2); border-radius: 8px; padding: 3px; gap: 2px;
+}
+.tab-btn {
+  flex: 1; padding: 6px; text-align: center; font-size: 11px; color: var(--muted);
+  cursor: pointer; border-radius: 6px; transition: all 0.15s;
+  font-family: 'DM Sans', sans-serif; border: none; background: none;
+}
+.tab-btn.active { background: var(--surface3); color: var(--text); font-weight: 500; }
+
+/* Color */
+.color-row { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; }
+.color-btn {
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: var(--r); padding: 9px; cursor: pointer; transition: border-color 0.15s;
+}
+.color-btn:hover { border-color: var(--accent); }
+.color-btn-label { font-size: 10px; color: var(--muted); margin-bottom: 5px; }
+.color-btn-preview { display: flex; align-items: center; gap: 6px; }
+.color-swatch {
+  width: 20px; height: 20px; border-radius: 5px;
+  border: 1px solid rgba(255,255,255,0.1); flex-shrink: 0;
+}
+.color-hex { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--text); }
+input[type=color] { position: absolute; opacity: 0; width: 0; height: 0; }
+
+/* Gradient */
+.grad-grid { display: grid; grid-template-columns: repeat(5,1fr); gap: 5px; }
+.grad-swatch {
+  height: 28px; border-radius: 7px; cursor: pointer;
+  border: 2px solid transparent; transition: all 0.15s;
+}
+.grad-swatch:hover, .grad-swatch.active { border-color: white; transform: scale(1.08); }
+
+/* Radius */
+.radius-grid { display: grid; grid-template-columns: repeat(5,1fr); gap: 5px; }
+.radius-btn {
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+  padding: 7px 3px; background: var(--surface2); border: 1px solid var(--border);
+  border-radius: 8px; cursor: pointer; font-size: 10px; color: var(--muted);
+  font-family: 'DM Sans', sans-serif; transition: all 0.15s;
+}
+.radius-btn .rbox { width: 18px; height: 18px; background: var(--muted); opacity: 0.35; }
+.radius-btn:hover, .radius-btn.active { border-color: var(--accent); color: var(--accent); }
+.radius-btn.active .rbox { opacity: 1; background: var(--accent); }
+
+/* Toggle */
+.toggle-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 8px 11px; background: var(--surface2); border: 1px solid var(--border);
+  border-radius: var(--r);
+}
+.toggle-row-label { font-size: 12px; color: var(--text); }
+.toggle {
+  width: 32px; height: 18px; background: var(--border); border-radius: 20px;
+  position: relative; cursor: pointer; transition: background 0.2s; flex-shrink: 0;
+}
+.toggle.on { background: var(--accent); }
+.toggle::after {
+  content: ''; position: absolute; width: 12px; height: 12px;
+  background: white; border-radius: 50%; top: 3px; left: 3px; transition: transform 0.2s;
+}
+.toggle.on::after { transform: translateX(14px); }
+
+/* Export */
+.export-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 5px; }
+.btn {
+  padding: 10px 5px; border-radius: var(--r);
+  font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 600;
+  cursor: pointer; border: none;
+  display: flex; align-items: center; justify-content: center; gap: 4px;
+  transition: all 0.15s;
+}
+.btn .material-icons-round { font-size: 13px; }
+.btn-primary { background: var(--accent); color: white; }
+.btn-primary:hover { background: #c84a1a; transform: translateY(-1px); box-shadow: 0 4px 16px var(--accent-glow); }
+.btn-primary:active { transform: none; }
+.btn-primary.loading { opacity: 0.6; pointer-events: none; }
+.btn-secondary { background: var(--surface2); color: var(--text); border: 1px solid var(--border); }
+.btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+
+/* ══ Icon Browser Modal ══ */
+.modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.75);
+  backdrop-filter: blur(6px);
+  z-index: 1000;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s;
+}
+.modal-overlay.open { opacity: 1; pointer-events: all; }
+.modal {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 20px 20px 0 0;
+  width: 100%; max-width: 960px;
+  height: 88vh;
+  display: flex; flex-direction: column;
+  transform: translateY(40px);
+  transition: transform 0.3s cubic-bezier(0.34,1.2,0.64,1);
+  overflow: hidden;
+}
+.modal-overlay.open .modal { transform: translateY(0); }
+
+.modal-header {
+  padding: 14px 18px 10px;
+  border-bottom: 1px solid var(--border);
+  display: flex; flex-direction: column; gap: 9px;
+  flex-shrink: 0;
+}
+.modal-top-row { display: flex; align-items: center; justify-content: space-between; }
+.modal-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 15px; }
+.modal-close {
+  width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;
+  background: var(--surface2); border: 1px solid var(--border); border-radius: 7px;
+  cursor: pointer; color: var(--muted); transition: all 0.15s;
+}
+.modal-close:hover { border-color: var(--accent); color: var(--accent); }
+.modal-close .material-icons-round { font-size: 15px; }
+
+.modal-search-wrap { position: relative; }
+.modal-search-wrap .material-icons-round {
+  position: absolute; left: 10px; top: 50%;
+  transform: translateY(-50%); font-size: 15px; color: var(--muted); pointer-events: none;
+}
+.modal-search {
+  width: 100%; background: var(--surface2); border: 1px solid var(--border);
+  border-radius: 9px; padding: 9px 9px 9px 34px;
+  color: var(--text); font-family: 'IBM Plex Mono', monospace; font-size: 13px;
+  outline: none; transition: border-color 0.2s;
+}
+.modal-search:focus { border-color: var(--accent); }
+.modal-search::placeholder { color: var(--muted); }
+
+.modal-src-row { display: flex; gap: 4px; overflow-x: auto; }
+.modal-src-row::-webkit-scrollbar { display: none; }
+.modal-src-tab {
+  padding: 4px 10px; font-size: 11px;
+  font-family: 'IBM Plex Mono', monospace; color: var(--muted);
+  border: 1px solid var(--border); border-radius: 20px;
+  cursor: pointer; transition: all 0.15s; background: none; white-space: nowrap; flex-shrink: 0;
+}
+.modal-src-tab.active { background: var(--accent); border-color: var(--accent); color: white; }
+
+.cat-scroll {
+  display: flex; gap: 4px; overflow-x: auto; padding: 9px 18px;
+  border-bottom: 1px solid var(--border); flex-shrink: 0;
+}
+.cat-scroll::-webkit-scrollbar { display: none; }
+.cat-tab {
+  padding: 4px 11px; font-size: 11px; font-family: 'DM Sans', sans-serif;
+  color: var(--muted); border: 1px solid var(--border); border-radius: 20px;
+  cursor: pointer; white-space: nowrap; transition: all 0.15s; background: none; flex-shrink: 0;
+}
+.cat-tab:hover { border-color: var(--accent); color: var(--accent); }
+.cat-tab.active { background: var(--surface2); border-color: var(--border); color: var(--text); font-weight: 500; }
+
+.icon-grid-wrap { flex: 1; overflow-y: auto; padding: 14px 18px; }
+.icon-grid-wrap::-webkit-scrollbar { width: 4px; }
+.icon-grid-wrap::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+.icon-count { font-size: 10px; color: var(--muted); font-family: 'IBM Plex Mono', monospace; margin-bottom: 10px; }
+.icon-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(68px,1fr)); gap: 5px; }
+.icon-tile {
+  display: flex; flex-direction: column; align-items: center; gap: 5px;
+  padding: 9px 5px; background: var(--surface2); border: 1px solid var(--border);
+  border-radius: 9px; cursor: pointer; transition: all 0.15s;
+}
+.icon-tile:hover { border-color: var(--accent); background: var(--accent-glow); }
+.icon-tile.selected { border-color: var(--accent); background: var(--accent-glow); }
+.icon-tile .material-icons-round,
+.icon-tile .material-symbols-rounded { font-size: 22px; color: var(--text); }
+.icon-tile i.ph { font-size: 22px; color: var(--text); }
+.icon-tile-name {
+  font-size: 8px; color: var(--muted); font-family: 'IBM Plex Mono', monospace;
+  text-align: center; word-break: break-all; line-height: 1.3;
+}
+.icon-tile:hover .icon-tile-name { color: var(--accent); }
+
+/* Toast */
+.toast {
+  position: fixed; bottom: 20px; left: 50%;
+  transform: translateX(-50%) translateY(10px);
+  background: var(--text); color: var(--bg);
+  font-family: 'IBM Plex Mono', monospace; font-size: 11px;
+  padding: 7px 15px; border-radius: 20px;
+  opacity: 0; transition: all 0.25s; z-index: 9999; pointer-events: none; white-space: nowrap;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+.toast.error { background: var(--accent); color: white; }
+
+@media (max-width: 800px) {
+  .workspace { grid-template-columns: 1fr; height: auto; overflow: visible; }
+  .controls { border-left: none; border-top: 1px solid var(--border); }
+  .preview-area { min-height: 300px; height: auto; padding: 26px 18px; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">Rei<span>Icons</span></div>
+  <div class="source-tabs" id="headerSourceTabs">
+    <button class="source-tab active" data-src="material-round">Mat. Round</button>
+    <button class="source-tab" data-src="material-symbols">Mat. Symbols</button>
+    <button class="source-tab" data-src="phosphor">Phosphor</button>
+  </div>
+</header>
+
+<div class="workspace">
+
+  <!-- LEFT: Preview -->
+  <div class="preview-area">
+    <div id="iconCanvas">
+      <div class="icon-wrapper" id="iconWrapper">
+        <span class="material-icons-round" id="mainIconEl" style="font-size:64px;color:#ffffff">auto_awesome</span>
+      </div>
+    </div>
+    <div class="info-strip">
+      <div class="info-cell"><div class="info-cell-label">Icon</div><div class="info-cell-val" id="infoName">auto_awesome</div></div>
+      <div class="info-cell"><div class="info-cell-label">Source</div><div class="info-cell-val" id="infoSrc">Mat. Round</div></div>
+      <div class="info-cell"><div class="info-cell-label">Size</div><div class="info-cell-val" id="infoSize">64px</div></div>
+      <div class="info-cell"><div class="info-cell-label">Canvas</div><div class="info-cell-val" id="infoCanvas">112×112</div></div>
+    </div>
+  </div>
+
+  <!-- RIGHT: Controls -->
+  <div class="controls">
+
+    <div class="ctrl-section">
+      <div class="sec-label">Icon Name</div>
+      <div class="input-wrap">
+        <span class="material-icons-round">tag</span>
+        <input type="text" class="icon-input" id="iconSearch" value="auto_awesome" placeholder="e.g. home, star, bolt…" autocomplete="off">
+      </div>
+      <button class="browse-btn" onclick="openBrowser()">
+        <span class="material-icons-round">apps</span>
+        Browse all icons
+      </button>
+      <div class="chips" id="quickChips">
+        <div class="chip" data-icon="home"><span class="material-icons-round">home</span>home</div>
+        <div class="chip" data-icon="auto_awesome"><span class="material-icons-round">auto_awesome</span>auto_awesome</div>
+        <div class="chip" data-icon="favorite"><span class="material-icons-round">favorite</span>favorite</div>
+        <div class="chip" data-icon="bolt"><span class="material-icons-round">bolt</span>bolt</div>
+        <div class="chip" data-icon="rocket_launch"><span class="material-icons-round">rocket_launch</span>rocket</div>
+        <div class="chip" data-icon="star"><span class="material-icons-round">star</span>star</div>
+        <div class="chip" data-icon="diamond"><span class="material-icons-round">diamond</span>diamond</div>
+        <div class="chip" data-icon="palette"><span class="material-icons-round">palette</span>palette</div>
+      </div>
+    </div>
+
+    <div class="ctrl-divider"></div>
+
+    <div class="ctrl-section">
+      <div class="sec-label">Icon Size</div>
+      <div class="slider-row"><span class="slider-label">Size</span><span class="slider-val" id="sizeVal">64px</span></div>
+      <input type="range" id="iconSize" min="16" max="128" value="64" step="4">
+    </div>
+
+    <div class="ctrl-section">
+      <div class="sec-label">Padding</div>
+      <div class="slider-row"><span class="slider-label">Canvas padding</span><span class="slider-val" id="paddingVal">24px</span></div>
+      <input type="range" id="iconPadding" min="0" max="64" value="24" step="4">
+    </div>
+
+    <div class="ctrl-divider"></div>
+
+    <div class="ctrl-section">
+      <div class="sec-label">Background</div>
+      <div class="tab-row" id="bgTabs">
+        <button class="tab-btn active" data-type="solid">Solid</button>
+        <button class="tab-btn" data-type="gradient">Gradient</button>
+        <button class="tab-btn" data-type="transparent">None</button>
+      </div>
+
+      <div id="solidPanel">
+        <div class="color-row">
+          <div class="color-btn" onclick="document.getElementById('bgPicker').click()">
+            <div class="color-btn-label">Background</div>
+            <div class="color-btn-preview">
+              <div class="color-swatch" id="bgSwatch" style="background:#e05c2a"></div>
+              <span class="color-hex" id="bgHex">#e05c2a</span>
+            </div>
+          </div>
+          <div class="color-btn" onclick="document.getElementById('iconPicker').click()">
+            <div class="color-btn-label">Icon</div>
+            <div class="color-btn-preview">
+              <div class="color-swatch" id="iconSwatch" style="background:#ffffff"></div>
+              <span class="color-hex" id="iconHex">#ffffff</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="gradientPanel" style="display:none">
+        <div class="grad-grid">
+          <div class="grad-swatch active" data-g="linear-gradient(135deg,#e05c2a,#f0a06e)" style="background:linear-gradient(135deg,#e05c2a,#f0a06e)"></div>
+          <div class="grad-swatch" data-g="linear-gradient(135deg,#2a6fc8,#6eadf0)" style="background:linear-gradient(135deg,#2a6fc8,#6eadf0)"></div>
+          <div class="grad-swatch" data-g="linear-gradient(135deg,#7c6af7,#f06e6e)" style="background:linear-gradient(135deg,#7c6af7,#f06e6e)"></div>
+          <div class="grad-swatch" data-g="linear-gradient(135deg,#0f0f12,#2a2a35)" style="background:linear-gradient(135deg,#0f0f12,#2a2a35)"></div>
+          <div class="grad-swatch" data-g="linear-gradient(135deg,#4ade9a,#2196f3)" style="background:linear-gradient(135deg,#4ade9a,#2196f3)"></div>
+          <div class="grad-swatch" data-g="linear-gradient(135deg,#ff6eb4,#ff9f4a)" style="background:linear-gradient(135deg,#ff6eb4,#ff9f4a)"></div>
+          <div class="grad-swatch" data-g="linear-gradient(135deg,#00c9ff,#92fe9d)" style="background:linear-gradient(135deg,#00c9ff,#92fe9d)"></div>
+          <div class="grad-swatch" data-g="linear-gradient(135deg,#fc4a1a,#f7b733)" style="background:linear-gradient(135deg,#fc4a1a,#f7b733)"></div>
+          <div class="grad-swatch" data-g="linear-gradient(135deg,#a8edea,#fed6e3)" style="background:linear-gradient(135deg,#a8edea,#fed6e3)"></div>
+          <div class="grad-swatch" data-g="linear-gradient(135deg,#1a1a2e,#4f4f7f)" style="background:linear-gradient(135deg,#1a1a2e,#4f4f7f)"></div>
+        </div>
+        <div style="margin-top:7px">
+          <div class="color-btn" onclick="document.getElementById('iconPicker').click()" style="max-width:128px">
+            <div class="color-btn-label">Icon color</div>
+            <div class="color-btn-preview">
+              <div class="color-swatch" id="iconSwatchGrad" style="background:#ffffff"></div>
+              <span class="color-hex" id="iconHexGrad">#ffffff</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ctrl-divider"></div>
+
+    <div class="ctrl-section">
+      <div class="sec-label">Corner Radius</div>
+      <div class="radius-grid" id="radiusGrid">
+        <button class="radius-btn" data-r="0%"><div class="rbox" style="border-radius:0"></div>None</button>
+        <button class="radius-btn" data-r="10%"><div class="rbox" style="border-radius:10%"></div>Small</button>
+        <button class="radius-btn active" data-r="22%"><div class="rbox" style="border-radius:22%"></div>Med</button>
+        <button class="radius-btn" data-r="36%"><div class="rbox" style="border-radius:36%"></div>Large</button>
+        <button class="radius-btn" data-r="50%"><div class="rbox" style="border-radius:50%"></div>Circle</button>
+      </div>
+    </div>
+
+    <div class="ctrl-divider"></div>
+
+    <div class="ctrl-section">
+      <div class="sec-label">Effects</div>
+      <div style="display:flex;flex-direction:column;gap:5px">
+        <div class="toggle-row"><span class="toggle-row-label">Drop shadow</span><div class="toggle on" id="shadowToggle"></div></div>
+        <div class="toggle-row"><span class="toggle-row-label">Inner border</span><div class="toggle" id="borderToggle"></div></div>
+      </div>
+    </div>
+
+    <div class="ctrl-divider"></div>
+
+    <div class="ctrl-section">
+      <div class="sec-label">Export</div>
+      <div class="export-grid">
+        <button class="btn btn-primary" id="pngBtn" onclick="downloadPNG()">
+          <span class="material-icons-round">download</span>PNG
+        </button>
+        <button class="btn btn-secondary" onclick="copyCSS()">
+          <span class="material-icons-round">code</span>CSS
+        </button>
+        <button class="btn btn-secondary" onclick="copySVG()">
+          <span class="material-icons-round">data_object</span>SVG
+        </button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══ Icon Browser Modal ══ -->
+<div class="modal-overlay" id="modalOverlay" onclick="handleOverlayClick(event)">
+  <div class="modal" id="modal">
+    <div class="modal-header">
+      <div class="modal-top-row">
+        <div class="modal-title">Browse Icons</div>
+        <div class="modal-close" onclick="closeBrowser()"><span class="material-icons-round">close</span></div>
+      </div>
+      <div class="modal-search-wrap">
+        <span class="material-icons-round">search</span>
+        <input type="text" class="modal-search" id="modalSearch" placeholder="Search icons…" autocomplete="off">
+      </div>
+      <div class="modal-src-row" id="modalSrcRow">
+        <button class="modal-src-tab active" data-src="material-round">Material Round</button>
+        <button class="modal-src-tab" data-src="material-symbols">Material Symbols</button>
+        <button class="modal-src-tab" data-src="phosphor">Phosphor</button>
+      </div>
+    </div>
+    <div class="cat-scroll" id="catTabs"></div>
+    <div class="icon-grid-wrap">
+      <div class="icon-count" id="iconCount"></div>
+      <div class="icon-grid" id="iconGrid"></div>
+    </div>
+  </div>
+</div>
+
+<input type="color" id="bgPicker" value="#e05c2a">
+<input type="color" id="iconPicker" value="#ffffff">
+<div class="toast" id="toast"></div>
+
+<script>
+// ══════════════════════════════════════════
+// ICON DATA
+// ══════════════════════════════════════════
+const MATERIAL_ICONS = {
+  "Common":["home","search","settings","favorite","star","person","add","close","check","menu","arrow_back","arrow_forward","delete","edit","share","download","upload","refresh","visibility","visibility_off","lock","lock_open","notifications","info","warning","error","help","done","done_all","clear","more_vert","more_horiz","expand_more","expand_less","chevron_right","chevron_left","open_in_new","link","bookmark","bookmarks","label","flag","thumb_up","thumb_down","filter_list","sort","swap_horiz","swap_vert","drag_handle","copy_all","content_copy","content_cut","content_paste","undo","redo","select_all","print","save","save_alt","send","reply","forward","attach_file","paid","euro","star_border","favorite_border"],
+  "App & UI":["dashboard","widgets","extension","apps","grid_view","list","view_list","view_module","view_carousel","table_rows","reorder","account_circle","manage_accounts","badge","group","groups","people","person_add","person_remove","contacts","forum","chat","message","mail","email","inbox","outbox","drafts","bug_report","code","terminal","data_object","data_array","functions","calculate","translate","auto_fix_high","auto_awesome","magic_button","psychology","lightbulb","tips_and_updates","emoji_objects","emoji_emotions","emoji_events","task_alt","task","checklist","check_circle","cancel","block","not_interested","do_not_disturb","circle","toll","offline_bolt","wb_sunny","dark_mode","light_mode","nights_stay","brightness_high","brightness_low","flare","lens","change_history","pentagon","hexagon"],
+  "Media":["play_arrow","pause","stop","skip_next","skip_previous","fast_forward","fast_rewind","replay","shuffle","repeat","repeat_one","queue_music","playlist_add","library_music","headphones","volume_up","volume_down","volume_off","volume_mute","mic","mic_off","videocam","videocam_off","camera","camera_alt","photo","photo_camera","image","collections","burst_mode","panorama","crop","flip","rotate_left","rotate_right","zoom_in","zoom_out","fullscreen","fullscreen_exit","picture_in_picture","present_to_all","cast","cast_connected","screen_share","live_tv","movie","video_library","ondemand_video","tv","movie_creation","music_note","music_off","queue","subscriptions","radio","podcasts","hearing","graphic_eq","surround_sound","speaker","speaker_group","smart_display","connected_tv"],
+  "Communication":["call","call_end","phone","phone_in_talk","phone_locked","voicemail","message","sms","chat_bubble","comment","forum","announcement","record_voice_over","contact_page","alternate_email","business","location_on","near_me","navigation","directions","explore","wifi","wifi_off","wifi_lock","bluetooth","bluetooth_connected","nfc","signal_cellular_alt","vpn_key","vpn_lock","security","verified","verified_user","gpp_good","gpp_bad","language","public","travel_explore","share_location","wrong_location","beenhere","place","pin_drop","my_location","gps_fixed","satellite","map","layers","terrain","satellite_alt","cell_tower","rss_feed","cast_for_education","diversity_1","diversity_2","diversity_3","connect_without_contact","online_prediction"],
+  "Files":["folder","folder_open","folder_shared","folder_special","create_new_folder","file_open","file_copy","file_download","file_upload","insert_drive_file","description","article","notes","note","note_add","sticky_note_2","library_books","book","auto_stories","menu_book","collections_bookmark","import_contacts","subject","text_snippet","source","cloud","cloud_upload","cloud_download","cloud_done","cloud_off","backup","restore","archive","inventory","storage","sd_card","usb","memory","bar_chart","pie_chart","show_chart","timeline","analytics","insights","trending_up","trending_down","trending_flat","assessment","table_chart","query_stats","data_usage","donut_large","donut_small","stacked_line_chart","waterfall_chart","ssid_chart","scatter_plot","bubble_chart","candlestick_chart","area_chart"],
+  "Design":["palette","color_lens","brush","format_paint","invert_colors","opacity","gradient","texture","style","design_services","auto_fix_normal","auto_fix_high","draw","gesture","edit_note","create","format_shapes","crop_rotate","layers","blur_on","blur_off","blur_circular","filter","filter_b_and_w","filter_hdr","filter_vintage","wb_sunny","flare","highlight","exposure","contrast","brightness_auto","colorize","photo_filter","lens","crop_free","crop_square","crop_landscape","crop_portrait","crop_16_9","straighten","transform","3d_rotation","view_in_ar","open_with","aspect_ratio","zoom_out_map","format_color_fill","format_color_reset","format_color_text","color_lens","palette","brush","auto_awesome_mosaic","auto_awesome_motion","grain","lens_blur","motion_blur"],
+  "Commerce":["shopping_cart","add_shopping_cart","shopping_bag","shopping_basket","store","storefront","local_grocery_store","local_mall","local_offer","loyalty","redeem","card_giftcard","card_membership","payment","credit_card","account_balance","account_balance_wallet","attach_money","money","monetization_on","currency_exchange","receipt","receipt_long","price_check","sell","discount","percent","savings","request_quote","calculate","point_of_sale","inventory_2","qr_code","qr_code_2","barcode_reader","tag","sell","price_change","currency_bitcoin","currency_pound","currency_yen","currency_franc","currency_lira","currency_ruble","currency_rupee","euro","paid","money_off","local_atm","atm","contactless","tap_and_play","loyalty","redeem"],
+  "Transport":["directions_car","car_rental","local_taxi","directions_bus","directions_subway","train","tram","directions_bike","electric_bike","electric_scooter","flight","flight_takeoff","flight_land","airplanemode_active","local_airport","directions_boat","sailing","local_shipping","electric_car","ev_station","local_gas_station","local_parking","traffic","speed","route","two_wheeler","moped","electric_moped","emergency","fire_truck","airport_shuttle","directions_transit_filled","pedal_bike","nordic_walking","hiking","kayaking","snowboarding","surfing","skateboarding","paragliding","scuba_diving","kitesurfing","sledding","downhill_skiing","ice_skating","roller_skating","sports_motorsports","agriculture","construction","forklift","conveyor_belt","commute","transfer_within_a_station"],
+  "Tech":["phone_android","phone_iphone","smartphone","tablet","computer","laptop","desktop_windows","desktop_mac","watch","tv","speaker","headset","keyboard","mouse","gamepad","sports_esports","memory","developer_board","battery_full","battery_0_bar","battery_charging_full","bolt","power","electrical_services","outlet","usb","bluetooth","wifi","router","cable","sim_card","sd_card","storage","cloud","scanner","print","fax","nfc","contactless","cast","airplay","devices","device_hub","developer_mode","code","terminal","smart_toy","precision_manufacturing","science","biotech","psychology","engineering","architecture","home_work","solar_power","wind_power","heat_pump","ev_charger","token"],
+  "Nature":["eco","nature","park","forest","local_florist","grass","water","waves","beach_access","terrain","landscape","public","wb_sunny","cloud","thunderstorm","grain","ac_unit","thermostat","visibility","dark_mode","light_mode","nights_stay","flare","star","stars","auto_awesome","pets","cruelty_free","sanitizer","spa","self_improvement","mood","sentiment_satisfied","sentiment_neutral","sentiment_dissatisfied","add_reaction","face","face_retouching_natural","air","water_drop","fireplace","severe_cold","snowflake","foggy","hdr_strong","wb_cloudy","partly_cloudy_day","partly_cloudy_night","rainy","stormy","sunny","sunny_snowing","cloudy","wind_power"],
+  "Health":["favorite","health_and_safety","local_hospital","medical_services","medication","medication_liquid","vaccines","biotech","science","psychology","emergency","accessible","accessibility","accessibility_new","elderly","pregnant_woman","child_care","fitness_center","sports","self_improvement","spa","mood","mood_bad","sick","monitor_heart","ecg","bloodtype","thermostat","clean_hands","sanitizer","soap","water_drop","masks","ventilator","pill","ophthalmology","microbiology","genetics","cardiology","orthopedics","radiology","allergy","nutrition","exercise","sprint","directions_run","healing","first_aid","stethoscope","health_metrics"],
+  "Food":["restaurant","restaurant_menu","local_dining","dinner_dining","lunch_dining","breakfast_dining","local_cafe","coffee","local_bar","sports_bar","local_pizza","local_drink","liquor","wine_bar","bakery_dining","ramen_dining","set_meal","rice_bowl","bento","takeout_dining","food_bank","outdoor_grill","kitchen","microwave","blender","coffee_maker","tapas","brunch_dining","kebab_dining","local_see","food_is_dangerous","no_food","no_drinks","bar","local_activity","nightlife","casino","pool","hot_tub","water","waves","beach_access","golf_course","spa","fitness_center","sports","stadium","theater_comedy","piano","music_note"],
+  "Arrows":["arrow_upward","arrow_downward","arrow_forward","arrow_back","arrow_back_ios","arrow_forward_ios","north","south","east","west","north_east","north_west","south_east","south_west","keyboard_arrow_up","keyboard_arrow_down","keyboard_arrow_left","keyboard_arrow_right","keyboard_double_arrow_up","keyboard_double_arrow_down","expand_more","expand_less","unfold_more","unfold_less","swap_horiz","swap_vert","rotate_left","rotate_right","undo","redo","reply","reply_all","forward","trending_up","trending_down","call_made","call_received","open_in_new","launch","exit_to_app","login","logout","input","output","sync","sync_alt","compare_arrows","transfer_within_a_station","multiple_stop","turn_left","turn_right","turn_slight_left","turn_slight_right","u_turn_left","u_turn_right","roundabout_left","roundabout_right","merge","fork_right","fork_left","ramp_left","ramp_right"],
+};
+
+const MATERIAL_SYMBOLS = {
+  "Common":["home","search","settings","favorite","star","person","add","close","check","menu","arrow_back","arrow_forward","delete","edit","share","download","upload","refresh","visibility","visibility_off","lock","lock_open","notifications","info","warning","error","help","done","done_all","clear","more_vert","bookmark","flag","thumb_up","thumb_down","filter_list","sort","drag_handle","content_copy","undo","redo","print","save","send","attach_file","paid","new_releases","auto_awesome","rocket_launch","bolt","diamond","crown","trophy","verified","badge","loyalty","workspace_premium","celebrate","emoji_events","military_tech","grade","stars"],
+  "New Icons":["neurology","cognition","psychiatry","genetics","microbiology","cardiology","orthopedics","immunology","ophthalmology","ent","dermatology","radiology","allergy","nutrition","exercise","sprint","kayaking","paragliding","surfing","scuba_diving","kitesurfing","sledding","snowboarding","skiing","ice_skating","roller_skating","skateboarding","cycling","two_wheeler","electric_moped","electric_rickshaw","airport_shuttle","agricultural","construction","engineering","architecture","real_estate_agent","foundation","water_pump","solar_power","wind_power","heat_pump","ev_charger","charger","cable","encrypted","policy","privacy_tip","security_update_good","gpp_maybe","health_and_safety","crisis_alert","brand_awareness","conversion_path","ads_click","add_to_homescreen","install_desktop","install_mobile","qr_code","qr_code_scanner","barcode","deployed_code","sdk","manufacturing","precision_manufacturing","factory","biotech","schema","account_tree","device_hub","hub","spoke","join_left","join_right","join_inner","join_full","flaky","rule","check_circle","cancel","block"],
+  "Design":["palette","color_lens","brush","format_paint","invert_colors","opacity","gradient","texture","style","design_services","draw","gesture","edit_note","create","format_shapes","layers","filter","blur_on","exposure","contrast","brightness_auto","colorize","photo_filter","lens","crop_free","straighten","transform","3d_rotation","view_in_ar","open_with","aspect_ratio","zoom_out_map","format_color_fill","format_color_reset","format_color_text","auto_awesome_mosaic","auto_awesome_motion","grain","motion_blur","smart_display","image","photo","landscape","panorama","camera","videocam"],
+  "Tech & AI":["smart_toy","psychology","psychology_alt","neurology","cognition","bubble_chart","data_object","data_array","functions","code","terminal","developer_mode","developer_board","memory","storage","cloud","cloud_sync","cloud_lock","database","dns","schema","account_tree","integration_instructions","api","webhook","http","data_usage","analytics","insights","bar_chart","pie_chart","show_chart","timeline","trending_up","model_training","batch_prediction","auto_mode","recycling","restart_alt","update","upgrade","new_releases","verified","badge","workspace_premium","crown","military_tech","trophy","medal","social_leaderboard","monitoring","network_ping","network_check","signal_cellular_alt","wifi_channel","router","hub","spoke","lan","nat","vpn_key","security","lock","enhanced_encryption","token","key","passkey","fingerprint","face_retouching_natural","face_6","person_4","supervised_user_circle"],
+};
+
+const PHOSPHOR_ICONS = {
+  "Common":["house","magnifying-glass","gear","heart","star","user","plus","x","check","list","arrow-left","arrow-right","trash","pencil","share","download-simple","upload-simple","arrows-clockwise","eye","eye-slash","lock","lock-open","bell","info","warning","x-circle","question","check-circle","prohibit","dots-three-vertical","dots-three","caret-up","caret-down","caret-right","caret-left","bookmark","flag","thumbs-up","thumbs-down","funnel","arrow-up-down","swap","copy","arrow-counter-clockwise","arrow-clockwise","printer","floppy-disk","paper-plane","paperclip","currency-dollar","currency-euro","currency-pound","currency-yen","currency-btc","currency-eth"],
+  "Interface":["squares-four","layout","sidebar","columns","rows","table","card-holder","list-bullets","list-numbers","list-checks","selection","cursor","cursor-click","mouse","keyboard","hand","hand-pointing","hand-waving","hand-grabbing","hand-fist","hand-peace","hands-clapping","eye-dropper","paint-brush","pencil-simple","pencil-line","magic-wand","eraser","scissors","crop","frame-corners","bounding-box","selection-all","selection-plus","selection-slash","intersect","intersect-three","exclude","subtract","unite","path","bezier-curve","anchor","ruler","compass","triangle","square","circle","hexagon","pentagon","diamond","diamond-four","spiral","shapes","sticker","chat-centered","chat-centered-text","chat-centered-dots"],
+  "Media":["play","pause","stop","skip-forward","skip-back","fast-forward","rewind","shuffle","repeat","repeat-once","queue","music-note","music-notes","headphones","microphone","microphone-slash","video","video-slash","camera","camera-slash","image","images","film-strip","film-slate","television","monitor","projector-screen","speaker-high","speaker-low","speaker-x","speaker-none","vinyl-record","radio","broadcast","waveform","waveform-slash","equalizer","metronome","spotify","youtube","soundcloud","apple-podcasts","playlist","film-reel","clapperboard","film-script","popcorn","ticket","star-four","circle-dashed","circle-half","circle-half-tilt","circles-three","circles-three-plus","circles-four"],
+  "Communication":["phone","phone-slash","phone-call","phone-incoming","phone-outgoing","chat","chat-text","chat-dots","chat-circle","chat-teardrop","chats","envelope","envelope-open","envelope-simple","envelope-open-text","at","address-book","contacts","identification-card","user-circle","user-square","users","users-three","user-plus","user-minus","user-check","user-x","user-gear","user-switch","megaphone","broadcast","wifi","wifi-high","wifi-medium","wifi-low","wifi-slash","wifi-x","bluetooth","bluetooth-connected","bluetooth-slash","bluetooth-x","cell-signal-full","cell-signal-high","cell-signal-medium","cell-signal-low","cell-signal-none","cell-signal-slash","cell-signal-x","rss","rss-simple","newspaper","read-cv-logo","article","hash","at"],
+  "Files":["folder","folder-open","folder-simple","folder-simple-dashed","folder-simple-plus","folder-simple-minus","folder-simple-star","folder-simple-lock","folder-notch","folder-notch-open","folder-notch-plus","file","file-text","file-code","file-image","file-audio","file-video","file-zip","file-pdf","file-doc","file-xls","file-ppt","file-csv","file-plus","file-minus","file-search","file-arrow-up","file-arrow-down","files","note","note-pencil","note-blank","notebook","notepad","book","book-open","book-open-text","books","book-bookmark","clipboard","clipboard-text","clipboard-check","clipboard-x","article","newspaper","hash","archive","vault","stack","package","package-open","cloud","cloud-arrow-up","cloud-arrow-down","cloud-check","cloud-slash","cloud-warning","cloud-x","database","hard-drive","hard-drives"],
+  "Design":["palette","paint-bucket","paint-brush-broad","paint-roller","pen","pen-nib","pen-nib-straight","highlighter","marker","eraser","crop","scissors","bezier-curve","anchor","ruler","compass","shapes","triangle","square","circle","hexagon","pentagon","diamond","star-four","star-of-david","cross","plus-circle","minus-circle","dot-outline","spiral","swatches","gradient","spectrum","sun","moon","cloud","cloud-rain","cloud-snow","cloud-lightning","cloud-fog","cloud-wind","snowflake","thermometer","fire","flame","drop","wave","wind","sparkle","confetti","shooting-star","magic-wand","wand","paint-brush","brush","pen","pencil","eraser","vector-three","vector-two","path","bezier-curve"],
+  "Commerce":["shopping-cart","shopping-cart-simple","bag","bag-simple","storefront","store","receipt","currency-dollar","currency-euro","currency-pound","currency-yen","currency-circle-dollar","currency-btc","currency-eth","piggy-bank","bank","credit-card","wallet","gift","tag","tag-simple","tags","barcode","qr-code","truck","package","package-open","archive","vault","scales","percent","chart-bar","chart-line","chart-pie","chart-donut","trend-up","trend-down","chart-line-up","chart-line-down","chart-bar-horizontal","coin","coins","hand-coins","money","money-wavy","chart-scatter","invoice","receipt-x","hand-withdrawing","hand-deposit","safe","cash-register","contactless-payment","credit-card-front","wallet","address-book"],
+  "Nature":["tree","tree-palm","tree-evergreen","flower","flower-tulip","leaf","plant","potted-plant","cactus","mushroom","bird","butterfly","cat","dog","horse","cow","fish","shrimp","crab","turtle","snake","rabbit","panda","koala","bug","ant","bee","sun","moon","cloud","cloud-sun","cloud-moon","cloud-rain","cloud-snow","cloud-lightning","snowflake","wind","fire","flame","water","drop","wave","mountains","island","globe","earth","compass-rose","map-pin","map","map-trifold","path","road-horizon","golf","tent","campfire","lighthouse","anchor","boat","sailboat","submarine","airplane","helicopter","rocket","ufo","meteor","planet","star","stars","comet","sun-horizon","moon-stars","clouds"],
+  "Social":["github-logo","twitter-logo","facebook-logo","instagram-logo","linkedin-logo","tiktok-logo","twitch-logo","discord-logo","slack-logo","reddit-logo","pinterest-logo","youtube-logo","spotify-logo","apple-logo","android-logo","windows-logo","linux-logo","notion-logo","figma-logo","framer-logo","codepen-logo","google-logo","google-play-logo","app-store-logo","stripe-logo","paypal-logo","stack-overflow-logo","behance-logo","dribbble-logo","medium-logo","substack-logo","product-hunt-logo","dev-to-logo","hash","at","share-network","broadcast","megaphone","hand-heart","globe","globe-hemisphere-east","globe-hemisphere-west","globe-simple","globe-stand","network","tree-structure","graph","flow-arrow","traffic-sign"],
+  "Arrows":["arrow-up","arrow-down","arrow-left","arrow-right","arrow-up-left","arrow-up-right","arrow-down-left","arrow-down-right","arrow-bend-up-left","arrow-bend-up-right","arrow-bend-down-left","arrow-bend-down-right","arrow-elbow-down-left","arrow-elbow-down-right","arrow-elbow-up-left","arrow-elbow-up-right","arrow-circle-up","arrow-circle-down","arrow-circle-left","arrow-circle-right","arrows-in","arrows-out","arrows-horizontal","arrows-vertical","arrows-merge","arrows-split","arrows-left-right","arrows-down-up","arrows-in-simple","arrows-out-simple","arrows-in-cardinal","arrows-out-cardinal","arrows-clockwise","arrows-counter-clockwise","caret-up","caret-down","caret-left","caret-right","caret-double-up","caret-double-down","caret-double-left","caret-double-right","caret-circle-up","caret-circle-down","caret-circle-left","caret-circle-right","sort-ascending","sort-descending","swap","shuffle","rewind","fast-forward","skip-back","skip-forward","return","corner-up-left","corner-up-right","corner-down-left","corner-down-right"],
+};
+
+// ══════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════
+const state = {
+  icon: 'auto_awesome',
+  source: 'material-round',
+  size: 64,
+  padding: 24,
+  bgType: 'solid',
+  bgColor: '#e05c2a',
+  bgGradient: 'linear-gradient(135deg,#e05c2a,#f0a06e)',
+  iconColor: '#ffffff',
+  radius: '22%',
+  shadow: true,
+  border: false,
+};
+
+function cs() { return state.size + state.padding * 2; }
+
+// ══════════════════════════════════════════
+// RENDER PREVIEW
+// ══════════════════════════════════════════
+function buildIconEl() {
+  const wrapper = document.getElementById('iconWrapper');
+  wrapper.innerHTML = '';
+  let el;
+  if (state.source === 'material-round') {
+    el = document.createElement('span');
+    el.className = 'material-icons-round';
+    el.textContent = state.icon;
+  } else if (state.source === 'material-symbols') {
+    el = document.createElement('span');
+    el.className = 'material-symbols-rounded';
+    el.textContent = state.icon;
+  } else {
+    el = document.createElement('i');
+    el.className = `ph ph-${state.icon}`;
+  }
+  el.style.fontSize = state.size + 'px';
+  el.style.color = state.iconColor;
+  wrapper.appendChild(el);
+}
+
+function updatePreview() {
+  const wrapper = document.getElementById('iconWrapper');
+  const size = cs();
+  wrapper.style.width = size + 'px';
+  wrapper.style.height = size + 'px';
+
+  if (state.bgType === 'solid') wrapper.style.background = state.bgColor;
+  else if (state.bgType === 'gradient') wrapper.style.background = state.bgGradient;
+  else wrapper.style.background = 'rgba(255,255,255,0.04)';
+
+  wrapper.style.borderRadius = state.radius;
+  wrapper.style.boxShadow = (state.shadow && state.bgType !== 'transparent')
+    ? '0 16px 48px rgba(0,0,0,0.4),0 4px 16px rgba(0,0,0,0.25)' : 'none';
+  wrapper.style.outline = state.border ? '1.5px solid rgba(255,255,255,0.2)' : 'none';
+  wrapper.style.outlineOffset = '-1.5px';
+
+  buildIconEl();
+
+  const srcLabels = {'material-round':'Mat. Round','material-symbols':'Mat. Symbols','phosphor':'Phosphor'};
+  document.getElementById('infoName').textContent = state.icon;
+  document.getElementById('infoSrc').textContent = srcLabels[state.source];
+  document.getElementById('infoSize').textContent = state.size + 'px';
+  document.getElementById('infoCanvas').textContent = `${size}×${size}`;
+}
+
+// ══════════════════════════════════════════
+// SOURCE SWITCHING
+// ══════════════════════════════════════════
+function setSource(src) {
+  state.source = src;
+  document.querySelectorAll('.source-tab,.modal-src-tab').forEach(t => {
+    t.classList.toggle('active', t.dataset.src === src);
+  });
+  updatePreview();
+  if (browserOpen) { renderCatTabs(); renderIconGrid(); }
+}
+
+document.querySelectorAll('.source-tab').forEach(t => t.addEventListener('click', () => setSource(t.dataset.src)));
+document.querySelectorAll('.modal-src-tab').forEach(t => t.addEventListener('click', () => setSource(t.dataset.src)));
+
+// ══════════════════════════════════════════
+// ICON BROWSER
+// ══════════════════════════════════════════
+let browserOpen = false;
+let activeCat = 'Common';
+let modalQuery = '';
+
+function getActiveData() {
+  if (state.source === 'material-round') return MATERIAL_ICONS;
+  if (state.source === 'material-symbols') return MATERIAL_SYMBOLS;
+  return PHOSPHOR_ICONS;
+}
+
+function openBrowser() {
+  browserOpen = true;
+  activeCat = 'Common';
+  modalQuery = '';
+  document.getElementById('modalSearch').value = '';
+  document.getElementById('modalOverlay').classList.add('open');
+  renderCatTabs();
+  renderIconGrid();
+}
+
+function closeBrowser() {
+  browserOpen = false;
+  document.getElementById('modalOverlay').classList.remove('open');
+}
+
+function handleOverlayClick(e) {
+  if (e.target === document.getElementById('modalOverlay')) closeBrowser();
+}
+
+function renderCatTabs() {
+  const cats = Object.keys(getActiveData());
+  const c = document.getElementById('catTabs');
+  c.innerHTML = cats.map(cat =>
+    `<button class="cat-tab${cat===activeCat?' active':''}" data-cat="${cat}">${cat}</button>`
+  ).join('');
+  c.querySelectorAll('.cat-tab').forEach(b => {
+    b.addEventListener('click', () => { activeCat = b.dataset.cat; renderCatTabs(); renderIconGrid(); });
+  });
+}
+
+function renderIconGrid() {
+  const data = getActiveData();
+  const q = modalQuery.toLowerCase();
+  let icons = [];
+  if (q) {
+    Object.values(data).forEach(arr => arr.forEach(ic => { if (ic.includes(q) && !icons.includes(ic)) icons.push(ic); }));
+  } else {
+    icons = data[activeCat] || [];
+  }
+
+  document.getElementById('iconCount').textContent = `${icons.length} icon${icons.length!==1?'s':''}`;
+
+  function makeIconEl(icon) {
+    if (state.source === 'material-round') return `<span class="material-icons-round">${icon}</span>`;
+    if (state.source === 'material-symbols') return `<span class="material-symbols-rounded">${icon}</span>`;
+    return `<i class="ph ph-${icon}"></i>`;
+  }
+
+  const grid = document.getElementById('iconGrid');
+  grid.innerHTML = icons.map(icon =>
+    `<div class="icon-tile${icon===state.icon?' selected':''}" data-icon="${icon}" title="${icon}">
+      ${makeIconEl(icon)}
+      <div class="icon-tile-name">${icon}</div>
+    </div>`
+  ).join('');
+
+  grid.querySelectorAll('.icon-tile').forEach(tile => {
+    tile.addEventListener('click', () => {
+      state.icon = tile.dataset.icon;
+      document.getElementById('iconSearch').value = state.icon;
+      updatePreview();
+      grid.querySelectorAll('.icon-tile').forEach(t => t.classList.remove('selected'));
+      tile.classList.add('selected');
+      setTimeout(closeBrowser, 180);
+    });
+  });
+}
+
+let modalDebounce;
+document.getElementById('modalSearch').addEventListener('input', e => {
+  clearTimeout(modalDebounce);
+  modalDebounce = setTimeout(() => { modalQuery = e.target.value.trim(); renderIconGrid(); }, 150);
+});
+
+// ══════════════════════════════════════════
+// CONTROLS
+// ══════════════════════════════════════════
+let debounce;
+document.getElementById('iconSearch').addEventListener('input', e => {
+  clearTimeout(debounce);
+  debounce = setTimeout(() => {
+    const val = e.target.value.trim().toLowerCase().replace(/\s+/g, state.source==='phosphor'?'-':'_');
+    if (val) { state.icon = val; updatePreview(); }
+  }, 280);
+});
+
+document.querySelectorAll('#quickChips .chip').forEach(c => {
+  c.addEventListener('click', () => {
+    state.icon = c.dataset.icon; state.source = 'material-round';
+    setSource('material-round');
+    document.getElementById('iconSearch').value = state.icon;
+    updatePreview();
+  });
+});
+
+document.getElementById('iconSize').addEventListener('input', e => {
+  state.size = +e.target.value;
+  document.getElementById('sizeVal').textContent = state.size+'px';
+  updatePreview();
+});
+document.getElementById('iconPadding').addEventListener('input', e => {
+  state.padding = +e.target.value;
+  document.getElementById('paddingVal').textContent = state.padding+'px';
+  updatePreview();
+});
+
+document.querySelectorAll('#bgTabs .tab-btn').forEach(t => {
+  t.addEventListener('click', () => {
+    document.querySelectorAll('#bgTabs .tab-btn').forEach(x=>x.classList.remove('active'));
+    t.classList.add('active');
+    state.bgType = t.dataset.type;
+    document.getElementById('solidPanel').style.display = state.bgType==='solid'?'':'none';
+    document.getElementById('gradientPanel').style.display = state.bgType==='gradient'?'':'none';
+    updatePreview();
+  });
+});
+
+document.getElementById('bgPicker').addEventListener('input', e => {
+  state.bgColor = e.target.value;
+  document.getElementById('bgSwatch').style.background = state.bgColor;
+  document.getElementById('bgHex').textContent = state.bgColor;
+  updatePreview();
+});
+document.getElementById('iconPicker').addEventListener('input', e => {
+  state.iconColor = e.target.value;
+  ['iconSwatch','iconSwatchGrad'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.background=state.iconColor;});
+  ['iconHex','iconHexGrad'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=state.iconColor;});
+  updatePreview();
+});
+
+document.querySelectorAll('.grad-swatch').forEach(s => {
+  s.addEventListener('click', () => {
+    document.querySelectorAll('.grad-swatch').forEach(x=>x.classList.remove('active'));
+    s.classList.add('active');
+    state.bgGradient = s.dataset.g;
+    updatePreview();
+  });
+});
+
+document.querySelectorAll('#radiusGrid .radius-btn').forEach(b => {
+  b.addEventListener('click', () => {
+    document.querySelectorAll('#radiusGrid .radius-btn').forEach(x=>x.classList.remove('active'));
+    b.classList.add('active');
+    state.radius = b.dataset.r;
+    updatePreview();
+  });
+});
+
+document.getElementById('shadowToggle').addEventListener('click', function() {
+  state.shadow = !state.shadow; this.classList.toggle('on', state.shadow); updatePreview();
+});
+document.getElementById('borderToggle').addEventListener('click', function() {
+  state.border = !state.border; this.classList.toggle('on', state.border); updatePreview();
+});
+
+// ══════════════════════════════════════════
+// TOAST
+// ══════════════════════════════════════════
+function showToast(msg, isError) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast'+(isError?' error':'');
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 2400);
+}
+
+// ══════════════════════════════════════════
+// PNG — font-based, always works
+// ══════════════════════════════════════════
+async function downloadPNG() {
+  const btn = document.getElementById('pngBtn');
+  btn.classList.add('loading');
+  btn.innerHTML = '<span class="material-icons-round">hourglass_top</span>…';
+
+  try {
+    const size = cs(), scale = 3;
+    const canvas = document.createElement('canvas');
+    canvas.width = size*scale; canvas.height = size*scale;
+    const ctx = canvas.getContext('2d');
+    ctx.scale(scale, scale);
+    const rPx = parseFloat(state.radius)/100*size;
+
+    function clip() {
+      ctx.beginPath(); ctx.roundRect(0,0,size,size,rPx); ctx.closePath(); ctx.clip();
+    }
+
+    // Background
+    if (state.bgType !== 'transparent') {
+      ctx.save(); clip();
+      if (state.bgType === 'solid') { ctx.fillStyle = state.bgColor; ctx.fill(); }
+      else {
+        const [c1,c2] = extractGrads(state.bgGradient);
+        const g = ctx.createLinearGradient(0,0,size,size);
+        g.addColorStop(0,c1); g.addColorStop(1,c2);
+        ctx.fillStyle = g; ctx.fill();
+      }
+      ctx.restore();
+    }
+
+    // Icon
+    if (state.source === 'phosphor') {
+      await renderPhosphor(ctx, size, rPx);
+    } else {
+      const family = state.source==='material-round' ? '"Material Icons Round"' : '"Material Symbols Rounded"';
+      await document.fonts.load(`${state.size*scale}px ${family}`);
+      ctx.save(); clip();
+      ctx.fillStyle = state.iconColor;
+      ctx.font = `${state.size}px ${family}`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(state.icon, size/2, size/2);
+      ctx.restore();
+    }
+
+    const a = document.createElement('a');
+    a.download = `${state.icon}_reiicons.png`;
+    a.href = canvas.toDataURL('image/png');
+    a.click();
+    showToast('✓ PNG saved — 3× resolution');
+  } catch(err) {
+    console.error(err);
+    showToast('Export failed, try again', true);
+  }
+
+  btn.classList.remove('loading');
+  btn.innerHTML = '<span class="material-icons-round">download</span>PNG';
+}
+
+async function renderPhosphor(ctx, size, rPx) {
+  // Render phosphor via SVG foreignObject (works in Chrome/Firefox)
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}">
+<foreignObject width="${size}" height="${size}">
+<div xmlns="http://www.w3.org/1999/xhtml" style="width:${size}px;height:${size}px;display:flex;align-items:center;justify-content:center;">
+<i class="ph ph-${state.icon}" style="font-size:${state.size}px;color:${state.iconColor};font-style:normal;"></i>
+</div>
+</foreignObject>
+</svg>`;
+  const blob = new Blob([svg],{type:'image/svg+xml'});
+  const url = URL.createObjectURL(blob);
+  await new Promise((res,rej)=>{
+    const img = new Image();
+    img.onload=()=>{
+      ctx.save(); ctx.beginPath(); ctx.roundRect(0,0,size,size,rPx); ctx.clip();
+      ctx.drawImage(img,0,0,size,size); ctx.restore(); URL.revokeObjectURL(url); res();
+    };
+    img.onerror=()=>{URL.revokeObjectURL(url);rej();};
+    img.src=url;
+  });
+}
+
+function extractGrads(grad) {
+  const m = grad.match(/#[0-9a-fA-F]{3,6}/g);
+  return m&&m.length>=2?[m[0],m[1]]:['#e05c2a','#f0a06e'];
+}
+
+function copyCSS() {
+  const size = cs();
+  const rPx = Math.round(parseFloat(state.radius)/100*size);
+  let bg = state.bgType==='solid'?`background-color: ${state.bgColor};`:
+           state.bgType==='gradient'?`background: ${state.bgGradient};`:`background: transparent;`;
+  const shadow = state.shadow?`\n  box-shadow: 0 16px 48px rgba(0,0,0,0.4);`:'';
+  const css = `.icon-container {\n  width: ${size}px;\n  height: ${size}px;\n  ${bg}\n  border-radius: ${rPx}px;\n  display: flex;\n  align-items: center;\n  justify-content: center;${shadow}\n}\n.icon-container .icon {\n  font-size: ${state.size}px;\n  color: ${state.iconColor};\n}`;
+  navigator.clipboard.writeText(css).then(()=>showToast('✓ CSS copied'));
+}
+
+function copySVG() {
+  const size = cs();
+  const rPx = Math.round(parseFloat(state.radius)/100*size);
+  let bg = '';
+  if (state.bgType==='solid') bg=`<rect width="${size}" height="${size}" rx="${rPx}" fill="${state.bgColor}"/>`;
+  else if (state.bgType==='gradient') {
+    const [c1,c2]=extractGrads(state.bgGradient);
+    bg=`<defs><linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="${c1}"/><stop offset="100%" stop-color="${c2}"/></linearGradient></defs><rect width="${size}" height="${size}" rx="${rPx}" fill="url(#g)"/>`;
+  }
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}">\n${bg}\n<text x="${size/2}" y="${size/2}" text-anchor="middle" dominant-baseline="central" font-size="${state.size}" fill="${state.iconColor}">${state.icon}</text>\n</svg>`;
+  navigator.clipboard.writeText(svg).then(()=>showToast('✓ SVG copied'));
+}
+
+// ══════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════
+updatePreview();
+</script>
+</body>
+</html>
