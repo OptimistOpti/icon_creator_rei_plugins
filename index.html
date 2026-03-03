@@ -1,0 +1,991 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rei Icons</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=IBM+Plex+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+<script src="https://unpkg.com/@phosphor-icons/web@2.1.1/src/index.js"></script>
+<style>
+:root {
+  --bg:#111113;--surface:#18181b;--surface2:#222227;--surface3:#2a2a30;
+  --border:#2e2e35;--text:#f0eff4;--muted:#7a7a8a;--accent:#e05c2a;
+  --accent-glow:rgba(224,92,42,0.18);--ai-color:#7c6af7;--ai-glow:rgba(124,106,247,0.2);
+  --r:10px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh;display:flex;flex-direction:column;overflow-x:hidden;}
+
+/* Header */
+header{padding:12px 22px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);background:var(--surface);z-index:20;flex-shrink:0;gap:12px;flex-wrap:wrap;}
+.brand{font-family:'Syne',sans-serif;font-weight:800;font-size:18px;letter-spacing:-0.02em;flex-shrink:0;}
+.brand span{color:var(--accent);}
+.source-tabs{display:flex;gap:3px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:3px;}
+.source-tab{padding:5px 10px;font-size:11px;font-family:'IBM Plex Mono',monospace;color:var(--muted);border-radius:5px;cursor:pointer;transition:all 0.15s;border:none;background:none;white-space:nowrap;}
+.source-tab.active{background:var(--accent);color:white;}
+
+/* Layout */
+.workspace{display:grid;grid-template-columns:1fr 340px;flex:1;min-height:0;height:calc(100vh - 53px);overflow:hidden;}
+
+/* Preview */
+.preview-area{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;padding:40px;position:relative;overflow:hidden;}
+.preview-area::before{content:'';position:absolute;width:500px;height:500px;background:radial-gradient(circle,rgba(224,92,42,0.05) 0%,transparent 65%);pointer-events:none;}
+#iconCanvas{position:relative;z-index:1;transition:transform 0.35s cubic-bezier(0.34,1.56,0.64,1);cursor:pointer;}
+#iconCanvas:hover{transform:scale(1.04) rotate(-1.5deg);}
+#iconCanvas:active{transform:scale(0.96);}
+.icon-wrapper{display:flex;align-items:center;justify-content:center;transition:all 0.25s;}
+.icon-wrapper .material-icons-round,.icon-wrapper .material-symbols-rounded,.icon-wrapper i.ph{line-height:1;user-select:none;display:block;}
+/* Global Material Symbols rule — must be global for dynamically injected HTML */
+.material-symbols-rounded{
+  font-family:'Material Symbols Rounded'!important;
+  font-weight:normal!important;font-style:normal!important;
+  font-size:24px;line-height:1;letter-spacing:normal!important;
+  text-transform:none!important;display:inline-block;
+  white-space:nowrap;word-wrap:normal;direction:ltr;
+  -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+  -moz-osx-font-smoothing:grayscale;
+  font-feature-settings:'liga'!important;
+  -webkit-font-feature-settings:'liga'!important;
+  font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 48!important;
+}
+.info-strip{position:relative;z-index:1;display:flex;border:1px solid var(--border);border-radius:var(--r);overflow:hidden;background:var(--surface);}
+.info-cell{padding:8px 12px;border-right:1px solid var(--border);display:flex;flex-direction:column;gap:2px;}
+.info-cell:last-child{border-right:none;}
+.info-cell-label{font-size:9px;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);font-family:'IBM Plex Mono',monospace;}
+.info-cell-val{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text);font-weight:500;max-width:88px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+
+/* Controls */
+.controls{background:var(--surface);border-left:1px solid var(--border);overflow-y:auto;padding:16px 14px;display:flex;flex-direction:column;gap:14px;}
+.controls::-webkit-scrollbar{width:3px;}
+.controls::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
+.ctrl-section{display:flex;flex-direction:column;gap:7px;}
+.sec-label{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:0.14em;color:var(--muted);text-transform:uppercase;}
+.ctrl-divider{height:1px;background:var(--border);margin:2px 0;}
+
+/* Input */
+.input-wrap{position:relative;}
+.input-wrap .material-icons-round{position:absolute;left:10px;top:50%;transform:translateY(-50%);font-size:15px;color:var(--muted);pointer-events:none;}
+.icon-input{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:10px 10px 10px 32px;color:var(--text);font-family:'IBM Plex Mono',monospace;font-size:13px;outline:none;transition:border-color 0.2s,box-shadow 0.2s;}
+.icon-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-glow);}
+.icon-input::placeholder{color:var(--muted);}
+.browse-btn{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;padding:9px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);color:var(--muted);font-size:12px;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all 0.15s;}
+.browse-btn:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-glow);}
+.browse-btn .material-icons-round{font-size:14px;}
+.chips{display:flex;flex-wrap:wrap;gap:4px;}
+.chip{display:flex;align-items:center;gap:3px;padding:3px 8px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;font-size:10px;color:var(--muted);cursor:pointer;transition:all 0.15s;}
+.chip:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-glow);}
+.chip .material-icons-round{font-size:11px;}
+
+/* Sliders */
+.slider-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px;}
+.slider-label{font-size:12px;color:var(--text);}
+.slider-val{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--accent);background:var(--accent-glow);padding:2px 7px;border-radius:5px;min-width:42px;text-align:center;}
+input[type=range]{-webkit-appearance:none;width:100%;height:3px;background:var(--border);border-radius:3px;outline:none;cursor:pointer;}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;background:var(--accent);border-radius:50%;box-shadow:0 0 8px var(--accent-glow);transition:transform 0.15s;}
+input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.3);}
+
+/* Tab row */
+.tab-row{display:flex;background:var(--surface2);border-radius:8px;padding:3px;gap:2px;}
+.tab-btn{flex:1;padding:6px;text-align:center;font-size:11px;color:var(--muted);cursor:pointer;border-radius:6px;transition:all 0.15s;font-family:'DM Sans',sans-serif;border:none;background:none;}
+.tab-btn.active{background:var(--surface3);color:var(--text);font-weight:500;}
+
+/* Color */
+.color-row{display:grid;grid-template-columns:1fr 1fr;gap:7px;}
+.color-btn{background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:9px;cursor:pointer;transition:border-color 0.15s;}
+.color-btn:hover{border-color:var(--accent);}
+.color-btn-label{font-size:10px;color:var(--muted);margin-bottom:5px;}
+.color-btn-preview{display:flex;align-items:center;gap:6px;}
+.color-swatch{width:20px;height:20px;border-radius:5px;border:1px solid rgba(255,255,255,0.1);flex-shrink:0;}
+.color-hex{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text);}
+input[type=color]{position:absolute;opacity:0;width:0;height:0;}
+.grad-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;}
+.grad-swatch{height:28px;border-radius:7px;cursor:pointer;border:2px solid transparent;transition:all 0.15s;}
+.grad-swatch:hover,.grad-swatch.active{border-color:white;transform:scale(1.08);}
+
+/* Radius */
+.radius-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;}
+.radius-btn{display:flex;flex-direction:column;align-items:center;gap:4px;padding:7px 3px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;cursor:pointer;font-size:10px;color:var(--muted);font-family:'DM Sans',sans-serif;transition:all 0.15s;}
+.radius-btn .rbox{width:18px;height:18px;background:var(--muted);opacity:0.35;}
+.radius-btn:hover,.radius-btn.active{border-color:var(--accent);color:var(--accent);}
+.radius-btn.active .rbox{opacity:1;background:var(--accent);}
+
+/* Toggle */
+.toggle-row{display:flex;align-items:center;justify-content:space-between;padding:8px 11px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);}
+.toggle-row-label{font-size:12px;color:var(--text);}
+.toggle{width:32px;height:18px;background:var(--border);border-radius:20px;position:relative;cursor:pointer;transition:background 0.2s;flex-shrink:0;}
+.toggle.on{background:var(--accent);}
+.toggle::after{content:'';position:absolute;width:12px;height:12px;background:white;border-radius:50%;top:3px;left:3px;transition:transform 0.2s;}
+.toggle.on::after{transform:translateX(14px);}
+
+/* Export */
+.export-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px;}
+.btn{padding:10px 5px;border-radius:var(--r);font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;cursor:pointer;border:none;display:flex;align-items:center;justify-content:center;gap:4px;transition:all 0.15s;}
+.btn .material-icons-round{font-size:13px;}
+.btn-primary{background:var(--accent);color:white;}
+.btn-primary:hover{background:#c84a1a;transform:translateY(-1px);box-shadow:0 4px 16px var(--accent-glow);}
+.btn-primary:active{transform:none;}
+.btn-primary.loading{opacity:0.6;pointer-events:none;}
+.btn-secondary{background:var(--surface2);color:var(--text);border:1px solid var(--border);}
+.btn-secondary:hover{border-color:var(--accent);color:var(--accent);}
+
+/* ══ AI Generation ══ */
+.ai-section{display:flex;flex-direction:column;gap:8px;}
+.ai-label{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:0.14em;color:var(--ai-color);text-transform:uppercase;display:flex;align-items:center;gap:6px;}
+.ai-label::before{content:'✦';font-size:10px;}
+.ai-input{width:100%;background:var(--surface2);border:1px solid rgba(124,106,247,0.3);border-radius:var(--r);padding:9px 11px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:12px;outline:none;resize:none;transition:border-color 0.2s,box-shadow 0.2s;min-height:64px;}
+.ai-input:focus{border-color:var(--ai-color);box-shadow:0 0 0 3px var(--ai-glow);}
+.ai-input::placeholder{color:var(--muted);}
+.ai-btn{width:100%;padding:10px;border-radius:var(--r);background:linear-gradient(135deg,var(--ai-color),#a855f7);color:white;border:none;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:all 0.2s;}
+.ai-btn:hover{opacity:0.85;transform:translateY(-1px);box-shadow:0 4px 20px var(--ai-glow);}
+.ai-btn:active{transform:none;}
+.ai-btn:disabled{opacity:0.5;cursor:not-allowed;transform:none;}
+.ai-btn .material-icons-round{font-size:15px;}
+.ai-result{position:relative;background:var(--surface2);border:1px solid rgba(124,106,247,0.25);border-radius:var(--r);overflow:hidden;aspect-ratio:1;display:none;align-items:center;justify-content:center;}
+.ai-result.visible{display:flex;}
+.ai-loader{display:flex;flex-direction:column;align-items:center;gap:10px;color:var(--muted);}
+.ai-loader-spin{width:32px;height:32px;border:2px solid var(--border);border-top:2px solid var(--ai-color);border-radius:50%;animation:spin 0.8s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.ai-loader-text{font-size:11px;font-family:'IBM Plex Mono',monospace;color:var(--ai-color);}
+.ai-result img{width:100%;height:100%;object-fit:cover;display:none;}
+.ai-result img.loaded{display:block;}
+.ai-use-btn{position:absolute;bottom:8px;right:8px;padding:5px 10px;background:var(--surface);border:1px solid var(--border);border-radius:7px;font-size:11px;color:var(--text);cursor:pointer;font-family:'DM Sans',sans-serif;display:none;align-items:center;gap:4px;transition:all 0.15s;}
+.ai-use-btn:hover{border-color:var(--ai-color);color:var(--ai-color);}
+.ai-use-btn.show{display:flex;}
+/* AI image on canvas */
+.icon-wrapper .ai-icon-img{width:100%;height:100%;object-fit:contain;display:block;border-radius:inherit;}
+.ai-gallery-label{font-size:10px;color:var(--muted);font-family:'IBM Plex Mono',monospace;}
+.ai-gallery{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;}
+.ai-gallery-item{aspect-ratio:1;border-radius:7px;overflow:hidden;cursor:pointer;border:1px solid var(--border);transition:all 0.15s;background:var(--surface2);}
+.ai-gallery-item:hover{border-color:var(--ai-color);transform:scale(1.05);}
+.ai-gallery-item img{width:100%;height:100%;object-fit:cover;}
+
+/* ══ Icon Browser Modal ══ */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.75);backdrop-filter:blur(6px);z-index:1000;display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity 0.25s;}
+.modal-overlay.open{opacity:1;pointer-events:all;}
+.modal{background:var(--surface);border:1px solid var(--border);border-radius:20px 20px 0 0;width:100%;max-width:960px;height:92vh;display:flex;flex-direction:column;transform:translateY(40px);transition:transform 0.3s cubic-bezier(0.34,1.2,0.64,1);overflow:hidden;}
+.modal-overlay.open .modal{transform:translateY(0);}
+.modal-header{padding:14px 18px 10px;border-bottom:1px solid var(--border);display:flex;flex-direction:column;gap:8px;flex-shrink:0;}
+.modal-top-row{display:flex;align-items:center;justify-content:space-between;}
+.modal-title{font-family:'Syne',sans-serif;font-weight:700;font-size:15px;}
+.modal-icon-count{font-size:10px;color:var(--muted);font-family:'IBM Plex Mono',monospace;}
+.modal-close{width:30px;height:30px;display:flex;align-items:center;justify-content:center;background:var(--surface2);border:1px solid var(--border);border-radius:7px;cursor:pointer;color:var(--muted);transition:all 0.15s;}
+.modal-close:hover{border-color:var(--accent);color:var(--accent);}
+.modal-close .material-icons-round{font-size:15px;}
+.modal-search-wrap{position:relative;}
+.modal-search-wrap .material-icons-round{position:absolute;left:10px;top:50%;transform:translateY(-50%);font-size:15px;color:var(--muted);pointer-events:none;}
+.modal-search{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:9px 9px 9px 34px;color:var(--text);font-family:'IBM Plex Mono',monospace;font-size:13px;outline:none;transition:border-color 0.2s;}
+.modal-search:focus{border-color:var(--accent);}
+.modal-search::placeholder{color:var(--muted);}
+.modal-src-row{display:flex;gap:4px;overflow-x:auto;}
+.modal-src-row::-webkit-scrollbar{display:none;}
+.modal-src-tab{padding:4px 10px;font-size:11px;font-family:'IBM Plex Mono',monospace;color:var(--muted);border:1px solid var(--border);border-radius:20px;cursor:pointer;transition:all 0.15s;background:none;white-space:nowrap;flex-shrink:0;}
+.modal-src-tab.active{background:var(--accent);border-color:var(--accent);color:white;}
+.cat-scroll{display:flex;gap:4px;overflow-x:auto;padding:8px 18px;border-bottom:1px solid var(--border);flex-shrink:0;}
+.cat-scroll::-webkit-scrollbar{display:none;}
+.cat-tab{padding:4px 11px;font-size:11px;font-family:'DM Sans',sans-serif;color:var(--muted);border:1px solid var(--border);border-radius:20px;cursor:pointer;white-space:nowrap;transition:all 0.15s;background:none;flex-shrink:0;}
+.cat-tab:hover{border-color:var(--accent);color:var(--accent);}
+.cat-tab.active{background:var(--surface2);border-color:var(--border);color:var(--text);font-weight:500;}
+.icon-grid-wrap{flex:1;overflow-y:auto;padding:12px 18px;}
+.icon-grid-wrap::-webkit-scrollbar{width:4px;}
+.icon-grid-wrap::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px;}
+.grid-section-title{font-size:10px;color:var(--muted);font-family:'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:0.1em;margin:12px 0 6px;padding-left:2px;}
+.grid-section-title:first-child{margin-top:0;}
+.icon-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(66px,1fr));gap:5px;margin-bottom:4px;}
+.icon-tile{display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 4px;background:var(--surface2);border:1px solid var(--border);border-radius:9px;cursor:pointer;transition:all 0.15s;}
+.icon-tile:hover{border-color:var(--accent);background:var(--accent-glow);}
+.icon-tile.selected{border-color:var(--accent);background:var(--accent-glow);}
+.icon-tile .material-icons-round,.icon-tile .material-symbols-rounded{font-size:22px;color:var(--text);}
+.icon-tile i.ph{font-size:22px;color:var(--text);}
+.icon-tile-name{font-size:8px;color:var(--muted);font-family:'IBM Plex Mono',monospace;text-align:center;word-break:break-all;line-height:1.3;}
+.icon-tile:hover .icon-tile-name{color:var(--accent);}
+
+/* Toast */
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(10px);background:var(--text);color:var(--bg);font-family:'IBM Plex Mono',monospace;font-size:11px;padding:7px 15px;border-radius:20px;opacity:0;transition:all 0.25s;z-index:9999;pointer-events:none;white-space:nowrap;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+.toast.error{background:var(--accent);color:white;}
+.toast.ai{background:var(--ai-color);color:white;}
+
+@media(max-width:800px){
+  .workspace{grid-template-columns:1fr;height:auto;overflow:visible;}
+  .controls{border-left:none;border-top:1px solid var(--border);}
+  .preview-area{min-height:280px;height:auto;padding:24px 18px;}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">Rei<span>Icons</span></div>
+  <div class="source-tabs" id="headerSourceTabs">
+    <button class="source-tab active" data-src="material-round">Mat. Round</button>
+    <button class="source-tab" data-src="material-symbols">Mat. Symbols</button>
+    <button class="source-tab" data-src="phosphor">Phosphor</button>
+  </div>
+</header>
+
+<div class="workspace">
+
+  <!-- LEFT: Preview -->
+  <div class="preview-area">
+    <div id="iconCanvas">
+      <div class="icon-wrapper" id="iconWrapper">
+        <span class="material-icons-round" style="font-size:64px;color:#ffffff">auto_awesome</span>
+      </div>
+    </div>
+    <div class="info-strip">
+      <div class="info-cell"><div class="info-cell-label">Иконка</div><div class="info-cell-val" id="infoName">auto_awesome</div></div>
+      <div class="info-cell"><div class="info-cell-label">Источник</div><div class="info-cell-val" id="infoSrc">Mat. Round</div></div>
+      <div class="info-cell"><div class="info-cell-label">Размер</div><div class="info-cell-val" id="infoSize">64px</div></div>
+      <div class="info-cell"><div class="info-cell-label">Канвас</div><div class="info-cell-val" id="infoCanvas">112×112</div></div>
+    </div>
+  </div>
+
+  <!-- RIGHT: Controls -->
+  <div class="controls">
+
+    <!-- Icon name -->
+    <div class="ctrl-section">
+      <div class="sec-label">Иконка</div>
+      <div class="input-wrap">
+        <span class="material-icons-round">tag</span>
+        <input type="text" class="icon-input" id="iconSearch" value="auto_awesome" placeholder="home, star, bolt…" autocomplete="off">
+      </div>
+      <button class="browse-btn" onclick="openBrowser()">
+        <span class="material-icons-round">apps</span>
+        Просмотреть все иконки
+      </button>
+      <button class="browse-btn" id="clearAiBtn" onclick="clearAIFromCanvas()" style="display:none;border-color:var(--ai-color);color:var(--ai-color);">
+        <span class="material-icons-round">auto_awesome</span>
+        Убрать AI-иконку
+      </button>
+      <div class="chips" id="quickChips">
+        <div class="chip" data-icon="home"><span class="material-icons-round">home</span>home</div>
+        <div class="chip" data-icon="auto_awesome"><span class="material-icons-round">auto_awesome</span>auto_awesome</div>
+        <div class="chip" data-icon="favorite"><span class="material-icons-round">favorite</span>favorite</div>
+        <div class="chip" data-icon="bolt"><span class="material-icons-round">bolt</span>bolt</div>
+        <div class="chip" data-icon="rocket_launch"><span class="material-icons-round">rocket_launch</span>rocket</div>
+        <div class="chip" data-icon="star"><span class="material-icons-round">star</span>star</div>
+        <div class="chip" data-icon="diamond"><span class="material-icons-round">diamond</span>diamond</div>
+        <div class="chip" data-icon="palette"><span class="material-icons-round">palette</span>palette</div>
+      </div>
+    </div>
+
+    <div class="ctrl-divider"></div>
+
+    <!-- Size -->
+    <div class="ctrl-section">
+      <div class="sec-label">Размер иконки</div>
+      <div class="slider-row"><span class="slider-label">Размер</span><span class="slider-val" id="sizeVal">64px</span></div>
+      <input type="range" id="iconSize" min="16" max="128" value="64" step="4">
+    </div>
+
+    <!-- Padding -->
+    <div class="ctrl-section">
+      <div class="sec-label">Отступы</div>
+      <div class="slider-row"><span class="slider-label">Отступ канваса</span><span class="slider-val" id="paddingVal">24px</span></div>
+      <input type="range" id="iconPadding" min="0" max="64" value="24" step="4">
+    </div>
+
+    <div class="ctrl-divider"></div>
+
+    <!-- Background -->
+    <div class="ctrl-section">
+      <div class="sec-label">Фон</div>
+      <div class="tab-row" id="bgTabs">
+        <button class="tab-btn active" data-type="solid">Цвет</button>
+        <button class="tab-btn" data-type="gradient">Градиент</button>
+        <button class="tab-btn" data-type="transparent">Без фона</button>
+      </div>
+      <div id="solidPanel">
+        <div class="color-row">
+          <div class="color-btn" onclick="document.getElementById('bgPicker').click()">
+            <div class="color-btn-label">Фон</div>
+            <div class="color-btn-preview"><div class="color-swatch" id="bgSwatch" style="background:#e05c2a"></div><span class="color-hex" id="bgHex">#e05c2a</span></div>
+          </div>
+          <div class="color-btn" onclick="document.getElementById('iconPicker').click()">
+            <div class="color-btn-label">Иконка</div>
+            <div class="color-btn-preview"><div class="color-swatch" id="iconSwatch" style="background:#ffffff"></div><span class="color-hex" id="iconHex">#ffffff</span></div>
+          </div>
+        </div>
+      </div>
+      <div id="gradientPanel" style="display:none">
+        <div class="grad-grid">
+          <div class="grad-swatch active" data-g="linear-gradient(135deg,#e05c2a,#f0a06e)" style="background:linear-gradient(135deg,#e05c2a,#f0a06e)"></div>
+          <div class="grad-swatch" data-g="linear-gradient(135deg,#2a6fc8,#6eadf0)" style="background:linear-gradient(135deg,#2a6fc8,#6eadf0)"></div>
+          <div class="grad-swatch" data-g="linear-gradient(135deg,#7c6af7,#f06e6e)" style="background:linear-gradient(135deg,#7c6af7,#f06e6e)"></div>
+          <div class="grad-swatch" data-g="linear-gradient(135deg,#0f0f12,#2a2a35)" style="background:linear-gradient(135deg,#0f0f12,#2a2a35)"></div>
+          <div class="grad-swatch" data-g="linear-gradient(135deg,#4ade9a,#2196f3)" style="background:linear-gradient(135deg,#4ade9a,#2196f3)"></div>
+          <div class="grad-swatch" data-g="linear-gradient(135deg,#ff6eb4,#ff9f4a)" style="background:linear-gradient(135deg,#ff6eb4,#ff9f4a)"></div>
+          <div class="grad-swatch" data-g="linear-gradient(135deg,#00c9ff,#92fe9d)" style="background:linear-gradient(135deg,#00c9ff,#92fe9d)"></div>
+          <div class="grad-swatch" data-g="linear-gradient(135deg,#fc4a1a,#f7b733)" style="background:linear-gradient(135deg,#fc4a1a,#f7b733)"></div>
+          <div class="grad-swatch" data-g="linear-gradient(135deg,#a8edea,#fed6e3)" style="background:linear-gradient(135deg,#a8edea,#fed6e3)"></div>
+          <div class="grad-swatch" data-g="linear-gradient(135deg,#1a1a2e,#4f4f7f)" style="background:linear-gradient(135deg,#1a1a2e,#4f4f7f)"></div>
+        </div>
+        <div style="margin-top:7px">
+          <div class="color-btn" onclick="document.getElementById('iconPicker').click()" style="max-width:128px">
+            <div class="color-btn-label">Цвет иконки</div>
+            <div class="color-btn-preview"><div class="color-swatch" id="iconSwatchGrad" style="background:#ffffff"></div><span class="color-hex" id="iconHexGrad">#ffffff</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ctrl-divider"></div>
+
+    <!-- Radius -->
+    <div class="ctrl-section">
+      <div class="sec-label">Скругление</div>
+      <div class="radius-grid" id="radiusGrid">
+        <button class="radius-btn" data-r="0%"><div class="rbox" style="border-radius:0"></div>Нет</button>
+        <button class="radius-btn" data-r="10%"><div class="rbox" style="border-radius:10%"></div>Мал.</button>
+        <button class="radius-btn active" data-r="22%"><div class="rbox" style="border-radius:22%"></div>Ср.</button>
+        <button class="radius-btn" data-r="36%"><div class="rbox" style="border-radius:36%"></div>Бол.</button>
+        <button class="radius-btn" data-r="50%"><div class="rbox" style="border-radius:50%"></div>Круг</button>
+      </div>
+    </div>
+
+    <div class="ctrl-divider"></div>
+
+    <!-- Effects -->
+    <div class="ctrl-section">
+      <div class="sec-label">Эффекты</div>
+      <div style="display:flex;flex-direction:column;gap:5px">
+        <div class="toggle-row"><span class="toggle-row-label">Тень</span><div class="toggle on" id="shadowToggle"></div></div>
+        <div class="toggle-row"><span class="toggle-row-label">Внутренняя рамка</span><div class="toggle" id="borderToggle"></div></div>
+      </div>
+    </div>
+
+    <div class="ctrl-divider"></div>
+
+    <!-- Export -->
+    <div class="ctrl-section">
+      <div class="sec-label">Экспорт</div>
+      <div class="export-grid">
+        <button class="btn btn-primary" id="pngBtn" onclick="downloadPNG()">
+          <span class="material-icons-round">download</span>PNG
+        </button>
+        <button class="btn btn-secondary" onclick="copyCSS()">
+          <span class="material-icons-round">code</span>CSS
+        </button>
+        <button class="btn btn-secondary" onclick="copySVG()">
+          <span class="material-icons-round">data_object</span>SVG
+        </button>
+      </div>
+    </div>
+
+    <div class="ctrl-divider"></div>
+
+    <!-- AI Generation -->
+    <div class="ctrl-section ai-section">
+      <div class="ai-label">AI Генерация · Flux</div>
+      <textarea class="ai-input" id="aiPrompt" placeholder="Опиши иконку... например: корзина для покупок, ракета, сердце в огне"></textarea>
+      <button class="ai-btn" id="aiBtn" onclick="generateAI()">
+        <span class="material-icons-round">auto_awesome</span>
+        Сгенерировать
+      </button>
+      <div class="ai-result" id="aiResult">
+        <div class="ai-loader" id="aiLoader">
+          <div class="ai-loader-spin"></div>
+          <div class="ai-loader-text">Генерируем…</div>
+        </div>
+        <img id="aiImg" alt="Generated icon" />
+        <button class="ai-use-btn" id="aiUseBtn" onclick="applyAIToCanvas()">
+          <span class="material-icons-round">check_circle</span>На канвас
+        </button>
+      </div>
+      <div style="display:none" id="aiGalleryWrap">
+        <div class="ai-gallery-label">Последние генерации</div>
+        <div class="ai-gallery" id="aiGallery"></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══ Icon Browser Modal ══ -->
+<div class="modal-overlay" id="modalOverlay" onclick="handleOverlayClick(event)">
+  <div class="modal" id="modal">
+    <div class="modal-header">
+      <div class="modal-top-row">
+        <div>
+          <div class="modal-title">Все иконки</div>
+          <div class="modal-icon-count" id="modalTotalCount"></div>
+        </div>
+        <div class="modal-close" onclick="closeBrowser()"><span class="material-icons-round">close</span></div>
+      </div>
+      <div class="modal-search-wrap">
+        <span class="material-icons-round">search</span>
+        <input type="text" class="modal-search" id="modalSearch" placeholder="Поиск иконок…" autocomplete="off">
+      </div>
+      <div class="modal-src-row" id="modalSrcRow">
+        <button class="modal-src-tab active" data-src="material-round">Material Round</button>
+        <button class="modal-src-tab" data-src="material-symbols">Material Symbols</button>
+        <button class="modal-src-tab" data-src="phosphor">Phosphor</button>
+      </div>
+    </div>
+    <div class="cat-scroll" id="catTabs"></div>
+    <div class="icon-grid-wrap" id="iconGridWrap"></div>
+  </div>
+</div>
+
+<input type="color" id="bgPicker" value="#e05c2a">
+<input type="color" id="iconPicker" value="#ffffff">
+<div class="toast" id="toast"></div>
+
+<script>
+// ══════════════════════════════════════════════════════════
+// COMPREHENSIVE ICON DATA
+// ══════════════════════════════════════════════════════════
+const MATERIAL_ICONS = {
+  "Популярные":["home","search","settings","favorite","star","person","add","close","check","menu","arrow_back","arrow_forward","delete","edit","share","download","upload","refresh","visibility","visibility_off","lock","lock_open","notifications","info","warning","error","help","done","done_all","clear","more_vert","more_horiz","expand_more","expand_less","chevron_right","chevron_left","open_in_new","link","bookmark","bookmarks","label","flag","thumb_up","thumb_down","filter_list","sort","swap_horiz","swap_vert","drag_handle","content_copy","content_cut","content_paste","undo","redo","select_all","print","save","save_alt","send","reply","forward","attach_file","paid","star_border","favorite_border","check_box","check_box_outline_blank","radio_button_checked","radio_button_unchecked","toggle_on","toggle_off","circle","cancel","block"],
+  "Навигация":["home","menu","arrow_back","arrow_forward","arrow_upward","arrow_downward","expand_more","expand_less","chevron_left","chevron_right","first_page","last_page","keyboard_arrow_up","keyboard_arrow_down","keyboard_arrow_left","keyboard_arrow_right","keyboard_double_arrow_up","keyboard_double_arrow_down","keyboard_double_arrow_left","keyboard_double_arrow_right","north","south","east","west","north_east","north_west","south_east","south_west","unfold_more","unfold_less","swap_horiz","swap_vert","compare_arrows","sync_alt","multiple_stop","turn_left","turn_right","turn_slight_left","turn_slight_right","u_turn_left","u_turn_right","roundabout_left","roundabout_right","merge","fork_right","fork_left","ramp_left","ramp_right","apps","grid_view","view_list","view_module","view_carousel","dashboard","reorder","drag_indicator","open_with","zoom_out_map","fullscreen","fullscreen_exit"],
+  "Действия":["add","remove","add_circle","remove_circle","add_circle_outline","remove_circle_outline","add_box","delete","delete_forever","delete_outline","edit","edit_note","create","draw","content_copy","content_cut","content_paste","undo","redo","reply","reply_all","forward","send","share","download","upload","publish","cloud_upload","cloud_download","save","save_alt","save_as","print","launch","open_in_new","login","logout","input","output","exit_to_app","refresh","autorenew","sync","cached","update","upgrade","new_releases","bolt","flash_on","flash_off","highlight_off","block","do_not_disturb","do_not_disturb_on","do_not_disturb_alt","report","report_problem","warning","error","error_outline","info","info_outline","help","help_outline","question_mark","priority_high"],
+  "Медиа":["play_arrow","pause","stop","skip_next","skip_previous","fast_forward","fast_rewind","replay","replay_5","replay_10","replay_30","forward_5","forward_10","forward_30","shuffle","shuffle_on","repeat","repeat_on","repeat_one","repeat_one_on","queue_music","playlist_add","playlist_add_check","playlist_play","playlist_remove","library_music","library_add","library_add_check","headphones","headset","headset_mic","headset_off","volume_up","volume_down","volume_off","volume_mute","mic","mic_none","mic_off","mic_external_on","mic_external_off","videocam","videocam_off","video_call","video_file","camera","camera_alt","camera_front","camera_rear","camera_roll","photo","photo_camera","photo_camera_back","photo_camera_front","image","image_not_supported","broken_image","collections","collections_bookmark","burst_mode","panorama","panorama_fish_eye","panorama_horizontal","panorama_vertical","panorama_wide_angle","crop","crop_free","crop_square","crop_landscape","crop_portrait","crop_16_9","crop_3_2","crop_5_4","crop_7_5","flip","rotate_left","rotate_right","zoom_in","zoom_out","zoom_in_map","zoom_out_map","open_in_full","close_fullscreen","fullscreen","fullscreen_exit","picture_in_picture","picture_in_picture_alt","present_to_all","cast","cast_connected","cast_for_education","screen_share","stop_screen_share","live_tv","movie","movie_creation","movie_filter","movie_edit","video_library","ondemand_video","video_settings","tv","connected_tv","smart_display","music_note","music_off","music_video","album","audiotrack","queue","queue_play_next","subscriptions","radio","podcasts","graphic_eq","equalizer","speaker","speaker_group","speaker_phone","surround_sound","hearing","speaker_notes","speaker_notes_off"],
+  "Общение":["chat","chat_bubble","chat_bubble_outline","comments_disabled","forum","comment","message","sms","mms","textsms","mail","mail_outline","email","drafts","inbox","outbox","send","move_to_inbox","markunread","markunread_mailbox","all_inbox","all_out","archive","unarchive","report","mark_as_unread","announcement","record_voice_over","voicemail","phone","phone_in_talk","phone_locked","phone_missed","phone_paused","phone_forwarded","phone_callback","phone_disabled","phone_enabled","call","call_end","call_made","call_received","call_missed","call_missed_outgoing","call_split","call_merge","dialer_sip","contact_phone","contact_mail","contact_page","contacts","import_contacts","address_book","alternate_email","business","location_on","location_off","near_me","near_me_disabled","navigation","directions","explore","explore_off","compass_calibration","where_to_vote","person_pin","person_pin_circle","place","map","room","wifi","wifi_off","wifi_lock","wifi_2_bar","wifi_1_bar","signal_wifi_bad","signal_wifi_off","signal_wifi_statusbar_4_bar","bluetooth","bluetooth_connected","bluetooth_disabled","bluetooth_searching","bluetooth_drive","nfc","data_usage","network_check","network_wifi","network_cell","router","hub","dns","vpn_key","vpn_lock","security","lock","lock_open","lock_person","https","gpp_good","gpp_bad","gpp_maybe","verified","verified_user","admin_panel_settings","policy","privacy_tip","manage_accounts","account_circle","account_box","account_balance","account_balance_wallet","badge","person","person_2","person_3","person_4","people","people_alt","people_outline","group","groups","group_add","group_remove","group_work","person_add","person_remove","person_off","person_search","manage_accounts","supervisor_account","engineering","support_agent","diversity_1","diversity_2","diversity_3"],
+  "Файлы":["folder","folder_open","folder_shared","folder_special","folder_copy","folder_delete","folder_zip","folder_off","folder_managed","create_new_folder","drive_folder_upload","drive_file_move","snippet_folder","source","file_open","file_copy","file_download","file_upload","file_present","file_download_done","file_download_off","file_upload_off","insert_drive_file","description","article","note","note_add","note_alt","sticky_note_2","notes","subject","text_snippet","integration_instructions","library_books","book","book_online","books","menu_book","auto_stories","collections_bookmark","local_library","chrome_reader_mode","receipt","receipt_long","list_alt","format_list_bulleted","format_list_numbered","format_list_numbered_rtl","reorder","view_headline","text_fields","title","wrap_text","text_format","format_bold","format_italic","format_underlined","format_strikethrough","format_color_text","format_color_fill","format_color_reset","format_align_left","format_align_center","format_align_right","format_align_justify","format_indent_increase","format_indent_decrease","format_quote","format_size","segment","table_rows","view_column","table_chart","grid_on","grid_off"],
+  "Данные":["bar_chart","pie_chart","show_chart","stacked_bar_chart","stacked_line_chart","area_chart","waterfall_chart","scatter_plot","bubble_chart","candlestick_chart","ssid_chart","multiline_chart","timeline","trending_up","trending_down","trending_flat","analytics","insights","data_usage","assessment","query_stats","monitoring","leaderboard","social_leaderboard","score","percent","functions","calculate","integration_instructions","schema","account_tree","device_hub","hub","spoke","lan","dns","join_left","join_right","join_inner","join_full","merge_type","call_split","call_merge","filter_list","filter_alt","filter_alt_off","sort","swap_vert","arrow_drop_up","arrow_drop_down","height","expand","compress","storage","database","memory","developer_board","cloud","cloud_queue","dynamic_feed","feed","rss_feed","data_object","data_array","code","terminal","developer_mode","api","webhook","http","javascript","html","css","token","key","passkey","fingerprint","face_retouching_natural"],
+  "Дизайн":["palette","color_lens","brush","format_paint","invert_colors","opacity","gradient","texture","style","design_services","auto_fix_normal","auto_fix_high","auto_fix_off","draw","gesture","edit_note","create","format_shapes","crop_rotate","flip_to_back","flip_to_front","layers","layers_clear","blur_on","blur_off","blur_circular","filter","filter_none","filter_1","filter_2","filter_3","filter_4","filter_5","filter_6","filter_7","filter_8","filter_9","filter_9_plus","filter_b_and_w","filter_center_focus","filter_drama","filter_frames","filter_hdr","filter_tilt_shift","filter_vintage","wb_sunny","wb_cloudy","wb_incandescent","wb_iridescent","wb_twighlight","wb_auto","wb_shade","flare","highlight","exposure","contrast","brightness_auto","brightness_high","brightness_low","brightness_medium","colorize","photo_filter","lens","vignette","crop_free","crop_square","crop_landscape","crop_portrait","crop_16_9","crop_3_2","crop_5_4","crop_7_5","crop_rotate","straighten","transform","3d_rotation","view_in_ar","open_with","aspect_ratio","zoom_out_map","center_focus_strong","center_focus_weak","motion_photos_on","motion_photos_off","motion_photos_pause","motion_photos_paused","panorama","360","vrpano","photo_size_select_actual","photo_size_select_large","photo_size_select_small","hdr_on","hdr_off","hdr_strong","hdr_weak","hdr_enhanced_select","looks","looks_one","looks_two","looks_3","looks_4","looks_5","looks_6","image_aspect_ratio","switch_camera","switch_video"],
+  "Коммерция":["shopping_cart","add_shopping_cart","remove_shopping_cart","shopping_cart_checkout","shopping_bag","shopping_basket","store","storefront","local_grocery_store","local_mall","local_offer","loyalty","redeem","card_giftcard","card_membership","card_travel","payment","credit_card","credit_score","account_balance","account_balance_wallet","attach_money","money","monetization_on","currency_exchange","receipt","receipt_long","price_check","price_change","sell","discount","percent","euro","currency_bitcoin","currency_pound","currency_yen","currency_franc","currency_lira","currency_ruble","currency_rupee","savings","savings_outlined","request_quote","calculate","point_of_sale","inventory","inventory_2","production_quantity_limits","qr_code","qr_code_2","barcode_reader","tag","sell","local_atm","atm","contactless","tap_and_play","money_off","paid","request_page","trending_up","leaderboard","storefront","shop","shop_two","store_mall_directory","warehouse","local_shipping","package","redeem","workspace_premium","stars","military_tech","emoji_events","trophy","crown"],
+  "Транспорт":["directions_car","car_rental","car_repair","car_crash","local_taxi","directions_bus","directions_bus_filled","bus_alert","directions_subway","directions_subway_filled","train","tram","directions_bike","two_wheeler","electric_bike","electric_scooter","moped","electric_moped","directions_walk","directions_run","hiking","nordic_walking","directions_boat","directions_boat_filled","sailing","kayaking","surfing","snowboarding","skiing","ice_skating","roller_skating","skateboarding","flight","flight_takeoff","flight_land","airplanemode_active","airplanemode_inactive","local_airport","connecting_airports","airline_seat_flat","airline_seat_flat_angled","airline_seat_individual_suite","airline_seat_legroom_extra","airline_seat_legroom_normal","airline_seat_legroom_reduced","airline_seat_recline_extra","airline_seat_recline_normal","airline_stop","airport_shuttle","ev_station","local_gas_station","local_parking","traffic","speed","route","emergency","fire_truck","local_police","local_hospital","local_shipping","delivery_dining","electric_car","motorcycle","agricultural","construction","forklift","commute","transfer_within_a_station","departure_board","commute","follow_the_signs","pedestrian","signal_cellular_alt","directions","explore","map","navigation"],
+  "Технологии":["phone_android","phone_iphone","smartphone","tablet","tablet_android","computer","laptop","laptop_mac","laptop_windows","laptop_chromebook","desktop_windows","desktop_mac","tv","smart_tv","connected_tv","cast","airplay","watch","watch_later","devices","device_hub","device_unknown","devices_other","phonelink","phonelink_off","phonelink_ring","phonelink_setup","headset","headset_mic","keyboard","keyboard_alt","keyboard_hide","keyboard_return","keyboard_tab","keyboard_voice","keyboard_capslock","keyboard_backspace","keyboard_arrow_up","keyboard_arrow_down","keyboard_arrow_left","keyboard_arrow_right","mouse","gamepad","sports_esports","videogame_asset","videogame_asset_off","memory","developer_board","developer_board_off","microwave","coffee_maker","blender","kitchen","dishwasher","local_laundry_service","battery_full","battery_5_bar","battery_4_bar","battery_3_bar","battery_2_bar","battery_1_bar","battery_0_bar","battery_alert","battery_charging_full","battery_saver","power","power_off","power_input","electrical_services","outlet","usb","bluetooth","nfc","wifi","router","cable","sim_card","sd_card","sd_card_alert","storage","cloud","scanner","print","fax","business_center","work","work_off","work_history","terminal","code","developer_mode","engineering","precision_manufacturing","science","biotech","token","key","passkey","smart_toy","adb","bug_report"],
+  "Природа":["eco","nature","nature_people","park","forest","local_florist","grass","water","waves","beach_access","terrain","landscape","map","public","language","travel_explore","wb_sunny","cloud","thunderstorm","storm","grain","ac_unit","thermostat","visibility","dark_mode","light_mode","nights_stay","wb_twilight","brightness_1","star","stars","auto_awesome","flare","lens","pets","cruelty_free","sanitizer","spa","self_improvement","mood","sentiment_satisfied","sentiment_neutral","sentiment_dissatisfied","sentiment_very_satisfied","sentiment_very_dissatisfied","add_reaction","face","face_2","face_3","face_4","face_5","face_6","face_retouching_natural","air","water_drop","fireplace","severe_cold","snowflake","foggy","hdr_strong","wb_cloudy","partly_cloudy_day","partly_cloudy_night","rainy","cloudy","wind_power","solar_power","flood","landslide","tsunami","volcano","forest","yard","local_florist","energy_savings_leaf","compost","recycling","grass","park","nature","eco","water","waves"],
+  "Здоровье":["favorite","favorite_border","heart_broken","health_and_safety","local_hospital","medical_services","medical_information","medication","medication_liquid","vaccines","syringe","biotech","science","psychology","psychiatry","emergency","emergency_recording","emergency_share","accessible","accessibility","accessibility_new","wheelchair_pickup","elderly","elderly_woman","pregnant_woman","child_care","child_friendly","baby_changing_station","baby","crib","baby_changing_station","fitness_center","sports","sports_gymnastics","self_improvement","spa","mood","mood_bad","sick","monitor_heart","ecg","ecg_heart","bloodtype","thermostat","clean_hands","sanitizer","soap","water_drop","masks","ventilator","pill","ophthalmology","microbiology","genetics","cardiology","orthopedics","radiology","allergy","nutrition","exercise","sprint","directions_run","healing","stethoscope","health_metrics","heart_plus","heart_minus","monitor_weight","medical_services"],
+  "Еда":["restaurant","restaurant_menu","local_dining","dinner_dining","lunch_dining","breakfast_dining","brunch_dining","local_cafe","coffee","cafe","local_bar","sports_bar","local_pizza","local_drink","liquor","wine_bar","bakery_dining","ramen_dining","set_meal","rice_bowl","bento","tapas","takeout_dining","food_bank","outdoor_grill","kitchen","microwave","blender","coffee_maker","no_food","no_drinks","food_is_dangerous","liquor","local_activity","nightlife","casino","bar","wine_bar","sports_bar","local_bar","free_breakfast","room_service","emoji_food_beverage","kitchen","cookware"],
+  "Места":["place","map","navigation","my_location","gps_fixed","gps_not_fixed","gps_off","location_on","location_off","location_searching","near_me","near_me_disabled","pin_drop","directions","route","alt_route","terrain","landscape","satellite","layers","zoom_in_map","zoom_out_map","where_to_vote","beenhere","tour","local_hotel","hotel","store","storefront","local_grocery_store","local_gas_station","local_parking","local_pharmacy","local_hospital","local_police","fire_station","castle","church","mosque","synagogue","temple_buddhist","temple_hindu","stadium","museum","art_track","local_movies","movie","theaters","spa","fitness_center","pool","golf_course","hot_tub","beach_access","park","forest","campground","cabin","cottage","villa","apartment","house","home_work","business","office_building","factory","warehouse","school","university","library","bank","post_office","atm","gas_station","parking","car_repair","car_wash","airport","train","bus_stop","subway","tram"],
+  "Интерфейс":["dashboard","widgets","extension","apps","grid_view","list","view_list","view_module","view_carousel","view_stream","table_rows","table_chart","reorder","sort","filter_list","filter_alt","search","find_in_page","find_replace","manage_search","saved_search","document_scanner","preview","tab","tab_unselected","web","web_asset","web_asset_off","wysiwyg","perm_media","perm_phone_msg","perm_scan_wifi","perm_contact_calendar","perm_identity","perm_data_setting","perm_device_info","perm_camera","settings","settings_accessibility","settings_applications","settings_backup_restore","settings_bluetooth","settings_brightness","settings_cell","settings_display","settings_ethernet","settings_input_antenna","settings_input_component","settings_input_hdmi","settings_input_svideo","settings_overscan","settings_phone","settings_power","settings_remote","settings_system_daydream","settings_voice","tune","toggle_off","toggle_on","radio_button_checked","radio_button_unchecked","check_box","check_box_outline_blank","indeterminate_check_box","circle","lens","panorama_fish_eye","close","add","remove","minimize","maximize"],
+};
+
+const MATERIAL_SYMBOLS = {
+  "Популярные":["home","search","settings","favorite","star","person","add","close","check","menu","arrow_back","arrow_forward","delete","edit","share","download","upload","refresh","visibility","visibility_off","lock","lock_open","notifications","info","warning","error","help","done","done_all","clear","more_vert","bookmark","flag","thumb_up","thumb_down","filter_list","sort","drag_handle","content_copy","undo","redo","print","save","send","attach_file","paid","new_releases","auto_awesome","rocket_launch","bolt","diamond","crown","trophy","verified","badge","loyalty","workspace_premium","celebrate","emoji_events","military_tech","grade","stars","circle","cancel","block"],
+  "Новые иконки":["neurology","cognition","psychiatry","genetics","microbiology","cardiology","orthopedics","immunology","ophthalmology","ent","dermatology","radiology","allergy","nutrition","exercise","sprint","kayaking","paragliding","surfing","scuba_diving","kitesurfing","sledding","snowboarding","skiing","ice_skating","roller_skating","skateboarding","cycling","two_wheeler","electric_moped","electric_rickshaw","airport_shuttle","agricultural","construction","engineering","architecture","real_estate_agent","foundation","water_pump","solar_power","wind_power","heat_pump","ev_charger","charger","cable","encrypted","policy","privacy_tip","security_update_good","gpp_maybe","health_and_safety","crisis_alert","brand_awareness","conversion_path","ads_click","add_to_homescreen","install_desktop","install_mobile","qr_code","qr_code_scanner","barcode","deployed_code","sdk","manufacturing","precision_manufacturing","factory","biotech","schema","account_tree","device_hub","hub","spoke","join_left","join_right","join_inner","join_full","flaky","rule","check_circle","cancel"],
+  "AI и Tech":["smart_toy","psychology","psychology_alt","neurology","cognition","bubble_chart","data_object","data_array","functions","code","terminal","developer_mode","developer_board","memory","storage","cloud","cloud_sync","cloud_lock","database","dns","schema","account_tree","integration_instructions","api","webhook","http","data_usage","analytics","insights","bar_chart","pie_chart","show_chart","timeline","trending_up","model_training","batch_prediction","auto_mode","recycling","restart_alt","update","upgrade","new_releases","verified","badge","workspace_premium","crown","military_tech","trophy","social_leaderboard","monitoring","network_ping","network_check","signal_cellular_alt","wifi_channel","router","hub","spoke","lan","nat","vpn_key","security","lock","enhanced_encryption","token","key","passkey","fingerprint","face_retouching_natural","face_6","person_4","supervised_user_circle","robot_2","android","apple"],
+  "Дизайн":["palette","color_lens","brush","format_paint","invert_colors","opacity","gradient","texture","style","design_services","draw","gesture","edit_note","create","format_shapes","layers","filter","blur_on","exposure","contrast","brightness_auto","colorize","photo_filter","lens","crop_free","straighten","transform","3d_rotation","view_in_ar","open_with","aspect_ratio","zoom_out_map","format_color_fill","format_color_reset","format_color_text","auto_awesome_mosaic","auto_awesome_motion","grain","motion_blur","image","photo","landscape","panorama","camera","videocam","photo_camera","image_search","imagesmode","image_aspect_ratio"],
+};
+
+const PHOSPHOR_ICONS = {
+  "Популярные":["house","magnifying-glass","gear","heart","star","user","plus","x","check","list","arrow-left","arrow-right","trash","pencil","share","download-simple","upload-simple","arrows-clockwise","eye","eye-slash","lock","lock-open","bell","info","warning","x-circle","question","check-circle","prohibit","dots-three-vertical","dots-three","caret-up","caret-down","caret-right","caret-left","bookmark","flag","thumbs-up","thumbs-down","funnel","arrow-up-down","swap","copy","arrow-counter-clockwise","arrow-clockwise","printer","floppy-disk","paper-plane","paperclip","currency-dollar","currency-euro","currency-pound","currency-yen","currency-btc","circle","x-square","check-square","seal-check","shield-check","shield-warning"],
+  "Интерфейс":["squares-four","layout","sidebar","columns","rows","table","card-holder","list-bullets","list-numbers","list-checks","selection","cursor","cursor-click","mouse","keyboard","hand","hand-pointing","hand-waving","hand-grabbing","hand-fist","hand-peace","hands-clapping","eye-dropper","paint-brush","pencil-simple","pencil-line","magic-wand","eraser","scissors","crop","frame-corners","bounding-box","selection-all","selection-plus","intersect","intersect-three","exclude","subtract","unite","path","bezier-curve","anchor","ruler","compass","triangle","square","circle","hexagon","pentagon","diamond","diamond-four","spiral","shapes","sticker","chat-centered","chat-centered-text"],
+  "Медиа":["play","pause","stop","skip-forward","skip-back","fast-forward","rewind","shuffle","repeat","repeat-once","queue","music-note","music-notes","headphones","microphone","microphone-slash","video","video-slash","camera","camera-slash","image","images","film-strip","film-slate","television","monitor","projector-screen","speaker-high","speaker-low","speaker-x","speaker-none","vinyl-record","radio","broadcast","waveform","waveform-slash","equalizer","metronome","playlist","film-reel","clapperboard","popcorn","ticket","star-four","circles-three","circles-three-plus","circles-four","record","cassette-tape","8-ball"],
+  "Общение":["phone","phone-slash","phone-call","phone-incoming","phone-outgoing","chat","chat-text","chat-dots","chat-circle","chat-teardrop","chats","envelope","envelope-open","envelope-simple","envelope-open-text","at","address-book","contacts","identification-card","user-circle","user-square","users","users-three","user-plus","user-minus","user-check","user-x","user-gear","user-switch","megaphone","broadcast","wifi","wifi-high","wifi-medium","wifi-low","wifi-slash","wifi-x","bluetooth","bluetooth-connected","bluetooth-slash","cell-signal-full","cell-signal-high","cell-signal-medium","cell-signal-low","cell-signal-none","rss","rss-simple","newspaper","hash"],
+  "Файлы":["folder","folder-open","folder-simple","folder-simple-dashed","folder-simple-plus","folder-simple-minus","folder-simple-star","folder-simple-lock","folder-notch","folder-notch-open","file","file-text","file-code","file-image","file-audio","file-video","file-zip","file-pdf","file-doc","file-xls","file-ppt","file-csv","file-plus","file-minus","file-search","file-arrow-up","file-arrow-down","files","note","note-pencil","note-blank","notebook","notepad","book","book-open","book-open-text","books","book-bookmark","clipboard","clipboard-text","clipboard-check","clipboard-x","article","newspaper","archive","vault","stack","package","package-open","cloud","cloud-arrow-up","cloud-arrow-down","cloud-check","cloud-slash","database","hard-drive","hard-drives"],
+  "Дизайн":["palette","paint-bucket","paint-brush-broad","paint-roller","pen","pen-nib","pen-nib-straight","highlighter","marker","eraser","crop","scissors","bezier-curve","anchor","ruler","compass","shapes","triangle","square","circle","hexagon","pentagon","diamond","star-four","cross","spiral","swatches","gradient","spectrum","sun","moon","cloud","snowflake","thermometer","fire","flame","drop","wave","wind","sparkle","confetti","shooting-star","magic-wand","wand"],
+  "Коммерция":["shopping-cart","shopping-cart-simple","bag","bag-simple","storefront","store","receipt","currency-dollar","currency-euro","currency-pound","currency-yen","currency-circle-dollar","currency-btc","currency-eth","piggy-bank","bank","credit-card","wallet","gift","tag","tag-simple","tags","barcode","qr-code","truck","package","package-open","archive","vault","scales","percent","chart-bar","chart-line","chart-pie","chart-donut","trend-up","trend-down","coin","coins","hand-coins","money","money-wavy"],
+  "Природа":["tree","tree-palm","tree-evergreen","flower","flower-tulip","leaf","plant","potted-plant","cactus","mushroom","bird","butterfly","cat","dog","horse","cow","fish","shrimp","crab","turtle","snake","rabbit","panda","bug","ant","bee","sun","moon","cloud","cloud-sun","cloud-moon","cloud-rain","cloud-snow","cloud-lightning","snowflake","wind","fire","flame","water","drop","wave","mountains","island","globe","earth","map-pin","map","tent","campfire","lighthouse","anchor"],
+  "Соцсети":["github-logo","twitter-logo","facebook-logo","instagram-logo","linkedin-logo","tiktok-logo","twitch-logo","discord-logo","slack-logo","reddit-logo","pinterest-logo","youtube-logo","spotify-logo","apple-logo","android-logo","windows-logo","linux-logo","notion-logo","figma-logo","framer-logo","codepen-logo","google-logo","google-play-logo","app-store-logo","stripe-logo","paypal-logo","stack-overflow-logo","behance-logo","dribbble-logo","medium-logo","substack-logo","product-hunt-logo","dev-to-logo","hash"],
+  "Стрелки":["arrow-up","arrow-down","arrow-left","arrow-right","arrow-up-left","arrow-up-right","arrow-down-left","arrow-down-right","arrow-bend-up-left","arrow-bend-up-right","arrow-bend-down-left","arrow-bend-down-right","arrow-elbow-down-left","arrow-elbow-down-right","arrow-circle-up","arrow-circle-down","arrow-circle-left","arrow-circle-right","arrows-in","arrows-out","arrows-horizontal","arrows-vertical","arrows-merge","arrows-split","arrows-clockwise","arrows-counter-clockwise","caret-up","caret-down","caret-left","caret-right","caret-double-up","caret-double-down","caret-double-left","caret-double-right","caret-circle-up","caret-circle-down","caret-circle-left","caret-circle-right","sort-ascending","sort-descending","swap","shuffle","rewind","fast-forward","skip-back","skip-forward","return","corner-up-left","corner-up-right","corner-down-left","corner-down-right"],
+};
+
+// ══════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════
+const state = {
+  icon:'auto_awesome', source:'material-round', size:64, padding:24,
+  bgType:'solid', bgColor:'#e05c2a', bgGradient:'linear-gradient(135deg,#e05c2a,#f0a06e)',
+  iconColor:'#ffffff', radius:'22%', shadow:true, border:false,
+  aiImageUrl: null, // when set, shows AI image on canvas instead of font icon
+};
+function cs(){return state.size+state.padding*2;}
+
+// ══════════════════════════════════════════
+// PREVIEW
+// ══════════════════════════════════════════
+function buildIconEl(){
+  const w=document.getElementById('iconWrapper'); w.innerHTML='';
+  // If AI image is active — show it as an <img> covering the full wrapper
+  if(state.aiImageUrl){
+    const img=document.createElement('img');
+    img.className='ai-icon-img';
+    img.src=state.aiImageUrl;
+    img.alt='AI icon';
+    img.style.cssText='width:100%;height:100%;object-fit:contain;display:block;';
+    w.appendChild(img);
+    return;
+  }
+  let el;
+  if(state.source==='material-round'){el=document.createElement('span');el.className='material-icons-round';el.textContent=state.icon;}
+  else if(state.source==='material-symbols'){
+    el=document.createElement('span');
+    el.className='material-symbols-rounded';
+    el.textContent=state.icon;
+    el.style.fontFamily="'Material Symbols Rounded'";
+    el.style.fontFeatureSettings="'liga'";
+    el.style.fontVariationSettings="'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 48";
+  }
+  else{el=document.createElement('i');el.className=`ph ph-${state.icon}`;}
+  el.style.fontSize=state.size+'px'; el.style.color=state.iconColor; w.appendChild(el);
+}
+
+function updatePreview(){
+  const w=document.getElementById('iconWrapper'), size=cs();
+  w.style.width=size+'px'; w.style.height=size+'px';
+  if(state.bgType==='solid') w.style.background=state.bgColor;
+  else if(state.bgType==='gradient') w.style.background=state.bgGradient;
+  else w.style.background='rgba(255,255,255,0.04)';
+  w.style.borderRadius=state.radius;
+  w.style.boxShadow=(state.shadow&&state.bgType!=='transparent')?'0 16px 48px rgba(0,0,0,0.4),0 4px 16px rgba(0,0,0,0.25)':'none';
+  w.style.outline=state.border?'1.5px solid rgba(255,255,255,0.2)':'none';
+  w.style.outlineOffset='-1.5px';
+  buildIconEl();
+  const lbl={'material-round':'Mat. Round','material-symbols':'Mat. Symbols','phosphor':'Phosphor','ai':'Pollinations'};
+  document.getElementById('infoName').textContent=state.aiImageUrl?'AI-иконка':state.icon;
+  document.getElementById('infoSrc').textContent=lbl[state.source]||state.source;
+  document.getElementById('infoSize').textContent=state.size+'px';
+  document.getElementById('infoCanvas').textContent=`${size}×${size}`;
+  // show/hide clear AI button
+  const cb=document.getElementById('clearAiBtn');
+  if(cb) cb.style.display=state.aiImageUrl?'flex':'none';
+}
+
+// ══════════════════════════════════════════
+// SOURCE
+// ══════════════════════════════════════════
+function setSource(src){
+  state.source=src;
+  document.querySelectorAll('.source-tab,.modal-src-tab').forEach(t=>t.classList.toggle('active',t.dataset.src===src));
+  updatePreview();
+  if(browserOpen){renderCatTabs();renderIconGrid();}
+}
+document.querySelectorAll('.source-tab').forEach(t=>t.addEventListener('click',()=>setSource(t.dataset.src)));
+document.querySelectorAll('.modal-src-tab').forEach(t=>t.addEventListener('click',()=>setSource(t.dataset.src)));
+
+// ══════════════════════════════════════════
+// ICON BROWSER
+// ══════════════════════════════════════════
+let browserOpen=false, activeCat='ВСЕ', modalQuery='';
+
+function getActiveData(){
+  if(state.source==='material-round') return MATERIAL_ICONS;
+  if(state.source==='material-symbols') return MATERIAL_SYMBOLS;
+  return PHOSPHOR_ICONS;
+}
+function getAllIcons(){
+  const seen=new Set(), all=[];
+  Object.values(getActiveData()).forEach(arr=>arr.forEach(ic=>{if(!seen.has(ic)){seen.add(ic);all.push(ic);}}));
+  return all;
+}
+function getTotalCount(){return getAllIcons().length;}
+
+function openBrowser(){
+  browserOpen=true; activeCat='ВСЕ'; modalQuery='';
+  document.getElementById('modalSearch').value='';
+  document.getElementById('modalOverlay').classList.add('open');
+  updateModalCount();
+  renderCatTabs();
+  // Wait for fonts before rendering so Material Symbols shows icons not text
+  const fontPromises=[
+    document.fonts.load("24px 'Material Icons Round'"),
+    document.fonts.load("24px 'Material Symbols Rounded'"),
+  ];
+  Promise.all(fontPromises).then(()=>renderIconGrid()).catch(()=>renderIconGrid());
+}
+function closeBrowser(){browserOpen=false;document.getElementById('modalOverlay').classList.remove('open');}
+function handleOverlayClick(e){if(e.target===document.getElementById('modalOverlay'))closeBrowser();}
+
+function updateModalCount(){
+  const total=getTotalCount();
+  document.getElementById('modalTotalCount').textContent=`${total} иконок`;
+}
+
+function renderCatTabs(){
+  const cats=['ВСЕ',...Object.keys(getActiveData())];
+  const c=document.getElementById('catTabs');
+  c.innerHTML=cats.map(cat=>
+    `<button class="cat-tab${cat===activeCat?' active':''}" data-cat="${cat}">${cat}</button>`
+  ).join('');
+  c.querySelectorAll('.cat-tab').forEach(b=>{
+    b.addEventListener('click',()=>{activeCat=b.dataset.cat;renderCatTabs();renderIconGrid();});
+  });
+}
+
+function makeIconHTML(icon){
+  if(state.source==='material-round') return `<span class="material-icons-round">${icon}</span>`;
+  if(state.source==='material-symbols') return `<span class="material-symbols-rounded" style="font-family:'Material Symbols Rounded';font-feature-settings:'liga';font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 48;text-transform:none;letter-spacing:normal;word-wrap:normal;font-size:22px">${icon}</span>`;
+  return `<i class="ph ph-${icon}"></i>`;
+}
+
+function renderIconGrid(){
+  const wrap=document.getElementById('iconGridWrap');
+  const q=modalQuery.toLowerCase();
+  updateModalCount();
+
+  if(q){
+    // search: flat list
+    const results=[];
+    const seen=new Set();
+    Object.values(getActiveData()).forEach(arr=>arr.forEach(ic=>{
+      if(ic.includes(q)&&!seen.has(ic)){seen.add(ic);results.push(ic);}
+    }));
+    document.getElementById('modalTotalCount').textContent=`Найдено: ${results.length}`;
+    wrap.innerHTML=`<div class="icon-grid" id="iconGrid">${results.map(ic=>
+      `<div class="icon-tile${ic===state.icon?' selected':''}" data-icon="${ic}" title="${ic}">${makeIconHTML(ic)}<div class="icon-tile-name">${ic}</div></div>`
+    ).join('')}</div>`;
+  } else if(activeCat==='ВСЕ'){
+    // show all grouped by category
+    const data=getActiveData();
+    let html='';
+    Object.entries(data).forEach(([cat,icons])=>{
+      html+=`<div class="grid-section-title">${cat}</div><div class="icon-grid">${icons.map(ic=>
+        `<div class="icon-tile${ic===state.icon?' selected':''}" data-icon="${ic}" title="${ic}">${makeIconHTML(ic)}<div class="icon-tile-name">${ic}</div></div>`
+      ).join('')}</div>`;
+    });
+    wrap.innerHTML=html;
+  } else {
+    const icons=getActiveData()[activeCat]||[];
+    wrap.innerHTML=`<div class="icon-grid" id="iconGrid">${icons.map(ic=>
+      `<div class="icon-tile${ic===state.icon?' selected':''}" data-icon="${ic}" title="${ic}">${makeIconHTML(ic)}<div class="icon-tile-name">${ic}</div></div>`
+    ).join('')}</div>`;
+  }
+
+  wrap.querySelectorAll('.icon-tile').forEach(tile=>{
+    tile.addEventListener('click',()=>{
+      state.icon=tile.dataset.icon;
+      document.getElementById('iconSearch').value=state.icon;
+      updatePreview();
+      wrap.querySelectorAll('.icon-tile').forEach(t=>t.classList.remove('selected'));
+      tile.classList.add('selected');
+      setTimeout(closeBrowser,160);
+    });
+  });
+}
+
+let mDeb;
+document.getElementById('modalSearch').addEventListener('input',e=>{
+  clearTimeout(mDeb);mDeb=setTimeout(()=>{modalQuery=e.target.value.trim();renderIconGrid();},150);
+});
+
+// ══════════════════════════════════════════
+// CONTROLS
+// ══════════════════════════════════════════
+let deb;
+document.getElementById('iconSearch').addEventListener('input',e=>{
+  clearTimeout(deb);deb=setTimeout(()=>{
+    const v=e.target.value.trim().toLowerCase().replace(/\s+/g,state.source==='phosphor'?'-':'_');
+    if(v){state.icon=v;updatePreview();}
+  },280);
+});
+document.querySelectorAll('#quickChips .chip').forEach(c=>{
+  c.addEventListener('click',()=>{
+    state.icon=c.dataset.icon;setSource('material-round');
+    document.getElementById('iconSearch').value=state.icon;updatePreview();
+  });
+});
+document.getElementById('iconSize').addEventListener('input',e=>{state.size=+e.target.value;document.getElementById('sizeVal').textContent=state.size+'px';updatePreview();});
+document.getElementById('iconPadding').addEventListener('input',e=>{state.padding=+e.target.value;document.getElementById('paddingVal').textContent=state.padding+'px';updatePreview();});
+document.querySelectorAll('#bgTabs .tab-btn').forEach(t=>{
+  t.addEventListener('click',()=>{
+    document.querySelectorAll('#bgTabs .tab-btn').forEach(x=>x.classList.remove('active'));
+    t.classList.add('active');state.bgType=t.dataset.type;
+    document.getElementById('solidPanel').style.display=state.bgType==='solid'?'':'none';
+    document.getElementById('gradientPanel').style.display=state.bgType==='gradient'?'':'none';
+    updatePreview();
+  });
+});
+document.getElementById('bgPicker').addEventListener('input',e=>{
+  state.bgColor=e.target.value;document.getElementById('bgSwatch').style.background=state.bgColor;document.getElementById('bgHex').textContent=state.bgColor;updatePreview();
+});
+document.getElementById('iconPicker').addEventListener('input',e=>{
+  state.iconColor=e.target.value;
+  ['iconSwatch','iconSwatchGrad'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.background=state.iconColor;});
+  ['iconHex','iconHexGrad'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=state.iconColor;});
+  updatePreview();
+});
+document.querySelectorAll('.grad-swatch').forEach(s=>{
+  s.addEventListener('click',()=>{document.querySelectorAll('.grad-swatch').forEach(x=>x.classList.remove('active'));s.classList.add('active');state.bgGradient=s.dataset.g;updatePreview();});
+});
+document.querySelectorAll('#radiusGrid .radius-btn').forEach(b=>{
+  b.addEventListener('click',()=>{document.querySelectorAll('#radiusGrid .radius-btn').forEach(x=>x.classList.remove('active'));b.classList.add('active');state.radius=b.dataset.r;updatePreview();});
+});
+document.getElementById('shadowToggle').addEventListener('click',function(){state.shadow=!state.shadow;this.classList.toggle('on',state.shadow);updatePreview();});
+document.getElementById('borderToggle').addEventListener('click',function(){state.border=!state.border;this.classList.toggle('on',state.border);updatePreview();});
+
+// ══════════════════════════════════════════
+// AI GENERATION
+// ══════════════════════════════════════════
+const AI_GALLERY_MAX=5;
+let aiGallery=[];
+let currentAiUrl='';
+
+async function generateAI(){
+  const prompt=document.getElementById('aiPrompt').value.trim();
+  if(!prompt){showToast('Введите описание иконки',true);return;}
+
+  const btn=document.getElementById('aiBtn');
+  const resultBox=document.getElementById('aiResult');
+  const loader=document.getElementById('aiLoader');
+  const loaderText=loader.querySelector('.ai-loader-text');
+  const imgEl=document.getElementById('aiImg');
+  const useBtn=document.getElementById('aiUseBtn');
+
+  btn.disabled=true;
+  resultBox.classList.add('visible');
+  loader.style.display='flex';
+  imgEl.style.display='none';
+  imgEl.classList.remove('loaded');
+  useBtn.classList.remove('show');
+
+  // Live seconds counter in the loader
+  let secs=0;
+  const msgs=['Flux думает…','Строим форму…','Рисуем детали…','Полируем пиксели…','Почти готово…','Ещё секунда…'];
+  function tick(){
+    secs++;
+    if(loaderText) loaderText.textContent=msgs[Math.min(Math.floor(secs/10),msgs.length-1)]+` ${secs}с`;
+    btn.innerHTML=`<span class="material-icons-round">hourglass_top</span>${secs}с…`;
+  }
+  const ticker=setInterval(tick,1000);
+
+  function done(){
+    clearInterval(ticker);
+    btn.disabled=false;
+    btn.innerHTML='<span class="material-icons-round">auto_awesome</span>Сгенерировать';
+  }
+
+  // Build URL — NO nologo (requires auth since March 2025), referrer helps rate limit
+  const seed=Math.floor(Math.random()*9999999);
+  const sysPrompt='flat vector icon, material design, minimalist, white background, centered, simple clean shapes, no text, '+prompt;
+  // NOTE: use encodeURIComponent on prompt only, append params separately
+  const url='https://image.pollinations.ai/prompt/'+encodeURIComponent(sysPrompt)
+    +'?width=512&height=512&model=flux&seed='+seed+'&enhance=false&safe=false';
+  currentAiUrl=url;
+
+  // Hard 90s timeout — anonymous tier can be slow
+  const hardStop=setTimeout(()=>{
+    _loading=false;
+    done();
+    loader.style.display='none';
+    resultBox.classList.remove('visible');
+    imgEl.onload=null; imgEl.onerror=null;
+    showToast('Тайм-аут. Pollinations перегружен, попробуйте позже',true);
+  },90000);
+
+  imgEl.onload=()=>{
+    clearTimeout(hardStop); done();
+    loader.style.display='none';
+    imgEl.classList.add('loaded');
+    imgEl.style.display='block';
+    useBtn.classList.add('show');
+    addToAiGallery(url);
+    showToast('✦ Готово! Нажми «На канвас»','ai');
+  };
+
+  let _loading = true;
+
+  imgEl.onerror=()=>{
+    if(!_loading) return;
+    clearTimeout(hardStop); done();
+    loader.style.display='none';
+    resultBox.classList.remove('visible');
+    showToast('Сервис временно недоступен — попробуйте ещё раз',true);
+    imgEl.onload=null; imgEl.onerror=null;
+  };
+
+  // Set src directly — DO NOT set to '' first (fires onerror in mobile Chrome)
+  _loading=true;
+  imgEl.src = url;
+
+function applyAIToCanvas(){
+  if(!currentAiUrl) return;
+  state.aiImageUrl=currentAiUrl;
+  state.source='ai';
+  updatePreview();
+  showToast('✦ AI-иконка на канвасе!','ai');
+}
+
+function clearAIFromCanvas(){
+  state.aiImageUrl=null;
+  state.source='material-round';
+  setSource('material-round');
+  updatePreview();
+}
+
+function addToAiGallery(url){
+  aiGallery.unshift(url);
+  if(aiGallery.length>AI_GALLERY_MAX) aiGallery=aiGallery.slice(0,AI_GALLERY_MAX);
+  renderAiGallery();
+}
+
+function renderAiGallery(){
+  const wrap=document.getElementById('aiGalleryWrap');
+  const g=document.getElementById('aiGallery');
+  if(aiGallery.length===0){wrap.style.display='none';return;}
+  wrap.style.display='flex';
+  wrap.style.flexDirection='column';
+  wrap.style.gap='6px';
+  g.innerHTML=aiGallery.map((url,i)=>
+    `<div class="ai-gallery-item" onclick="selectFromGallery('${url}')" title="Генерация ${i+1}">
+      <img src="${url}" alt="gen ${i+1}" loading="lazy">
+    </div>`
+  ).join('');
+}
+
+function selectFromGallery(url){
+  currentAiUrl=url;
+  const resultBox=document.getElementById('aiResult');
+  const loader=document.getElementById('aiLoader');
+  const imgEl=document.getElementById('aiImg');
+  const useBtn=document.getElementById('aiUseBtn');
+  resultBox.classList.add('visible');
+  loader.style.display='flex';
+  imgEl.style.display='none';
+  imgEl.classList.remove('loaded');
+  useBtn.classList.remove('show');
+  imgEl.onload=()=>{
+    loader.style.display='none';
+    imgEl.classList.add('loaded');
+    imgEl.style.display='block';
+    useBtn.classList.add('show');
+  };
+  imgEl.src=url;
+}
+
+document.getElementById('aiPrompt').addEventListener('keydown',e=>{
+  if(e.key==='Enter'&&(e.ctrlKey||e.metaKey)) generateAI();
+});
+
+// ══════════════════════════════════════════
+// TOAST
+// ══════════════════════════════════════════
+function showToast(msg,type){
+  const t=document.getElementById('toast');
+  t.textContent=msg;
+  t.className='toast'+(type==='error'?' error':type==='ai'?' ai':'');
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2600);
+}
+
+// ══════════════════════════════════════════
+// roundRect POLYFILL (Android WebView / older Chrome)
+// ══════════════════════════════════════════
+(function(){
+  if(!CanvasRenderingContext2D.prototype.roundRect){
+    CanvasRenderingContext2D.prototype.roundRect=function(x,y,w,h,r){
+      r=Math.min(typeof r==='object'?r[0]:r, w/2, h/2);
+      if(r<0) r=0;
+      this.moveTo(x+r,y);
+      this.lineTo(x+w-r,y);
+      this.quadraticCurveTo(x+w,y,x+w,y+r);
+      this.lineTo(x+w,y+h-r);
+      this.quadraticCurveTo(x+w,y+h,x+w-r,y+h);
+      this.lineTo(x+r,y+h);
+      this.quadraticCurveTo(x,y+h,x,y+h-r);
+      this.lineTo(x,y+r);
+      this.quadraticCurveTo(x,y,x+r,y);
+      this.closePath();
+      return this;
+    };
+  }
+})();
+
+// ══════════════════════════════════════════
+// PNG DOWNLOAD
+// ══════════════════════════════════════════
+async function downloadPNG(){
+  const btn=document.getElementById('pngBtn');
+  btn.classList.add('loading');btn.innerHTML='<span class="material-icons-round">hourglass_top</span>…';
+  try{
+    const size=cs(),scale=3;
+    const canvas=document.createElement('canvas');
+    canvas.width=size*scale;canvas.height=size*scale;
+    const ctx=canvas.getContext('2d');
+    ctx.scale(scale,scale);
+    const rPx=parseFloat(state.radius)/100*size;
+
+    function clip(){
+      ctx.beginPath();
+      ctx.roundRect(0,0,size,size,rPx);
+      ctx.closePath();
+      ctx.clip();
+    }
+
+    // Background
+    if(state.bgType!=='transparent'){
+      ctx.save();clip();
+      if(state.bgType==='solid'){ctx.fillStyle=state.bgColor;ctx.fill();}
+      else{
+        const[c1,c2]=extractGrads(state.bgGradient);
+        const g=ctx.createLinearGradient(0,0,size,size);
+        g.addColorStop(0,c1);g.addColorStop(1,c2);
+        ctx.fillStyle=g;ctx.fill();
+      }
+      ctx.restore();
+    }
+
+    // Icon / AI image
+    if(state.aiImageUrl){
+      // Draw AI image — load with crossOrigin for canvas export
+      await new Promise((res,rej)=>{
+        const img=new Image();
+        img.crossOrigin='anonymous';
+        img.onload=()=>{
+          ctx.save();clip();
+          // fit inside padding
+          ctx.drawImage(img, state.padding, state.padding, state.size, state.size);
+          ctx.restore();res();
+        };
+        img.onerror=()=>{
+          // CORS blocked - try without crossOrigin (canvas will be tainted but we try toDataURL anyway)
+          const img2=new Image();
+          img2.onload=()=>{
+            ctx.save();clip();
+            ctx.drawImage(img2, state.padding, state.padding, state.size, state.size);
+            ctx.restore();res();
+          };
+          img2.onerror=rej;
+          img2.src=state.aiImageUrl+'&t='+Date.now();
+        };
+        img.src=state.aiImageUrl;
+      });
+    } else if(state.source==='phosphor'){
+      await renderPhosphor(ctx,size,rPx);
+    } else {
+      const fam=state.source==='material-round'?'"Material Icons Round"':'"Material Symbols Rounded"';
+      try{ await document.fonts.load(`${state.size*scale}px ${fam}`); }catch(e){}
+      ctx.save();clip();
+      ctx.fillStyle=state.iconColor;
+      ctx.font=`${state.size}px ${fam}`;
+      ctx.textAlign='center';
+      ctx.textBaseline='middle';
+      ctx.fillText(state.icon,size/2,size/2);
+      ctx.restore();
+    }
+
+    // Try toDataURL — may fail if canvas is CORS-tainted
+    let dataUrl;
+    try{ dataUrl=canvas.toDataURL('image/png'); }
+    catch(e){
+      // Canvas tainted — open AI image URL directly for saving
+      if(state.aiImageUrl){ window.open(state.aiImageUrl,'_blank'); showToast('Открыто в новой вкладке — сохрани вручную'); return; }
+      throw e;
+    }
+    const a=document.createElement('a');a.download=`${state.aiImageUrl?'ai':state.icon}_reiicons.png`;a.href=dataUrl;a.click();
+    showToast('✓ PNG сохранён — 3× разрешение');
+  }catch(err){console.error(err);showToast('Ошибка экспорта',true);}
+  btn.classList.remove('loading');btn.innerHTML='<span class="material-icons-round">download</span>PNG';
+}
+async function renderPhosphor(ctx,size,rPx){
+  const svg=`<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}"><foreignObject width="${size}" height="${size}"><div xmlns="http://www.w3.org/1999/xhtml" style="width:${size}px;height:${size}px;display:flex;align-items:center;justify-content:center;"><i class="ph ph-${state.icon}" style="font-size:${state.size}px;color:${state.iconColor};font-style:normal;"></i></div></foreignObject></svg>`;
+  const blob=new Blob([svg],{type:'image/svg+xml'});const url=URL.createObjectURL(blob);
+  await new Promise((res,rej)=>{const img=new Image();img.onload=()=>{ctx.save();ctx.beginPath();ctx.roundRect(0,0,size,size,rPx);ctx.clip();ctx.drawImage(img,0,0,size,size);ctx.restore();URL.revokeObjectURL(url);res();};img.onerror=()=>{URL.revokeObjectURL(url);rej();};img.src=url;});
+}
+function extractGrads(g){const m=g.match(/#[0-9a-fA-F]{3,6}/g);return m&&m.length>=2?[m[0],m[1]]:['#e05c2a','#f0a06e'];}
+
+function copyCSS(){
+  const size=cs(),rPx=Math.round(parseFloat(state.radius)/100*size);
+  let bg=state.bgType==='solid'?`background-color: ${state.bgColor};`:state.bgType==='gradient'?`background: ${state.bgGradient};`:`background: transparent;`;
+  const sh=state.shadow?`\n  box-shadow: 0 16px 48px rgba(0,0,0,0.4);`:'';
+  navigator.clipboard.writeText(`.icon-container {\n  width: ${size}px;\n  height: ${size}px;\n  ${bg}\n  border-radius: ${rPx}px;\n  display: flex;\n  align-items: center;\n  justify-content: center;${sh}\n}\n.icon-container .icon {\n  font-size: ${state.size}px;\n  color: ${state.iconColor};\n}`).then(()=>showToast('✓ CSS скопирован'));
+}
+function copySVG(){
+  const size=cs(),rPx=Math.round(parseFloat(state.radius)/100*size);
+  let bg='';
+  if(state.bgType==='solid') bg=`<rect width="${size}" height="${size}" rx="${rPx}" fill="${state.bgColor}"/>`;
+  else if(state.bgType==='gradient'){const[c1,c2]=extractGrads(state.bgGradient);bg=`<defs><linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="${c1}"/><stop offset="100%" stop-color="${c2}"/></linearGradient></defs><rect width="${size}" height="${size}" rx="${rPx}" fill="url(#g)"/>`;}
+  navigator.clipboard.writeText(`<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}">\n${bg}\n<text x="${size/2}" y="${size/2}" text-anchor="middle" dominant-baseline="central" font-size="${state.size}" fill="${state.iconColor}">${state.icon}</text>\n</svg>`).then(()=>showToast('✓ SVG скопирован'));
+}
+
+// ══════════════════════════════════════════
+updatePreview();
+</script>
+</body>
+</html>
