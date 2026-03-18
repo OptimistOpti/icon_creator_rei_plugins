@@ -1,0 +1,1299 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rei Icons</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=IBM+Plex+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+<script src="https://unpkg.com/@phosphor-icons/web@2.1.1/src/index.js"></script>
+<script src="https://js.puter.com/v2/"></script>
+<style>
+:root{--bg:#111113;--surface:#18181b;--s2:#222227;--s3:#2a2a30;--border:#2e2e35;--text:#f0eff4;--muted:#7a7a8a;--acc:#e05c2a;--acc-g:rgba(224,92,42,0.18);--ai:#7c6af7;--ai-g:rgba(124,106,247,0.2);--r:10px}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh;display:flex;flex-direction:column;overflow-x:hidden}
+
+/* Material Symbols fix — must be global with !important */
+.material-symbols-rounded{font-family:'Material Symbols Rounded'!important;font-weight:normal!important;font-style:normal!important;line-height:1;letter-spacing:normal!important;text-transform:none!important;display:inline-block;white-space:nowrap;word-wrap:normal;direction:ltr;font-feature-settings:'liga'!important;-webkit-font-feature-settings:'liga'!important;-webkit-font-smoothing:antialiased;font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 48!important}
+
+header{padding:12px 22px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);background:var(--surface);z-index:20;flex-shrink:0;gap:12px;flex-wrap:wrap}
+.brand{font-family:'Syne',sans-serif;font-weight:800;font-size:18px;letter-spacing:-.02em;flex-shrink:0}
+.brand span{color:var(--acc)}
+.src-tabs{display:flex;gap:3px;background:var(--s2);border:1px solid var(--border);border-radius:8px;padding:3px}
+.src-tab{padding:5px 10px;font-size:11px;font-family:'IBM Plex Mono',monospace;color:var(--muted);border-radius:5px;cursor:pointer;transition:all .15s;border:none;background:none;white-space:nowrap}
+.src-tab.active{background:var(--acc);color:#fff}
+
+.workspace{display:grid;grid-template-columns:1fr 340px;flex:1;min-height:0;height:calc(100vh - 53px);overflow:hidden}
+
+.preview{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;padding:40px;position:relative;overflow:hidden}
+.preview::before{content:'';position:absolute;width:500px;height:500px;background:radial-gradient(circle,rgba(224,92,42,.05) 0%,transparent 65%);pointer-events:none}
+#cvs{position:relative;z-index:1;transition:transform .35s cubic-bezier(.34,1.56,.64,1);cursor:pointer}
+#cvs:hover{transform:scale(1.04) rotate(-1.5deg)}
+#cvs:active{transform:scale(.96)}
+.iw{display:flex;align-items:center;justify-content:center;transition:all .25s}
+.iw .material-icons-round,.iw .material-symbols-rounded,.iw i.ph{line-height:1;user-select:none;display:block}
+
+.info{display:flex;border:1px solid var(--border);border-radius:var(--r);overflow:hidden;background:var(--surface);position:relative;z-index:1}
+.ic{padding:8px 12px;border-right:1px solid var(--border);display:flex;flex-direction:column;gap:2px}
+.ic:last-child{border-right:none}
+.ic-l{font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);font-family:'IBM Plex Mono',monospace}
+.ic-v{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text);font-weight:500;max-width:90px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+.panel{background:var(--surface);border-left:1px solid var(--border);overflow-y:auto;padding:16px 14px;display:flex;flex-direction:column;gap:14px}
+.panel::-webkit-scrollbar{width:3px}
+.panel::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+.sec{display:flex;flex-direction:column;gap:7px}
+.slbl{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.14em;color:var(--muted);text-transform:uppercase}
+.div{height:1px;background:var(--border);margin:2px 0}
+
+.inp-wrap{position:relative}
+.inp-wrap .material-icons-round{position:absolute;left:10px;top:50%;transform:translateY(-50%);font-size:15px;color:var(--muted);pointer-events:none}
+.inp{width:100%;background:var(--s2);border:1px solid var(--border);border-radius:var(--r);padding:10px 10px 10px 32px;color:var(--text);font-family:'IBM Plex Mono',monospace;font-size:13px;outline:none;transition:border-color .2s,box-shadow .2s}
+.inp:focus{border-color:var(--acc);box-shadow:0 0 0 3px var(--acc-g)}
+.inp::placeholder{color:var(--muted)}
+
+.browse{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;padding:9px;background:var(--s2);border:1px solid var(--border);border-radius:var(--r);color:var(--muted);font-size:12px;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .15s}
+.browse:hover{border-color:var(--acc);color:var(--acc);background:var(--acc-g)}
+.browse .material-icons-round{font-size:14px}
+
+.chips{display:flex;flex-wrap:wrap;gap:4px}
+.chip{display:flex;align-items:center;gap:3px;padding:3px 8px;background:var(--s2);border:1px solid var(--border);border-radius:20px;font-size:10px;color:var(--muted);cursor:pointer;transition:all .15s}
+.chip:hover{border-color:var(--acc);color:var(--acc);background:var(--acc-g)}
+.chip .material-icons-round{font-size:11px}
+
+.sr{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px}
+.sl{font-size:12px;color:var(--text)}
+.sv{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--acc);background:var(--acc-g);padding:2px 7px;border-radius:5px;min-width:42px;text-align:center}
+input[type=range]{-webkit-appearance:none;width:100%;height:3px;background:var(--border);border-radius:3px;outline:none;cursor:pointer}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;background:var(--acc);border-radius:50%;transition:transform .15s}
+input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.3)}
+
+.tabs{display:flex;background:var(--s2);border-radius:8px;padding:3px;gap:2px}
+.tab{flex:1;padding:6px;text-align:center;font-size:11px;color:var(--muted);cursor:pointer;border-radius:6px;transition:all .15s;font-family:'DM Sans',sans-serif;border:none;background:none}
+.tab.active{background:var(--s3);color:var(--text);font-weight:500}
+
+.cr{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.cb{background:var(--s2);border:1px solid var(--border);border-radius:var(--r);padding:9px;cursor:pointer;transition:border-color .15s}
+.cb:hover{border-color:var(--acc)}
+.cb-l{font-size:10px;color:var(--muted);margin-bottom:5px}
+.cb-p{display:flex;align-items:center;gap:6px}
+.cs{width:20px;height:20px;border-radius:5px;border:1px solid rgba(255,255,255,.1);flex-shrink:0}
+.ch{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text)}
+input[type=color]{position:absolute;opacity:0;width:0;height:0}
+
+.gg{display:grid;grid-template-columns:repeat(5,1fr);gap:5px}
+.gs{height:28px;border-radius:7px;cursor:pointer;border:2px solid transparent;transition:all .15s}
+.gs:hover,.gs.active{border-color:#fff;transform:scale(1.08)}
+
+.rg{display:grid;grid-template-columns:repeat(5,1fr);gap:5px}
+.rb{display:flex;flex-direction:column;align-items:center;gap:4px;padding:7px 3px;background:var(--s2);border:1px solid var(--border);border-radius:8px;cursor:pointer;font-size:10px;color:var(--muted);font-family:'DM Sans',sans-serif;transition:all .15s}
+.rb .rbox{width:18px;height:18px;background:var(--muted);opacity:.35}
+.rb:hover,.rb.active{border-color:var(--acc);color:var(--acc)}
+.rb.active .rbox{opacity:1;background:var(--acc)}
+
+.trow{display:flex;align-items:center;justify-content:space-between;padding:8px 11px;background:var(--s2);border:1px solid var(--border);border-radius:var(--r)}
+.trow-l{font-size:12px;color:var(--text)}
+.tog{width:32px;height:18px;background:var(--border);border-radius:20px;position:relative;cursor:pointer;transition:background .2s;flex-shrink:0}
+.tog.on{background:var(--acc)}
+.tog::after{content:'';position:absolute;width:12px;height:12px;background:#fff;border-radius:50%;top:3px;left:3px;transition:transform .2s}
+.tog.on::after{transform:translateX(14px)}
+
+.eg{display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px}
+.btn{padding:10px 5px;border-radius:var(--r);font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;cursor:pointer;border:none;display:flex;align-items:center;justify-content:center;gap:4px;transition:all .15s}
+.btn .material-icons-round{font-size:13px}
+.bp{background:var(--acc);color:#fff}
+.bp:hover{background:#c84a1a;transform:translateY(-1px);box-shadow:0 4px 16px var(--acc-g)}
+.bp:active{transform:none}
+.bp.loading{opacity:.6;pointer-events:none}
+.bs{background:var(--s2);color:var(--text);border:1px solid var(--border)}
+.bs:hover{border-color:var(--acc);color:var(--acc)}
+
+/* AI */
+.ai-lbl{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.14em;color:var(--ai);text-transform:uppercase;display:flex;align-items:center;gap:6px}
+.ai-lbl::before{content:'✦';font-size:10px}
+.ai-inp{width:100%;background:var(--s2);border:1px solid rgba(124,106,247,.3);border-radius:var(--r);padding:9px 11px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:12px;outline:none;resize:none;transition:border-color .2s,box-shadow .2s;min-height:64px}
+.ai-inp:focus{border-color:var(--ai);box-shadow:0 0 0 3px var(--ai-g)}
+.ai-inp::placeholder{color:var(--muted)}
+.ai-btn{width:100%;padding:10px;border-radius:var(--r);background:linear-gradient(135deg,var(--ai),#a855f7);color:#fff;border:none;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:all .2s}
+.ai-btn:hover{opacity:.85;transform:translateY(-1px);box-shadow:0 4px 20px var(--ai-g)}
+.ai-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.ai-btn .material-icons-round{font-size:15px}
+.ai-res{position:relative;background:var(--s2);border:1px solid rgba(124,106,247,.25);border-radius:var(--r);overflow:hidden;aspect-ratio:1;display:none;align-items:center;justify-content:center}
+.ai-res.vis{display:flex}
+.ai-ld{display:flex;flex-direction:column;align-items:center;gap:10px;color:var(--muted)}
+.ai-spin{width:32px;height:32px;border:2px solid var(--border);border-top:2px solid var(--ai);border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.ai-lt{font-size:11px;font-family:'IBM Plex Mono',monospace;color:var(--ai)}
+.ai-res img{width:100%;height:100%;object-fit:cover;display:none}
+.ai-res img.loaded{display:block}
+.ai-use{position:absolute;bottom:8px;right:8px;padding:5px 10px;background:var(--surface);border:1px solid var(--border);border-radius:7px;font-size:11px;color:var(--text);cursor:pointer;font-family:'DM Sans',sans-serif;display:none;align-items:center;gap:4px;transition:all .15s}
+.ai-use:hover{border-color:var(--ai);color:var(--ai)}
+.ai-use.show{display:flex}
+.ai-glbl{font-size:10px;color:var(--muted);font-family:'IBM Plex Mono',monospace}
+.ai-gal{display:grid;grid-template-columns:repeat(5,1fr);gap:5px}
+.ai-gi{aspect-ratio:1;border-radius:7px;overflow:hidden;cursor:pointer;border:1px solid var(--border);transition:all .15s;background:var(--s2)}
+.ai-gi:hover{border-color:var(--ai);transform:scale(1.05)}
+.ai-gi img{width:100%;height:100%;object-fit:cover}
+.ai-icon-img{width:100%;height:100%;object-fit:contain;display:block}
+
+/* Modal */
+.modal-ov{position:fixed;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(6px);z-index:1000;display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .25s}
+.modal-ov.open{opacity:1;pointer-events:all}
+.modal{background:var(--surface);border:1px solid var(--border);border-radius:20px 20px 0 0;width:100%;max-width:960px;height:92vh;display:flex;flex-direction:column;transform:translateY(40px);transition:transform .3s cubic-bezier(.34,1.2,.64,1);overflow:hidden}
+.modal-ov.open .modal{transform:translateY(0)}
+.mhdr{padding:14px 18px 10px;border-bottom:1px solid var(--border);display:flex;flex-direction:column;gap:8px;flex-shrink:0}
+.mtr{display:flex;align-items:center;justify-content:space-between}
+.mtit{font-family:'Syne',sans-serif;font-weight:700;font-size:15px}
+.mcnt{font-size:10px;color:var(--muted);font-family:'IBM Plex Mono',monospace}
+.mclose{width:30px;height:30px;display:flex;align-items:center;justify-content:center;background:var(--s2);border:1px solid var(--border);border-radius:7px;cursor:pointer;color:var(--muted);transition:all .15s}
+.mclose:hover{border-color:var(--acc);color:var(--acc)}
+.mclose .material-icons-round{font-size:15px}
+.msw{position:relative}
+.msw .material-icons-round{position:absolute;left:10px;top:50%;transform:translateY(-50%);font-size:15px;color:var(--muted);pointer-events:none}
+.ms{width:100%;background:var(--s2);border:1px solid var(--border);border-radius:9px;padding:9px 9px 9px 34px;color:var(--text);font-family:'IBM Plex Mono',monospace;font-size:13px;outline:none;transition:border-color .2s}
+.ms:focus{border-color:var(--acc)}
+.ms::placeholder{color:var(--muted)}
+.msr{display:flex;gap:4px;overflow-x:auto}
+.msr::-webkit-scrollbar{display:none}
+.mst{padding:4px 10px;font-size:11px;font-family:'IBM Plex Mono',monospace;color:var(--muted);border:1px solid var(--border);border-radius:20px;cursor:pointer;transition:all .15s;background:none;white-space:nowrap;flex-shrink:0}
+.mst.active{background:var(--acc);border-color:var(--acc);color:#fff}
+.cscr{display:flex;gap:4px;overflow-x:auto;padding:8px 18px;border-bottom:1px solid var(--border);flex-shrink:0}
+.cscr::-webkit-scrollbar{display:none}
+.ctab{padding:4px 11px;font-size:11px;font-family:'DM Sans',sans-serif;color:var(--muted);border:1px solid var(--border);border-radius:20px;cursor:pointer;white-space:nowrap;transition:all .15s;background:none;flex-shrink:0}
+.ctab:hover{border-color:var(--acc);color:var(--acc)}
+.ctab.active{background:var(--s2);border-color:var(--border);color:var(--text);font-weight:500}
+.igw{flex:1;overflow-y:auto;padding:12px 18px}
+.igw::-webkit-scrollbar{width:4px}
+.igw::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
+.gst{font-size:10px;color:var(--muted);font-family:'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:.1em;margin:12px 0 6px;padding-left:2px}
+.gst:first-child{margin-top:0}
+.ig{display:grid;grid-template-columns:repeat(auto-fill,minmax(66px,1fr));gap:5px;margin-bottom:4px}
+.it{display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 4px;background:var(--s2);border:1px solid var(--border);border-radius:9px;cursor:pointer;transition:all .15s}
+.it:hover,.it.sel{border-color:var(--acc);background:var(--acc-g)}
+.it .material-icons-round,.it .material-symbols-rounded{font-size:22px;color:var(--text)}
+.it i.ph{font-size:22px;color:var(--text)}
+.itn{font-size:8px;color:var(--muted);font-family:'IBM Plex Mono',monospace;text-align:center;word-break:break-all;line-height:1.3}
+.it:hover .itn{color:var(--acc)}
+
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(10px);background:var(--text);color:var(--bg);font-family:'IBM Plex Mono',monospace;font-size:11px;padding:7px 15px;border-radius:20px;opacity:0;transition:all .25s;z-index:9999;pointer-events:none;white-space:nowrap}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast.err{background:var(--acc);color:#fff}
+.toast.ai{background:var(--ai);color:#fff}
+
+@media(max-width:800px){
+  .workspace{grid-template-columns:1fr;height:auto;overflow:visible}
+  .panel{border-left:none;border-top:1px solid var(--border)}
+  .preview{min-height:280px;height:auto;padding:24px 18px}
+}
+/* ── Custom Color Picker ── */
+.cpick-ov{position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(8px);z-index:2000;display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .2s}
+.cpick-ov.open{opacity:1;pointer-events:all}
+.cpick{background:var(--surface);border:1px solid var(--border);border-radius:20px 20px 0 0;width:100%;max-width:400px;padding:18px 18px 30px;display:flex;flex-direction:column;gap:12px;transform:translateY(30px);transition:transform .25s cubic-bezier(.34,1.2,.64,1)}
+.cpick-ov.open .cpick{transform:translateY(0)}
+.cpick-title{font-family:'Syne',sans-serif;font-weight:700;font-size:14px;text-align:center;color:var(--text)}
+/* SL box */
+.cp-sl{position:relative;width:100%;height:160px;border-radius:10px;cursor:crosshair;overflow:hidden;flex-shrink:0}
+.cp-sl-bg{position:absolute;inset:0;background:hsl(0,100%,50%)}
+.cp-sl-white{position:absolute;inset:0;background:linear-gradient(to right,#fff,transparent)}
+.cp-sl-black{position:absolute;inset:0;background:linear-gradient(to bottom,transparent,#000)}
+.cp-sl-thumb{position:absolute;width:16px;height:16px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,.4),0 2px 6px rgba(0,0,0,.4);transform:translate(-50%,-50%);pointer-events:none;top:20%;left:80%}
+/* Hue slider */
+.cp-hue{width:100%;height:14px;border-radius:7px;cursor:pointer;background:linear-gradient(to right,#f00,#ff0,#0f0,#0ff,#00f,#f0f,#f00);position:relative;flex-shrink:0}
+.cp-hue-thumb{position:absolute;width:18px;height:18px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,.4),0 2px 6px rgba(0,0,0,.4);top:50%;transform:translate(-50%,-50%);pointer-events:none}
+/* Preview + hex */
+.cp-bot{display:flex;align-items:center;gap:10px}
+.cp-preview{width:44px;height:44px;border-radius:10px;flex-shrink:0;border:1px solid var(--border)}
+.cp-hex{flex:1;background:var(--s2);border:1px solid var(--border);border-radius:8px;padding:9px 11px;font-family:'IBM Plex Mono',monospace;font-size:14px;color:var(--text);outline:none;text-transform:uppercase;letter-spacing:.05em;transition:border-color .15s}
+.cp-hex:focus{border-color:var(--acc)}
+/* Swatches */
+.cp-swatches{display:grid;grid-template-columns:repeat(10,1fr);gap:5px}
+.cp-sw{height:22px;border-radius:5px;cursor:pointer;border:1px solid rgba(255,255,255,.08);transition:transform .1s}
+.cp-sw:hover{transform:scale(1.15)}
+/* Buttons */
+.cp-btns{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.cp-cancel{padding:10px;background:var(--s2);border:1px solid var(--border);border-radius:9px;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer}
+.cp-ok{padding:10px;background:var(--acc);border:none;border-radius:9px;color:#fff;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">Rei<span>Icons</span></div>
+  <div class="src-tabs" id="hSrc">
+    <button class="src-tab active" data-src="mr">Mat. Round</button>
+    <button class="src-tab" data-src="ms">Mat. Symbols</button>
+    <button class="src-tab" data-src="ph">Phosphor</button>
+  </div>
+</header>
+
+<div class="workspace">
+  <!-- PREVIEW -->
+  <div class="preview">
+    <div id="cvs">
+      <div class="iw" id="iw" style="width:112px;height:112px;background:#e05c2a;border-radius:22%;display:flex;align-items:center;justify-content:center;box-shadow:0 16px 48px rgba(0,0,0,.4)">
+        <span class="material-icons-round" style="font-size:64px;color:#fff">auto_awesome</span>
+      </div>
+    </div>
+    <div class="info">
+      <div class="ic"><div class="ic-l">Иконка</div><div class="ic-v" id="iName">auto_awesome</div></div>
+      <div class="ic"><div class="ic-l">Источник</div><div class="ic-v" id="iSrc">Mat. Round</div></div>
+      <div class="ic"><div class="ic-l">Размер</div><div class="ic-v" id="iSz">64px</div></div>
+      <div class="ic"><div class="ic-l">Канвас</div><div class="ic-v" id="iCv">112×112</div></div>
+    </div>
+  </div>
+
+  <!-- PANEL -->
+  <div class="panel">
+
+    <div class="sec">
+      <div class="slbl">Иконка</div>
+      <div class="inp-wrap">
+        <span class="material-icons-round">tag</span>
+        <input class="inp" id="iconInp" value="auto_awesome" placeholder="home, star, bolt…" autocomplete="off">
+      </div>
+      <button class="browse" onclick="openBrowser()"><span class="material-icons-round">apps</span>Просмотреть все иконки</button>
+      <button class="browse" id="clearAI" style="display:none;border-color:var(--ai);color:var(--ai)" onclick="clearAi()"><span class="material-icons-round">auto_awesome</span>Убрать AI‑иконку</button>
+      <div class="chips">
+        <div class="chip" data-icon="home"><span class="material-icons-round">home</span>home</div>
+        <div class="chip" data-icon="auto_awesome"><span class="material-icons-round">auto_awesome</span>auto_awesome</div>
+        <div class="chip" data-icon="favorite"><span class="material-icons-round">favorite</span>favorite</div>
+        <div class="chip" data-icon="bolt"><span class="material-icons-round">bolt</span>bolt</div>
+        <div class="chip" data-icon="rocket_launch"><span class="material-icons-round">rocket_launch</span>rocket</div>
+        <div class="chip" data-icon="star"><span class="material-icons-round">star</span>star</div>
+        <div class="chip" data-icon="diamond"><span class="material-icons-round">diamond</span>diamond</div>
+        <div class="chip" data-icon="palette"><span class="material-icons-round">palette</span>palette</div>
+      </div>
+    </div>
+
+    <div class="div"></div>
+
+    <div class="sec">
+      <div class="slbl">Размер иконки</div>
+      <div class="sr"><span class="sl">Размер</span><span class="sv" id="szV">64px</span></div>
+      <input type="range" id="szR" min="16" max="128" value="64" step="4">
+    </div>
+    <div class="sec">
+      <div class="slbl">Отступы</div>
+      <div class="sr"><span class="sl">Отступ канваса</span><span class="sv" id="pdV">24px</span></div>
+      <input type="range" id="pdR" min="0" max="64" value="24" step="4">
+    </div>
+
+    <div class="div"></div>
+
+    <div class="sec">
+      <div class="slbl">Фон</div>
+      <div class="tabs" id="bgTabs">
+        <button class="tab active" data-t="solid">Цвет</button>
+        <button class="tab" data-t="gradient">Градиент</button>
+        <button class="tab" data-t="none">Без фона</button>
+      </div>
+      <div id="solidP">
+        <div class="cr">
+          <div class="cb" onclick="openPicker('bg')">
+            <div class="cb-l">Фон</div><div class="cb-p"><div class="cs" id="bgSw" style="background:#e05c2a"></div><span class="ch" id="bgHx">#e05c2a</span></div>
+          </div>
+          <div class="cb" onclick="openPicker('ic')">
+            <div class="cb-l">Иконка</div><div class="cb-p"><div class="cs" id="icSw" style="background:#fff"></div><span class="ch" id="icHx">#ffffff</span></div>
+          </div>
+        </div>
+      </div>
+      <div id="gradP" style="display:none">
+        <div class="gg" id="gradSwatches">
+          <div class="gs active" data-g="linear-gradient(135deg,#e05c2a,#f0a06e)" style="background:linear-gradient(135deg,#e05c2a,#f0a06e)"></div>
+          <div class="gs" data-g="linear-gradient(135deg,#2a6fc8,#6eadf0)" style="background:linear-gradient(135deg,#2a6fc8,#6eadf0)"></div>
+          <div class="gs" data-g="linear-gradient(135deg,#7c6af7,#f06e6e)" style="background:linear-gradient(135deg,#7c6af7,#f06e6e)"></div>
+          <div class="gs" data-g="linear-gradient(135deg,#0f0f12,#2a2a35)" style="background:linear-gradient(135deg,#0f0f12,#2a2a35)"></div>
+          <div class="gs" data-g="linear-gradient(135deg,#4ade9a,#2196f3)" style="background:linear-gradient(135deg,#4ade9a,#2196f3)"></div>
+          <div class="gs" data-g="linear-gradient(135deg,#ff6eb4,#ff9f4a)" style="background:linear-gradient(135deg,#ff6eb4,#ff9f4a)"></div>
+          <div class="gs" data-g="linear-gradient(135deg,#00c9ff,#92fe9d)" style="background:linear-gradient(135deg,#00c9ff,#92fe9d)"></div>
+          <div class="gs" data-g="linear-gradient(135deg,#fc4a1a,#f7b733)" style="background:linear-gradient(135deg,#fc4a1a,#f7b733)"></div>
+          <div class="gs" data-g="linear-gradient(135deg,#a8edea,#fed6e3)" style="background:linear-gradient(135deg,#a8edea,#fed6e3)"></div>
+          <div class="gs" data-g="linear-gradient(135deg,#1a1a2e,#4f4f7f)" style="background:linear-gradient(135deg,#1a1a2e,#4f4f7f)"></div>
+        </div>
+
+        <!-- Custom gradient builder -->
+        <div style="margin-top:9px;background:var(--s3);border:1px solid var(--border);border-radius:var(--r);padding:9px;display:flex;flex-direction:column;gap:8px">
+          <div style="font-size:9px;font-family:'IBM Plex Mono',monospace;color:var(--muted);text-transform:uppercase;letter-spacing:.1em">Свой градиент</div>
+          <div id="customGradPreview" style="height:28px;border-radius:7px;background:linear-gradient(135deg,#e05c2a,#f0a06e)"></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
+            <div class="cb" onclick="openPicker('cg1')">
+              <div class="cb-l">Цвет 1</div>
+              <div class="cb-p"><div class="cs" id="cg1Sw" style="background:#e05c2a"></div><span class="ch" id="cg1Hx">#e05c2a</span></div>
+            </div>
+            <div class="cb" onclick="openPicker('cg2')">
+              <div class="cb-l">Цвет 2</div>
+              <div class="cb-p"><div class="cs" id="cg2Sw" style="background:#f0a06e"></div><span class="ch" id="cg2Hx">#f0a06e</span></div>
+            </div>
+          </div>
+          <!-- Direction wheel -->
+          <div style="display:flex;flex-direction:column;gap:4px">
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <span style="font-size:11px;color:var(--text)">Угол</span>
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--acc)" id="cgAngleV">135°</span>
+            </div>
+            <input type="range" id="cgAngleR" min="0" max="360" value="135" step="15">
+          </div>
+          <button onclick="applyCustomGrad()" style="width:100%;padding:7px;background:var(--acc);color:#fff;border:none;border-radius:7px;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;cursor:pointer">Применить</button>
+        </div>
+
+        <div style="margin-top:7px">
+          <div class="cb" style="max-width:130px" onclick="openPicker('ic')">
+            <div class="cb-l">Цвет иконки</div><div class="cb-p"><div class="cs" id="icSwG" style="background:#fff"></div><span class="ch" id="icHxG">#ffffff</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="div"></div>
+
+    <div class="sec">
+      <div class="slbl">Скругление</div>
+      <div class="rg" id="radG">
+        <button class="rb" data-r="0%"><div class="rbox" style="border-radius:0"></div>Нет</button>
+        <button class="rb" data-r="10%"><div class="rbox" style="border-radius:10%"></div>Мал.</button>
+        <button class="rb active" data-r="22%"><div class="rbox" style="border-radius:22%"></div>Ср.</button>
+        <button class="rb" data-r="36%"><div class="rbox" style="border-radius:36%"></div>Бол.</button>
+        <button class="rb" data-r="50%"><div class="rbox" style="border-radius:50%"></div>Круг</button>
+      </div>
+    </div>
+
+    <div class="div"></div>
+
+    <div class="sec">
+      <div class="slbl">Эффекты</div>
+      <div style="display:flex;flex-direction:column;gap:5px">
+        <div class="trow"><span class="trow-l">Тень</span><div class="tog on" id="togSh"></div></div>
+        <div class="trow"><span class="trow-l">Внутренняя рамка</span><div class="tog" id="togBd"></div></div>
+      </div>
+    </div>
+
+    <div class="div"></div>
+
+    <div class="sec">
+      <div class="slbl">Экспорт</div>
+      <div class="eg">
+        <button class="btn bp" id="pngBtn" onclick="dlPNG()"><span class="material-icons-round">download</span>PNG</button>
+        <button class="btn bs" onclick="cpCSS()"><span class="material-icons-round">code</span>CSS</button>
+        <button class="btn bs" onclick="cpSVG()"><span class="material-icons-round">data_object</span>SVG</button>
+      </div>
+    </div>
+
+    <div class="div"></div>
+
+    <div class="sec">
+      <div class="ai-lbl">AI Генерация · Pollinations</div>
+      <textarea class="ai-inp" id="aiInp" placeholder="Опиши иконку… корзина, ракета, кот"></textarea>
+      <button class="ai-btn" id="aiBtn" onclick="genAI()"><span class="material-icons-round">auto_awesome</span>Сгенерировать</button>
+      <div class="ai-res" id="aiRes">
+        <div class="ai-ld" id="aiLd"><div class="ai-spin"></div><div class="ai-lt" id="aiLt">Генерируем…</div></div>
+        <img id="aiImg" alt="">
+        <button class="ai-use" id="aiUse" onclick="applyAI()"><span class="material-icons-round">check_circle</span>На канвас</button>
+      </div>
+      <div id="aiGW" style="display:none;flex-direction:column;gap:6px">
+        <div class="ai-glbl">Последние генерации</div>
+        <div class="ai-gal" id="aiGal"></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-ov" id="mOv" onclick="if(event.target===this)closeBrowser()">
+  <div class="modal">
+    <div class="mhdr">
+      <div class="mtr">
+        <div><div class="mtit">Все иконки</div><div class="mcnt" id="mCnt"></div></div>
+        <div class="mclose" onclick="closeBrowser()"><span class="material-icons-round">close</span></div>
+      </div>
+      <div class="msw"><span class="material-icons-round">search</span><input class="ms" id="mSrch" placeholder="Поиск иконок…" autocomplete="off"></div>
+      <div class="msr" id="mSrc">
+        <button class="mst active" data-src="mr">Material Round</button>
+        <button class="mst" data-src="ms">Material Symbols</button>
+        <button class="mst" data-src="ph">Phosphor</button>
+      </div>
+    </div>
+    <div class="cscr" id="cats"></div>
+    <div class="igw" id="igw"></div>
+  </div>
+</div>
+
+<!-- Custom Color Picker Modal -->
+<div class="cpick-ov" id="cpOv">
+  <div class="cpick">
+    <div class="cpick-title" id="cpTitle">Цвет фона</div>
+    <div class="cp-sl" id="cpSL">
+      <div class="cp-sl-bg" id="cpSlBg"></div>
+      <div class="cp-sl-white"></div>
+      <div class="cp-sl-black"></div>
+      <div class="cp-sl-thumb" id="cpSlThumb"></div>
+    </div>
+    <div style="position:relative">
+      <div class="cp-hue" id="cpHue">
+        <div class="cp-hue-thumb" id="cpHueThumb"></div>
+      </div>
+    </div>
+    <div class="cp-bot">
+      <div class="cp-preview" id="cpPreview"></div>
+      <input class="cp-hex" id="cpHex" maxlength="7" spellcheck="false" placeholder="#ffffff">
+    </div>
+    <div class="cp-swatches" id="cpSwatches"></div>
+    <div class="cp-btns">
+      <button class="cp-cancel" onclick="closePicker()">Отмена</button>
+      <button class="cp-ok" onclick="confirmPicker()">Применить</button>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+// ─────────────────────────────────────────
+// ICON DATA
+// ─────────────────────────────────────────
+var ICONS = {
+  mr: {
+    "Популярные":["home","search","settings","favorite","star","person","add","close","check","menu","arrow_back","arrow_forward","delete","edit","share","download","upload","refresh","visibility","visibility_off","lock","lock_open","notifications","info","warning","error","help","done","done_all","clear","more_vert","more_horiz","expand_more","expand_less","chevron_right","chevron_left","open_in_new","link","bookmark","flag","thumb_up","thumb_down","filter_list","sort","drag_handle","content_copy","content_paste","undo","redo","print","save","send","reply","forward","attach_file","paid","star_border","favorite_border","circle","cancel","block","check_circle","add_circle","remove_circle"],
+    "Навигация":["home","menu","arrow_back","arrow_forward","arrow_upward","arrow_downward","expand_more","expand_less","chevron_left","chevron_right","first_page","last_page","keyboard_arrow_up","keyboard_arrow_down","keyboard_arrow_left","keyboard_arrow_right","north","south","east","west","north_east","north_west","south_east","south_west","swap_horiz","swap_vert","apps","grid_view","view_list","view_module","dashboard","reorder","drag_indicator","open_with","fullscreen","fullscreen_exit","zoom_in","zoom_out"],
+    "Действия":["add","remove","delete","delete_forever","edit","edit_note","create","draw","content_copy","content_cut","content_paste","undo","redo","reply","reply_all","forward","send","share","download","upload","save","save_alt","print","launch","open_in_new","login","logout","refresh","sync","cached","update","upgrade","bolt","flash_on","flash_off","highlight_off","block","do_not_disturb","report","warning","error","info","help","question_mark","priority_high","done","done_all","check_circle","cancel","close","add_circle","remove_circle","star","bookmark","flag","push_pin","label","lock","lock_open","visibility","visibility_off","search","filter_list","sort","tune"],
+    "Медиа":["play_arrow","pause","stop","skip_next","skip_previous","fast_forward","fast_rewind","replay","shuffle","repeat","repeat_one","queue_music","playlist_add","library_music","headphones","volume_up","volume_down","volume_off","volume_mute","mic","mic_off","videocam","videocam_off","camera","camera_alt","photo","photo_camera","image","collections","burst_mode","panorama","crop","flip","rotate_left","rotate_right","zoom_in","zoom_out","fullscreen","fullscreen_exit","cast","screen_share","live_tv","movie","video_library","tv","music_note","music_off","queue","subscriptions","radio","podcasts","speaker","headset","graphic_eq","equalizer"],
+    "Общение":["chat","chat_bubble","forum","comment","message","sms","mail","email","drafts","inbox","send","reply","reply_all","forward","announcement","record_voice_over","phone","call","call_end","voicemail","contact_page","contacts","alternate_email","person","people","group","groups","person_add","person_remove","badge","account_circle","manage_accounts","supervisor_account","wifi","wifi_off","bluetooth","bluetooth_connected","nfc","signal_cellular_alt","vpn_key","security","verified","verified_user","gpp_good","gpp_bad","language","public","travel_explore","location_on","near_me","navigation","directions","explore","map"],
+    "Файлы":["folder","folder_open","folder_shared","folder_special","create_new_folder","insert_drive_file","description","article","note","note_add","sticky_note_2","notes","library_books","book","auto_stories","menu_book","collections_bookmark","import_contacts","cloud","cloud_upload","cloud_download","cloud_done","cloud_off","backup","restore","archive","storage","sd_card","usb","memory","bar_chart","pie_chart","show_chart","timeline","analytics","insights","trending_up","trending_down","trending_flat","assessment","table_chart","data_object","data_array","functions","calculate","code","terminal","developer_mode","api","integration_instructions","source"],
+    "Дизайн":["palette","color_lens","brush","format_paint","invert_colors","opacity","gradient","texture","style","design_services","auto_fix_high","draw","gesture","edit_note","layers","blur_on","blur_off","filter","filter_b_and_w","filter_hdr","filter_vintage","wb_sunny","flare","highlight","exposure","contrast","brightness_auto","colorize","photo_filter","lens","crop_free","crop_square","crop_landscape","crop_portrait","crop_16_9","straighten","transform","3d_rotation","view_in_ar","open_with","aspect_ratio","format_color_fill","format_color_reset","format_color_text","auto_awesome","auto_awesome_mosaic","grain","motion_blur","image","photo","panorama","camera"],
+    "Коммерция":["shopping_cart","add_shopping_cart","shopping_bag","shopping_basket","store","storefront","local_grocery_store","local_mall","local_offer","loyalty","redeem","card_giftcard","card_membership","payment","credit_card","account_balance","account_balance_wallet","attach_money","money","monetization_on","currency_exchange","receipt","receipt_long","price_check","sell","discount","percent","euro","currency_bitcoin","currency_pound","currency_yen","currency_ruble","savings","request_quote","calculate","point_of_sale","inventory_2","qr_code","qr_code_2","tag","paid","money_off","local_atm","contactless"],
+    "Транспорт":["directions_car","car_rental","local_taxi","directions_bus","directions_subway","train","tram","directions_bike","electric_bike","electric_scooter","moped","flight","flight_takeoff","flight_land","local_airport","directions_boat","sailing","local_shipping","electric_car","ev_station","local_gas_station","local_parking","traffic","speed","route","two_wheeler","hiking","directions_walk","directions_run","kayaking","surfing","snowboarding","skiing","skateboarding","emergency","fire_truck","airport_shuttle","agriculture","construction","commute","transfer_within_a_station","map","navigation","directions","explore","gps_fixed","place","pin_drop","my_location"],
+    "Технологии":["phone_android","phone_iphone","smartphone","tablet","computer","laptop","desktop_windows","desktop_mac","tv","smart_display","cast","watch","devices","device_hub","headset","keyboard","mouse","gamepad","sports_esports","memory","developer_board","battery_full","battery_charging_full","bolt","power","electrical_services","outlet","usb","bluetooth","wifi","router","cable","sim_card","sd_card","storage","cloud","scanner","print","smart_toy","precision_manufacturing","science","biotech","psychology","engineering","architecture","token","key","passkey","fingerprint","face_retouching_natural","solar_power","wind_power","ev_charger"],
+    "Природа":["eco","nature","park","forest","local_florist","grass","water","waves","beach_access","terrain","landscape","public","wb_sunny","cloud","thunderstorm","ac_unit","thermostat","visibility","dark_mode","light_mode","nights_stay","flare","star","stars","auto_awesome","pets","cruelty_free","sanitizer","spa","self_improvement","mood","sentiment_satisfied","sentiment_neutral","sentiment_dissatisfied","add_reaction","face","face_retouching_natural","air","water_drop","fireplace","severe_cold","foggy","wb_cloudy","partly_cloudy_day","rainy","wind_power","recycling","compost","energy_savings_leaf","grass","yard"],
+    "Здоровье":["favorite","health_and_safety","local_hospital","medical_services","medication","medication_liquid","vaccines","biotech","science","psychology","emergency","accessible","accessibility","accessibility_new","elderly","pregnant_woman","child_care","fitness_center","sports","self_improvement","spa","mood","mood_bad","sick","monitor_heart","ecg","bloodtype","thermostat","clean_hands","sanitizer","soap","masks","healing","stethoscope"],
+    "Еда":["restaurant","restaurant_menu","local_dining","dinner_dining","lunch_dining","breakfast_dining","local_cafe","coffee","local_bar","sports_bar","local_pizza","local_drink","liquor","wine_bar","bakery_dining","ramen_dining","set_meal","rice_bowl","bento","takeout_dining","outdoor_grill","kitchen","microwave","blender","coffee_maker","food_bank","bar","nightlife"],
+    "Стрелки":["arrow_upward","arrow_downward","arrow_forward","arrow_back","arrow_back_ios","arrow_forward_ios","north","south","east","west","north_east","north_west","south_east","south_west","keyboard_arrow_up","keyboard_arrow_down","keyboard_arrow_left","keyboard_arrow_right","keyboard_double_arrow_up","keyboard_double_arrow_down","expand_more","expand_less","unfold_more","unfold_less","swap_horiz","swap_vert","rotate_left","rotate_right","undo","redo","reply","reply_all","forward","trending_up","trending_down","open_in_new","launch","login","logout","sync","sync_alt","compare_arrows","multiple_stop","turn_left","turn_right","merge","fork_right","fork_left"]
+  },
+  ms: {
+    "Популярные":["home","search","settings","favorite","star","person","add","close","check","menu","arrow_back","arrow_forward","delete","edit","share","download","upload","refresh","visibility","visibility_off","lock","lock_open","notifications","info","warning","error","help","done","done_all","clear","more_vert","bookmark","flag","thumb_up","thumb_down","filter_list","sort","drag_handle","content_copy","undo","redo","print","save","send","attach_file","paid","new_releases","auto_awesome","rocket_launch","bolt","diamond","crown","trophy","verified","badge","loyalty","workspace_premium","celebrate","emoji_events","military_tech","grade","stars","circle","cancel","block"],
+    "Новые иконки":["neurology","cognition","psychiatry","genetics","microbiology","cardiology","orthopedics","immunology","ophthalmology","ent","dermatology","radiology","allergy","nutrition","exercise","sprint","kayaking","paragliding","surfing","scuba_diving","kitesurfing","sledding","snowboarding","skiing","ice_skating","roller_skating","skateboarding","cycling","two_wheeler","electric_moped","electric_rickshaw","airport_shuttle","agricultural","construction","engineering","architecture","real_estate_agent","foundation","water_pump","solar_power","wind_power","heat_pump","ev_charger","charger","cable","encrypted","policy","privacy_tip","security_update_good","gpp_maybe","health_and_safety","crisis_alert","brand_awareness","conversion_path","ads_click","install_desktop","install_mobile","qr_code","qr_code_scanner","barcode","deployed_code","sdk","manufacturing","precision_manufacturing","factory","biotech","schema","account_tree","device_hub","hub","spoke","flaky","rule","check_circle","cancel"],
+    "AI и Tech":["smart_toy","psychology","psychology_alt","neurology","cognition","bubble_chart","data_object","data_array","functions","code","terminal","developer_mode","developer_board","memory","storage","cloud","cloud_sync","cloud_lock","database","dns","schema","account_tree","integration_instructions","api","webhook","http","data_usage","analytics","insights","bar_chart","pie_chart","show_chart","timeline","trending_up","model_training","batch_prediction","auto_mode","recycling","restart_alt","update","upgrade","new_releases","verified","badge","workspace_premium","crown","military_tech","trophy","social_leaderboard","monitoring","network_ping","network_check","wifi_channel","router","hub","spoke","lan","vpn_key","security","lock","enhanced_encryption","token","key","passkey","fingerprint","face_retouching_natural"],
+    "Дизайн":["palette","color_lens","brush","format_paint","invert_colors","opacity","gradient","texture","style","design_services","draw","gesture","edit_note","create","format_shapes","layers","filter","blur_on","exposure","contrast","brightness_auto","colorize","photo_filter","lens","crop_free","straighten","transform","3d_rotation","view_in_ar","open_with","aspect_ratio","zoom_out_map","format_color_fill","format_color_reset","format_color_text","auto_awesome_mosaic","auto_awesome_motion","grain","image","photo","landscape","panorama","camera","videocam"]
+  },
+  ph: {
+    "Популярные":["house","magnifying-glass","gear","heart","star","user","plus","x","check","list","arrow-left","arrow-right","trash","pencil","share","download-simple","upload-simple","arrows-clockwise","eye","eye-slash","lock","lock-open","bell","info","warning","x-circle","question","check-circle","prohibit","dots-three-vertical","dots-three","caret-up","caret-down","caret-right","caret-left","bookmark","flag","thumbs-up","thumbs-down","funnel","arrow-up-down","swap","copy","arrow-counter-clockwise","arrow-clockwise","printer","floppy-disk","paper-plane","paperclip","currency-dollar","currency-euro","currency-pound","currency-yen","currency-btc","circle","x-square","check-square","seal-check","shield-check"],
+    "Интерфейс":["squares-four","layout","sidebar","columns","rows","table","card-holder","list-bullets","list-numbers","list-checks","selection","cursor","cursor-click","mouse","keyboard","hand","hand-pointing","hand-waving","hand-grabbing","hand-fist","hands-clapping","eye-dropper","paint-brush","pencil-simple","pencil-line","magic-wand","eraser","scissors","crop","frame-corners","bounding-box","selection-all","intersect","intersect-three","exclude","subtract","unite","path","bezier-curve","anchor","ruler","compass","triangle","square","circle","hexagon","pentagon","diamond","diamond-four","spiral","shapes","sticker"],
+    "Медиа":["play","pause","stop","skip-forward","skip-back","fast-forward","rewind","shuffle","repeat","repeat-once","queue","music-note","music-notes","headphones","microphone","microphone-slash","video","video-slash","camera","camera-slash","image","images","film-strip","film-slate","television","monitor","projector-screen","speaker-high","speaker-low","speaker-x","speaker-none","vinyl-record","radio","broadcast","waveform","equalizer","metronome","playlist","film-reel","clapperboard","popcorn","ticket","star-four","circles-three","circles-four"],
+    "Общение":["phone","phone-slash","phone-call","phone-incoming","phone-outgoing","chat","chat-text","chat-dots","chat-circle","chat-teardrop","chats","envelope","envelope-open","envelope-simple","envelope-open-text","at","address-book","contacts","identification-card","user-circle","user-square","users","users-three","user-plus","user-minus","user-check","user-x","user-gear","megaphone","broadcast","wifi","wifi-high","wifi-medium","wifi-low","wifi-slash","bluetooth","bluetooth-connected","rss","rss-simple","newspaper","hash"],
+    "Файлы":["folder","folder-open","folder-simple","folder-simple-plus","folder-simple-minus","folder-simple-star","folder-simple-lock","folder-notch","folder-notch-open","file","file-text","file-code","file-image","file-audio","file-video","file-zip","file-pdf","file-doc","file-xls","file-ppt","file-csv","file-plus","file-minus","file-search","file-arrow-up","file-arrow-down","files","note","note-pencil","note-blank","notebook","book","book-open","book-open-text","books","book-bookmark","clipboard","clipboard-text","clipboard-check","clipboard-x","article","archive","vault","stack","package","package-open","cloud","cloud-arrow-up","cloud-arrow-down","cloud-check","database","hard-drive"],
+    "Дизайн":["palette","paint-bucket","paint-brush-broad","paint-roller","pen","pen-nib","highlighter","marker","eraser","crop","scissors","bezier-curve","ruler","compass","shapes","triangle","square","circle","hexagon","pentagon","diamond","star-four","spiral","swatches","gradient","sun","moon","cloud","snowflake","fire","flame","drop","wave","sparkle","confetti","shooting-star","magic-wand"],
+    "Коммерция":["shopping-cart","shopping-cart-simple","bag","bag-simple","storefront","store","receipt","currency-dollar","currency-euro","currency-pound","currency-yen","currency-btc","currency-eth","piggy-bank","bank","credit-card","wallet","gift","tag","tag-simple","tags","barcode","qr-code","truck","package","scales","percent","chart-bar","chart-line","chart-pie","chart-donut","trend-up","trend-down","coin","coins","hand-coins","money","money-wavy"],
+    "Природа":["tree","tree-palm","tree-evergreen","flower","flower-tulip","leaf","plant","potted-plant","cactus","mushroom","bird","butterfly","cat","dog","horse","cow","fish","rabbit","panda","bug","bee","sun","moon","cloud","cloud-sun","cloud-rain","cloud-snow","cloud-lightning","snowflake","wind","fire","flame","water","drop","wave","mountains","globe","earth","map-pin","map","tent","campfire","anchor"],
+    "Соцсети":["github-logo","twitter-logo","facebook-logo","instagram-logo","linkedin-logo","tiktok-logo","twitch-logo","discord-logo","slack-logo","reddit-logo","pinterest-logo","youtube-logo","spotify-logo","apple-logo","android-logo","windows-logo","linux-logo","notion-logo","figma-logo","framer-logo","google-logo","google-play-logo","app-store-logo","stripe-logo","paypal-logo","stack-overflow-logo","behance-logo","dribbble-logo","medium-logo","substack-logo","product-hunt-logo","hash"],
+    "Стрелки":["arrow-up","arrow-down","arrow-left","arrow-right","arrow-up-left","arrow-up-right","arrow-down-left","arrow-down-right","arrow-bend-up-left","arrow-bend-up-right","arrow-bend-down-left","arrow-bend-down-right","arrow-circle-up","arrow-circle-down","arrow-circle-left","arrow-circle-right","arrows-in","arrows-out","arrows-horizontal","arrows-vertical","arrows-merge","arrows-split","arrows-clockwise","arrows-counter-clockwise","caret-up","caret-down","caret-left","caret-right","caret-double-up","caret-double-down","caret-double-left","caret-double-right","caret-circle-up","caret-circle-down","caret-circle-left","caret-circle-right","sort-ascending","sort-descending","swap","shuffle","rewind","fast-forward","skip-back","skip-forward","return","corner-up-left","corner-up-right"]
+  }
+};
+
+// ─────────────────────────────────────────
+// STATE
+// ─────────────────────────────────────────
+var S = {
+  icon: 'auto_awesome',
+  src: 'mr',
+  size: 64,
+  pad: 24,
+  bgType: 'solid',
+  bgCol: '#e05c2a',
+  bgGrad: 'linear-gradient(135deg,#e05c2a,#f0a06e)',
+  icCol: '#ffffff',
+  radius: '22%',
+  shadow: true,
+  border: false,
+  aiUrl: null
+};
+
+function cs() { return S.size + S.pad * 2; }
+
+// ─────────────────────────────────────────
+// roundRect POLYFILL
+// ─────────────────────────────────────────
+if (!CanvasRenderingContext2D.prototype.roundRect) {
+  CanvasRenderingContext2D.prototype.roundRect = function(x,y,w,h,r) {
+    r = Math.min(typeof r==='object'?r[0]:r, w/2, h/2);
+    if(r<0) r=0;
+    this.moveTo(x+r,y);
+    this.lineTo(x+w-r,y); this.quadraticCurveTo(x+w,y,x+w,y+r);
+    this.lineTo(x+w,y+h-r); this.quadraticCurveTo(x+w,y+h,x+w-r,y+h);
+    this.lineTo(x+r,y+h); this.quadraticCurveTo(x,y+h,x,y+h-r);
+    this.lineTo(x,y+r); this.quadraticCurveTo(x,y,x+r,y);
+    this.closePath();
+    return this;
+  };
+}
+
+// ─────────────────────────────────────────
+// AI IMAGE COLORIZER
+// Converts dark pixels → icCol, white → transparent
+// Works because Puter returns blob URLs (same-origin, no CORS)
+// ─────────────────────────────────────────
+var _aiColorCache = {}; // cache: key = aiUrl+'|'+color → dataURL
+
+function hexToRgb(hex) {
+  hex = hex.replace('#','');
+  if (hex.length === 3) hex = hex[0]+hex[0]+hex[1]+hex[1]+hex[2]+hex[2];
+  return {
+    r: parseInt(hex.slice(0,2),16),
+    g: parseInt(hex.slice(2,4),16),
+    b: parseInt(hex.slice(4,6),16)
+  };
+}
+
+function colorizeAiImage(targetCanvas, url, color, size) {
+  var cacheKey = url + '|' + color + '|' + size;
+  var ctx = targetCanvas.getContext('2d');
+
+  if (_aiColorCache[cacheKey]) {
+    var cached = new Image();
+    cached.onload = function() { ctx.clearRect(0,0,size,size); ctx.drawImage(cached,0,0,size,size); };
+    cached.src = _aiColorCache[cacheKey];
+    return;
+  }
+
+  // If it's a blob URL from Claude SVG generation — recolor via SVG currentColor
+  var svgText = window._aiSvgCache && window._aiSvgCache[url];
+  if (svgText) {
+    // Replace currentColor with the target color, set size
+    var colored = svgText
+      .replace(/currentColor/g, color)
+      .replace(/width="[^"]*"/, 'width="'+size+'"')
+      .replace(/height="[^"]*"/, 'height="'+size+'"');
+    var blob = new Blob([colored], {type:'image/svg+xml'});
+    var bUrl = URL.createObjectURL(blob);
+    var im = new Image();
+    im.onload = function() {
+      ctx.clearRect(0,0,size,size);
+      ctx.drawImage(im,0,0,size,size);
+      URL.revokeObjectURL(bUrl);
+      // Cache as data URL
+      try { _aiColorCache[cacheKey] = targetCanvas.toDataURL(); } catch(e){}
+    };
+    im.src = bUrl;
+    return;
+  }
+
+  // Raster image — pixel-by-pixel colorization
+  var col = hexToRgb(color);
+  var tmp = new Image();
+  tmp.crossOrigin = 'anonymous';
+  tmp.onload = function() {
+    var off = document.createElement('canvas');
+    off.width = size; off.height = size;
+    var octx = off.getContext('2d');
+    octx.drawImage(tmp, 0, 0, size, size);
+    try {
+      var id = octx.getImageData(0, 0, size, size);
+      var d = id.data;
+      for (var i = 0; i < d.length; i += 4) {
+        var lum = (d[i]*0.299 + d[i+1]*0.587 + d[i+2]*0.114);
+        var a = Math.round((1 - lum/255) * 255 * (d[i+3]/255));
+        d[i]=col.r; d[i+1]=col.g; d[i+2]=col.b; d[i+3]=a;
+      }
+      octx.putImageData(id, 0, 0);
+      var dataUrl = off.toDataURL('image/png');
+      _aiColorCache[cacheKey] = dataUrl;
+      ctx.clearRect(0,0,size,size);
+      ctx.drawImage(off,0,0,size,size);
+    } catch(e) {
+      ctx.clearRect(0,0,size,size);
+      ctx.drawImage(tmp,0,0,size,size);
+    }
+  };
+  tmp.onerror = function() {
+    ctx.clearRect(0,0,size,size);
+    ctx.fillStyle = color;
+    ctx.fillRect(size*0.2, size*0.2, size*0.6, size*0.6);
+  };
+  tmp.src = url;
+}
+
+// ─────────────────────────────────────────
+// RENDER
+// ─────────────────────────────────────────
+function render() {
+  var w = document.getElementById('iw');
+  var size = cs();
+  w.style.width = size + 'px';
+  w.style.height = size + 'px';
+  w.style.borderRadius = S.radius;
+  w.style.boxShadow = (S.shadow && S.bgType !== 'none') ? '0 16px 48px rgba(0,0,0,.4),0 4px 16px rgba(0,0,0,.25)' : 'none';
+  w.style.outline = S.border ? '1.5px solid rgba(255,255,255,.2)' : 'none';
+  w.style.outlineOffset = '-1.5px';
+
+  if (S.bgType === 'solid') w.style.background = S.bgCol;
+  else if (S.bgType === 'gradient') w.style.background = S.bgGrad;
+  else w.style.background = 'rgba(255,255,255,.04)';
+
+  // Icon content
+  w.innerHTML = '';
+  if (S.aiUrl) {
+    // Render AI icon via canvas: convert dark pixels → icCol, white → transparent
+    var cvs = document.createElement('canvas');
+    cvs.width = S.size; cvs.height = S.size;
+    cvs.style.cssText = 'display:block;image-rendering:crisp-edges;';
+    w.appendChild(cvs);
+    colorizeAiImage(cvs, S.aiUrl, S.icCol, S.size);
+  } else if (S.src === 'mr') {
+    var el = document.createElement('span');
+    el.className = 'material-icons-round';
+    el.textContent = S.icon;
+    el.style.fontSize = S.size + 'px';
+    el.style.color = S.icCol;
+    el.style.lineHeight = '1';
+    el.style.display = 'block';
+    w.appendChild(el);
+  } else if (S.src === 'ms') {
+    var el = document.createElement('span');
+    el.className = 'material-symbols-rounded';
+    el.textContent = S.icon;
+    el.style.cssText = 'font-size:'+S.size+'px;color:'+S.icCol+';line-height:1;display:block;font-family:"Material Symbols Rounded";font-feature-settings:"liga";font-variation-settings:"FILL" 0,"wght" 400,"GRAD" 0,"opsz" 48;text-transform:none;letter-spacing:normal;word-wrap:normal;';
+    w.appendChild(el);
+  } else {
+    var el = document.createElement('i');
+    el.className = 'ph ph-' + S.icon;
+    el.style.fontSize = S.size + 'px';
+    el.style.color = S.icCol;
+    el.style.lineHeight = '1';
+    w.appendChild(el);
+  }
+
+  // Info bar
+  var srcLbl = {mr:'Mat. Round', ms:'Mat. Symbols', ph:'Phosphor', ai:'Pollinations'};
+  document.getElementById('iName').textContent = S.aiUrl ? 'AI-иконка' : S.icon;
+  document.getElementById('iSrc').textContent = srcLbl[S.src] || S.src;
+  document.getElementById('iSz').textContent = S.size + 'px';
+  document.getElementById('iCv').textContent = size + '×' + size;
+
+  document.getElementById('clearAI').style.display = S.aiUrl ? 'flex' : 'none';
+}
+
+// ─────────────────────────────────────────
+// SOURCE TABS
+// ─────────────────────────────────────────
+function setSrc(src) {
+  S.src = src;
+  document.querySelectorAll('.src-tab,.mst').forEach(function(t) {
+    t.classList.toggle('active', t.dataset.src === src);
+  });
+  render();
+  if (bOpen) { buildCats(); buildGrid(); }
+}
+document.querySelectorAll('.src-tab').forEach(function(t) {
+  t.addEventListener('click', function() { setSrc(t.dataset.src); });
+});
+document.querySelectorAll('.mst').forEach(function(t) {
+  t.addEventListener('click', function() { setSrc(t.dataset.src); });
+});
+
+// ─────────────────────────────────────────
+// CONTROLS
+// ─────────────────────────────────────────
+var deb;
+document.getElementById('iconInp').addEventListener('input', function(e) {
+  clearTimeout(deb);
+  deb = setTimeout(function() {
+    var v = e.target.value.trim().toLowerCase().replace(/\s+/g, S.src==='ph'?'-':'_');
+    if (v) { S.icon = v; render(); }
+  }, 300);
+});
+
+document.querySelectorAll('.chip').forEach(function(c) {
+  c.addEventListener('click', function() {
+    S.icon = c.dataset.icon;
+    S.src = 'mr';
+    setSrc('mr');
+    document.getElementById('iconInp').value = S.icon;
+    render();
+  });
+});
+
+document.getElementById('szR').addEventListener('input', function(e) {
+  S.size = +e.target.value;
+  document.getElementById('szV').textContent = S.size + 'px';
+  render();
+});
+document.getElementById('pdR').addEventListener('input', function(e) {
+  S.pad = +e.target.value;
+  document.getElementById('pdV').textContent = S.pad + 'px';
+  render();
+});
+
+document.querySelectorAll('#bgTabs .tab').forEach(function(t) {
+  t.addEventListener('click', function() {
+    document.querySelectorAll('#bgTabs .tab').forEach(function(x){x.classList.remove('active');});
+    t.classList.add('active');
+    S.bgType = t.dataset.t;
+    document.getElementById('solidP').style.display = S.bgType==='solid' ? '' : 'none';
+    document.getElementById('gradP').style.display = S.bgType==='gradient' ? '' : 'none';
+    render();
+  });
+});
+
+
+// bgPick + icPick handled by custom picker
+document.querySelectorAll('.gs').forEach(function(s) {
+  s.addEventListener('click', function() {
+    document.querySelectorAll('.gs').forEach(function(x){x.classList.remove('active');});
+    s.classList.add('active');
+    S.bgGrad = s.dataset.g;
+    render();
+  });
+});
+document.querySelectorAll('#radG .rb').forEach(function(b) {
+  b.addEventListener('click', function() {
+    document.querySelectorAll('#radG .rb').forEach(function(x){x.classList.remove('active');});
+    b.classList.add('active');
+    S.radius = b.dataset.r;
+    render();
+  });
+});
+document.getElementById('togSh').addEventListener('click', function() {
+  S.shadow = !S.shadow; this.classList.toggle('on', S.shadow); render();
+});
+document.getElementById('togBd').addEventListener('click', function() {
+  S.border = !S.border; this.classList.toggle('on', S.border); render();
+});
+
+// ─────────────────────────────────────────
+// BROWSER
+// ─────────────────────────────────────────
+var bOpen = false, bCat = 'ВСЕ', bQ = '';
+
+function openBrowser() {
+  bOpen = true; bCat = 'ВСЕ'; bQ = '';
+  document.getElementById('mSrch').value = '';
+  document.getElementById('mOv').classList.add('open');
+  // Wait for font before rendering icons
+  Promise.all([
+    document.fonts.load("24px 'Material Icons Round'"),
+    document.fonts.load("24px 'Material Symbols Rounded'")
+  ]).then(function(){ buildCats(); buildGrid(); }).catch(function(){ buildCats(); buildGrid(); });
+}
+function closeBrowser() { bOpen = false; document.getElementById('mOv').classList.remove('open'); }
+
+function getData() { return ICONS[S.src] || ICONS.mr; }
+function getAllFlat() {
+  var seen={}, out=[];
+  Object.values(getData()).forEach(function(arr){ arr.forEach(function(ic){ if(!seen[ic]){seen[ic]=1;out.push(ic);} }); });
+  return out;
+}
+
+function buildCats() {
+  var cats = ['ВСЕ'].concat(Object.keys(getData()));
+  var total = getAllFlat().length;
+  document.getElementById('mCnt').textContent = total + ' иконок';
+  var c = document.getElementById('cats');
+  c.innerHTML = cats.map(function(cat){
+    return '<button class="ctab'+(cat===bCat?' active':'')+'" data-cat="'+cat+'">'+cat+'</button>';
+  }).join('');
+  c.querySelectorAll('.ctab').forEach(function(b){
+    b.addEventListener('click', function(){ bCat=b.dataset.cat; buildCats(); buildGrid(); });
+  });
+}
+
+function iconHTML(ic) {
+  if (S.src === 'mr') return '<span class="material-icons-round">'+ic+'</span>';
+  if (S.src === 'ms') return '<span class="material-symbols-rounded" style="font-family:\'Material Symbols Rounded\';font-feature-settings:\'liga\';font-variation-settings:\'FILL\' 0,\'wght\' 400,\'GRAD\' 0,\'opsz\' 48;text-transform:none;letter-spacing:normal;word-wrap:normal;font-size:22px">'+ic+'</span>';
+  return '<i class="ph ph-'+ic+'"></i>';
+}
+
+function buildGrid() {
+  var wrap = document.getElementById('igw');
+  var q = bQ.toLowerCase();
+  var data = getData();
+  var html = '';
+
+  if (q) {
+    var res = [], seen = {};
+    Object.values(data).forEach(function(arr){ arr.forEach(function(ic){ if(ic.includes(q)&&!seen[ic]){seen[ic]=1;res.push(ic);} }); });
+    document.getElementById('mCnt').textContent = 'Найдено: ' + res.length;
+    html = '<div class="ig">'+res.map(function(ic){
+      return '<div class="it'+(ic===S.icon?' sel':'')+'" data-icon="'+ic+'" title="'+ic+'">'+iconHTML(ic)+'<div class="itn">'+ic+'</div></div>';
+    }).join('')+'</div>';
+  } else if (bCat === 'ВСЕ') {
+    Object.entries(data).forEach(function(e){
+      html += '<div class="gst">'+e[0]+'</div><div class="ig">'+e[1].map(function(ic){
+        return '<div class="it'+(ic===S.icon?' sel':'')+'" data-icon="'+ic+'" title="'+ic+'">'+iconHTML(ic)+'<div class="itn">'+ic+'</div></div>';
+      }).join('')+'</div>';
+    });
+  } else {
+    var icons = data[bCat] || [];
+    html = '<div class="ig">'+icons.map(function(ic){
+      return '<div class="it'+(ic===S.icon?' sel':'')+'" data-icon="'+ic+'" title="'+ic+'">'+iconHTML(ic)+'<div class="itn">'+ic+'</div></div>';
+    }).join('')+'</div>';
+  }
+
+  wrap.innerHTML = html;
+  wrap.querySelectorAll('.it').forEach(function(tile){
+    tile.addEventListener('click', function(){
+      S.icon = tile.dataset.icon;
+      document.getElementById('iconInp').value = S.icon;
+      render();
+      wrap.querySelectorAll('.it').forEach(function(t){ t.classList.remove('sel'); });
+      tile.classList.add('sel');
+      setTimeout(closeBrowser, 150);
+    });
+  });
+}
+
+var mDeb;
+document.getElementById('mSrch').addEventListener('input', function(e){
+  clearTimeout(mDeb);
+  mDeb = setTimeout(function(){ bQ = e.target.value.trim(); buildGrid(); }, 150);
+});
+
+// ─────────────────────────────────────────
+// AI — Pollinations.ai (no key, no limits per user)
+// ─────────────────────────────────────────
+var aiGallery = [];
+var aiCurUrl = '';
+
+function genAI() {
+  var prompt = document.getElementById('aiInp').value.trim();
+  if (!prompt) { toast('Введите описание иконки', 'err'); return; }
+
+  var btn   = document.getElementById('aiBtn');
+  var res   = document.getElementById('aiRes');
+  var ld    = document.getElementById('aiLd');
+  var lt    = document.getElementById('aiLt');
+  var imgEl = document.getElementById('aiImg');
+  var use   = document.getElementById('aiUse');
+
+  btn.disabled = true;
+  res.classList.add('vis');
+  ld.style.display = 'flex';
+  imgEl.style.display = 'none';
+  imgEl.classList.remove('loaded');
+  use.classList.remove('show');
+  // Detach handlers before reuse
+  imgEl.onload = null;
+  imgEl.onerror = null;
+
+  var secs = 0;
+  var ticker = setInterval(function() {
+    secs++;
+    var msgs = ['Flux рисует…','Строим форму…','Добавляем детали…','Финальные штрихи…','Почти…'];
+    if (lt) lt.textContent = msgs[Math.min(Math.floor(secs/8), msgs.length-1)] + ' ' + secs + 'с';
+    btn.innerHTML = '<span class="material-icons-round">hourglass_top</span>' + secs + 'с…';
+  }, 1000);
+
+  function done() {
+    clearInterval(ticker);
+    btn.disabled = false;
+    btn.innerHTML = '<span class="material-icons-round">auto_awesome</span>Сгенерировать';
+  }
+  function showImg(src) {
+    aiCurUrl = src;
+    done();
+    ld.style.display = 'none';
+    imgEl.src = src;
+    imgEl.classList.add('loaded');
+    imgEl.style.display = 'block';
+    use.classList.add('show');
+    addGallery(src);
+    toast('✦ Готово! Нажми «На канвас»', 'ai');
+  }
+  function showErr(msg) {
+    done();
+    ld.style.display = 'none';
+    res.classList.remove('vis');
+    toast(msg, 'err');
+  }
+
+  var seed = Math.floor(Math.random() * 9999999);
+  var p = 'flat vector icon, material design, minimalist, pure white background, centered, simple bold shapes, no text, no shadow, ' + prompt;
+  var url = 'https://image.pollinations.ai/prompt/' + encodeURIComponent(p)
+          + '?width=512&height=512&model=flux-schnell&seed=' + seed;
+
+  // Hard timeout — 90s
+  var hard = setTimeout(function() {
+    imgEl.onload = null; imgEl.onerror = null;
+    showErr('Pollinations не ответил — попробуйте ещё раз');
+  }, 90000);
+
+  imgEl.onload = function() {
+    clearTimeout(hard);
+    showImg(url);
+    imgEl.onload = null; imgEl.onerror = null;
+  };
+  imgEl.onerror = function() {
+    clearTimeout(hard);
+    imgEl.onload = null; imgEl.onerror = null;
+    showErr('Ошибка загрузки. Pollinations перегружен — попробуйте ещё раз');
+  };
+  imgEl.src = url;
+}
+
+function applyAI() {
+  if (!aiCurUrl) return;
+  S.aiUrl = aiCurUrl;
+  S.src = 'ai';
+  render();
+  toast('✦ AI-иконка на канвасе!', 'ai');
+}
+function clearAi() {
+  S.aiUrl = null; S.src = 'mr'; setSrc('mr');
+}
+function addGallery(url) {
+  aiGallery.unshift(url);
+  if (aiGallery.length > 5) aiGallery = aiGallery.slice(0,5);
+  var gw = document.getElementById('aiGW');
+  var gal = document.getElementById('aiGal');
+  gw.style.display = 'flex';
+  gal.innerHTML = aiGallery.map(function(u,i){
+    return '<div class="ai-gi" onclick="pickGallery(\'' + i + '\')" title="Генерация '+(i+1)+'"><img src="'+u+'" loading="lazy"></div>';
+  }).join('');
+}
+function pickGallery(i) {
+  var url = aiGallery[+i]; if (!url) return;
+  aiCurUrl = url;
+  var res=document.getElementById('aiRes'),ld=document.getElementById('aiLd'),
+      img=document.getElementById('aiImg'),use=document.getElementById('aiUse');
+  res.classList.add('vis'); ld.style.display='flex'; img.style.display='none';
+  img.classList.remove('loaded'); use.classList.remove('show');
+  img.onload=function(){ld.style.display='none';img.classList.add('loaded');img.style.display='block';use.classList.add('show');};
+  img.src=url;
+}
+document.getElementById('aiInp').addEventListener('keydown', function(e) {
+  if (e.key==='Enter'&&(e.ctrlKey||e.metaKey)) genAI();
+});
+
+// ─────────────────────────────────────────
+// CUSTOM COLOR PICKER
+// ─────────────────────────────────────────
+var CP = {
+  target: null, // 'bg' | 'ic' | 'cg1' | 'cg2'
+  h: 0, s: 80, l: 50, // HSL
+  hex: '#e05c2a'
+};
+var CP_SWATCHES = [
+  '#e05c2a','#e8403a','#e84086','#a040e8','#4040e8',
+  '#4096e8','#40c8e8','#40e884','#a0e840','#e8c840',
+  '#fff','#f0eff4','#aaa','#555','#222',
+  '#111113','#0d1117','#1a1a2e','#16213e','#0f3460',
+];
+
+function hslToHex(h,s,l) {
+  s/=100; l/=100;
+  var a=s*Math.min(l,1-l),f=function(n){var k=(n+h/30)%12;return l-a*Math.max(Math.min(k-3,9-k,1),-1);};
+  return '#'+[f(0),f(8),f(4)].map(function(x){return Math.round(x*255).toString(16).padStart(2,'0');}).join('');
+}
+function hexToHsl(hex) {
+  hex=hex.replace('#','');
+  if(hex.length===3) hex=hex[0]+hex[0]+hex[1]+hex[1]+hex[2]+hex[2];
+  var r=parseInt(hex.slice(0,2),16)/255,g=parseInt(hex.slice(2,4),16)/255,b=parseInt(hex.slice(4,6),16)/255;
+  var max=Math.max(r,g,b),min=Math.min(r,g,b),h,s,l=(max+min)/2;
+  if(max===min){h=s=0;}else{var d=max-min;s=l>.5?d/(2-max-min):d/(max+min);
+    switch(max){case r:h=((g-b)/d+(g<b?6:0))/6;break;case g:h=((b-r)/d+2)/6;break;case b:h=((r-g)/d+4)/6;break;}}
+  return {h:Math.round(h*360),s:Math.round(s*100),l:Math.round(l*100)};
+}
+
+function cpUpdateUI() {
+  CP.hex = hslToHex(CP.h, CP.s, CP.l);
+  document.getElementById('cpSlBg').style.background = 'hsl('+CP.h+',100%,50%)';
+  document.getElementById('cpPreview').style.background = CP.hex;
+  document.getElementById('cpHex').value = CP.hex.toUpperCase();
+  // Thumb position in SL box: s=0..100 → x, l=100..0 (bright=top)
+  // In the box: x=saturation(0=white,100=pure), y=lightness(0=black,100=bright)
+  // Approximate: x = s%, y = (100-l*2)% clamped when s>0
+  var xPct = CP.s;
+  var yPct = 100 - (CP.l / (1 - CP.s/200)) * 100;
+  if(isNaN(yPct)||yPct<0) yPct=0; if(yPct>100) yPct=100;
+  document.getElementById('cpSlThumb').style.left = xPct + '%';
+  document.getElementById('cpSlThumb').style.top = yPct + '%';
+  document.getElementById('cpSlThumb').style.background = CP.hex;
+  // Hue thumb
+  document.getElementById('cpHueThumb').style.left = (CP.h/360*100) + '%';
+}
+
+function openPicker(target) {
+  CP.target = target;
+  var titles = {bg:'Цвет фона', ic:'Цвет иконки', cg1:'Цвет 1', cg2:'Цвет 2'};
+  document.getElementById('cpTitle').textContent = titles[target] || 'Цвет';
+  // Get current color
+  var cur = target==='bg'?S.bgCol: target==='ic'?S.icCol: target==='cg1'?cgC1: cgC2;
+  var hsl = hexToHsl(cur);
+  CP.h=hsl.h; CP.s=hsl.s; CP.l=hsl.l;
+  // Build swatches
+  document.getElementById('cpSwatches').innerHTML = CP_SWATCHES.map(function(c){
+    var safe=c.replace(/#/,'%23'); return '<div class="cp-sw" style="background:'+c+'" onclick="cpPickSwatch(this)" data-c="'+c+'"></div>';
+  }).join('');
+  cpUpdateUI();
+  document.getElementById('cpOv').classList.add('open');
+}
+
+function closePicker() {
+  document.getElementById('cpOv').classList.remove('open');
+}
+
+function cpPickSwatch(el) {
+  var hex = el.dataset.c;
+  var hsl = hexToHsl(hex); CP.h=hsl.h; CP.s=hsl.s; CP.l=hsl.l;
+  cpUpdateUI();
+}
+
+function confirmPicker() {
+  closePicker();
+  applyPickerColor(CP.target, CP.hex);
+}
+
+function applyPickerColor(target, hex) {
+  if (target==='bg') {
+    S.bgCol=hex; document.getElementById('bgSw').style.background=hex; document.getElementById('bgHx').textContent=hex;
+  } else if (target==='ic') {
+    S.icCol=hex;
+    ['icSw','icSwG'].forEach(function(id){var el=document.getElementById(id);if(el)el.style.background=hex;});
+    ['icHx','icHxG'].forEach(function(id){var el=document.getElementById(id);if(el)el.textContent=hex;});
+  } else if (target==='cg1') {
+    cgC1=hex; document.getElementById('cg1Sw').style.background=hex; document.getElementById('cg1Hx').textContent=hex; updateCustomGradPreview();
+  } else if (target==='cg2') {
+    cgC2=hex; document.getElementById('cg2Sw').style.background=hex; document.getElementById('cg2Hx').textContent=hex; updateCustomGradPreview();
+  }
+  render();
+}
+
+// SL box drag
+(function(){
+  var sl=document.getElementById('cpSL'), dragging=false;
+  function setFromXY(x,y){
+    var r=sl.getBoundingClientRect();
+    var xPct=Math.max(0,Math.min(1,(x-r.left)/r.width));
+    var yPct=Math.max(0,Math.min(1,(y-r.top)/r.height));
+    CP.s=Math.round(xPct*100);
+    // yPct=0 → bright (l depends on s), yPct=1 → black
+    CP.l=Math.round((1-yPct)*(1-xPct/2)*100);
+    cpUpdateUI();
+  }
+  sl.addEventListener('mousedown',function(e){dragging=true;setFromXY(e.clientX,e.clientY);e.preventDefault();});
+  sl.addEventListener('touchstart',function(e){dragging=true;setFromXY(e.touches[0].clientX,e.touches[0].clientY);e.preventDefault();},{passive:false});
+  document.addEventListener('mousemove',function(e){if(dragging)setFromXY(e.clientX,e.clientY);});
+  document.addEventListener('touchmove',function(e){if(dragging)setFromXY(e.touches[0].clientX,e.touches[0].clientY);},{passive:true});
+  document.addEventListener('mouseup',function(){dragging=false;});
+  document.addEventListener('touchend',function(){dragging=false;});
+})();
+
+// Hue slider drag
+(function(){
+  var hue=document.getElementById('cpHue'), dragging=false;
+  function setH(x){var r=hue.getBoundingClientRect();CP.h=Math.round(Math.max(0,Math.min(1,(x-r.left)/r.width))*360);cpUpdateUI();}
+  hue.addEventListener('mousedown',function(e){dragging=true;setH(e.clientX);e.preventDefault();});
+  hue.addEventListener('touchstart',function(e){dragging=true;setH(e.touches[0].clientX);e.preventDefault();},{passive:false});
+  document.addEventListener('mousemove',function(e){if(dragging)setH(e.clientX);});
+  document.addEventListener('touchmove',function(e){if(dragging)setH(e.touches[0].clientX);},{passive:true});
+  document.addEventListener('mouseup',function(){dragging=false;});
+  document.addEventListener('touchend',function(){dragging=false;});
+})();
+
+// Hex input
+document.getElementById('cpHex').addEventListener('input', function(e){
+  var v=e.target.value.trim();
+  if(!v.startsWith('#')) v='#'+v;
+  if(/^#[0-9a-fA-F]{6}$/.test(v)){
+    var hsl=hexToHsl(v); CP.h=hsl.h; CP.s=hsl.s; CP.l=hsl.l; cpUpdateUI();
+  }
+});
+
+// Close on overlay click
+document.getElementById('cpOv').addEventListener('click', function(e){ if(e.target===this) closePicker(); });
+
+
+// ─────────────────────────────────────────
+// EXPORT
+// ─────────────────────────────────────────
+function grads(g) {
+  var m = g.match(/#[0-9a-fA-F]{3,6}/g);
+  return (m && m.length>=2) ? [m[0],m[1]] : ['#e05c2a','#f0a06e'];
+}
+
+async function dlPNG() {
+  var btn = document.getElementById('pngBtn');
+  btn.classList.add('loading');
+  btn.innerHTML = '<span class="material-icons-round">hourglass_top</span>…';
+  try {
+    var size = cs(), scale = 3;
+    var canvas = document.createElement('canvas');
+    canvas.width = size*scale; canvas.height = size*scale;
+    var ctx = canvas.getContext('2d');
+    ctx.scale(scale, scale);
+    var rPx = parseFloat(S.radius)/100*size;
+
+    function clip() { ctx.beginPath(); ctx.roundRect(0,0,size,size,rPx); ctx.closePath(); ctx.clip(); }
+
+    if (S.bgType !== 'none') {
+      ctx.save(); clip();
+      if (S.bgType === 'solid') { ctx.fillStyle = S.bgCol; ctx.fill(); }
+      else { var gc = grads(S.bgGrad); var g = ctx.createLinearGradient(0,0,size,size); g.addColorStop(0,gc[0]); g.addColorStop(1,gc[1]); ctx.fillStyle=g; ctx.fill(); }
+      ctx.restore();
+    }
+
+    if (S.aiUrl) {
+      var svgText = window._aiSvgCache && window._aiSvgCache[S.aiUrl];
+      await new Promise(function(res) {
+        if (svgText) {
+          // SVG from Claude — recolor and draw directly (no CORS issues)
+          var colored = svgText
+            .replace(/currentColor/g, S.icCol)
+            .replace(/width="[^"]*"/, 'width="'+S.size+'"')
+            .replace(/height="[^"]*"/, 'height="'+S.size+'"');
+          var blob = new Blob([colored], {type:'image/svg+xml'});
+          var bUrl = URL.createObjectURL(blob);
+          var im = new Image();
+          im.onload = function() {
+            ctx.save(); clip();
+            ctx.drawImage(im, S.pad, S.pad, S.size, S.size);
+            ctx.restore();
+            URL.revokeObjectURL(bUrl);
+            res();
+          };
+          im.onerror = function() { URL.revokeObjectURL(bUrl); res(); };
+          im.src = bUrl;
+        } else {
+          // Raster AI image — pixel colorize
+          var col = hexToRgb(S.icCol);
+          var tmp = new Image(); tmp.crossOrigin = 'anonymous';
+          tmp.onload = function() {
+            try {
+              var off = document.createElement('canvas'); off.width=S.size; off.height=S.size;
+              var octx = off.getContext('2d'); octx.drawImage(tmp,0,0,S.size,S.size);
+              var id = octx.getImageData(0,0,S.size,S.size); var d=id.data;
+              for (var i=0;i<d.length;i+=4){var lum=d[i]*.299+d[i+1]*.587+d[i+2]*.114;var a=Math.round((1-lum/255)*255*(d[i+3]/255));d[i]=col.r;d[i+1]=col.g;d[i+2]=col.b;d[i+3]=a;}
+              octx.putImageData(id,0,0);
+              ctx.save(); clip(); ctx.drawImage(off,S.pad,S.pad,S.size,S.size); ctx.restore();
+            } catch(e) {
+              ctx.save(); clip(); ctx.globalCompositeOperation='multiply'; ctx.drawImage(tmp,S.pad,S.pad,S.size,S.size); ctx.restore();
+            }
+            res();
+          };
+          tmp.onerror = function() { res(); };
+          tmp.src = S.aiUrl;
+        }
+      });
+    } else if (S.src === 'ph') {
+      // Fetch actual SVG from Phosphor CDN and draw it — foreignObject fails on Android
+      await new Promise(function(res, rej) {
+        var variants = [
+          'https://unpkg.com/@phosphor-icons/core@2.1.1/assets/regular/' + S.icon + '.svg',
+          'https://cdn.jsdelivr.net/npm/@phosphor-icons/core@2.1.1/assets/regular/' + S.icon + '.svg'
+        ];
+        function tryCDN(idx) {
+          if (idx >= variants.length) { rej(new Error('SVG not found')); return; }
+          fetch(variants[idx])
+            .then(function(r) {
+              if (!r.ok) { tryCDN(idx+1); return null; }
+              return r.text();
+            })
+            .then(function(svgText) {
+              if (!svgText) return;
+              // Recolor: replace currentColor / black with icCol
+              var colored = svgText
+                .replace(/fill="[^"]*"/g, 'fill="'+S.icCol+'"')
+                .replace(/stroke="[^"]*"/g, 'stroke="'+S.icCol+'"')
+                .replace(/currentColor/g, S.icCol)
+                // Set explicit size
+                .replace(/<svg([^>]*)>/, '<svg$1 width="'+S.size+'" height="'+S.size+'">');
+              var blob = new Blob([colored], {type:'image/svg+xml'});
+              var url = URL.createObjectURL(blob);
+              var im = new Image();
+              im.onload = function() {
+                ctx.save(); clip();
+                ctx.drawImage(im, S.pad, S.pad, S.size, S.size);
+                ctx.restore();
+                URL.revokeObjectURL(url);
+                res();
+              };
+              im.onerror = function() { URL.revokeObjectURL(url); tryCDN(idx+1); };
+              im.src = url;
+            })
+            .catch(function() { tryCDN(idx+1); });
+        }
+        tryCDN(0);
+      });
+    } else {
+      var fam = S.src==='ms' ? '"Material Symbols Rounded"' : '"Material Icons Round"';
+      try { await document.fonts.load(S.size*scale+'px '+fam); } catch(e){}
+      ctx.save(); clip();
+      ctx.fillStyle = S.icCol;
+      ctx.font = S.size+'px '+fam;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(S.icon, size/2, size/2);
+      ctx.restore();
+    }
+
+    var dataUrl;
+    try { dataUrl = canvas.toDataURL('image/png'); }
+    catch(e) {
+      if (S.aiUrl) { window.open(S.aiUrl,'_blank'); toast('Открыто в новой вкладке — сохрани вручную'); return; }
+      throw e;
+    }
+    var a = document.createElement('a');
+    a.download = (S.aiUrl?'ai':S.icon)+'_reiicons.png';
+    a.href = dataUrl; a.click();
+    toast('✓ PNG сохранён — 3× разрешение');
+  } catch(e) { console.error(e); toast('Ошибка экспорта', 'err'); }
+  btn.classList.remove('loading');
+  btn.innerHTML = '<span class="material-icons-round">download</span>PNG';
+}
+
+function cpCSS() {
+  var size=cs(), rPx=Math.round(parseFloat(S.radius)/100*size);
+  var bg = S.bgType==='solid'?'background-color:'+S.bgCol+';':S.bgType==='gradient'?'background:'+S.bgGrad+';':'background:transparent;';
+  var sh = S.shadow?'\n  box-shadow:0 16px 48px rgba(0,0,0,.4);':'';
+  navigator.clipboard.writeText('.icon-wrap{\n  width:'+size+'px;\n  height:'+size+'px;\n  '+bg+'\n  border-radius:'+rPx+'px;\n  display:flex;\n  align-items:center;\n  justify-content:center;'+sh+'\n}\n.icon{\n  font-size:'+S.size+'px;\n  color:'+S.icCol+';\n}').then(function(){ toast('✓ CSS скопирован'); });
+}
+function cpSVG() {
+  var size=cs(), rPx=Math.round(parseFloat(S.radius)/100*size);
+  var bg='';
+  if(S.bgType==='solid') bg='<rect width="'+size+'" height="'+size+'" rx="'+rPx+'" fill="'+S.bgCol+'"/>';
+  else if(S.bgType==='gradient'){var gc=grads(S.bgGrad);bg='<defs><linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="'+gc[0]+'"/><stop offset="100%" stop-color="'+gc[1]+'"/></linearGradient></defs><rect width="'+size+'" height="'+size+'" rx="'+rPx+'" fill="url(#g)"/>';}
+  navigator.clipboard.writeText('<svg xmlns="http://www.w3.org/2000/svg" width="'+size+'" height="'+size+'">\n'+bg+'\n<text x="'+size/2+'" y="'+size/2+'" text-anchor="middle" dominant-baseline="central" font-size="'+S.size+'" fill="'+S.icCol+'">'+S.icon+'</text>\n</svg>').then(function(){ toast('✓ SVG скопирован'); });
+}
+
+// ─────────────────────────────────────────
+// TOAST
+// ─────────────────────────────────────────
+function toast(msg, type) {
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast' + (type==='err'?' err':type==='ai'?' ai':'');
+  t.classList.add('show');
+  setTimeout(function(){ t.classList.remove('show'); }, 2600);
+}
+
+// ─────────────────────────────────────────
+// CUSTOM GRADIENT
+// ─────────────────────────────────────────
+var cgC1 = '#e05c2a', cgC2 = '#f0a06e', cgAngle = 135;
+
+function updateCustomGradPreview() {
+  var g = 'linear-gradient(' + cgAngle + 'deg,' + cgC1 + ',' + cgC2 + ')';
+  document.getElementById('customGradPreview').style.background = g;
+}
+
+// cg1Pick handled by custom picker
+// cg2Pick handled by custom picker
+document.getElementById('cgAngleR').addEventListener('input', function(e) {
+  cgAngle = +e.target.value;
+  document.getElementById('cgAngleV').textContent = cgAngle + '°';
+  updateCustomGradPreview();
+});
+
+function applyCustomGrad() {
+  var g = 'linear-gradient(' + cgAngle + 'deg,' + cgC1 + ',' + cgC2 + ')';
+  S.bgGrad = g;
+  // Deselect preset swatches
+  document.querySelectorAll('#gradSwatches .gs').forEach(function(s){ s.classList.remove('active'); });
+  render();
+  toast('✓ Градиент применён');
+}
+
+// ─────────────────────────────────────────
+// INIT
+// ─────────────────────────────────────────
+render();
+</script>
+</body>
+</html>
