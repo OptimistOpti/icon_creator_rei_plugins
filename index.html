@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
+<title>Rei Icons — improved</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=IBM+Plex+Mono:wght@400;500&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+<script src="https://unpkg.com/@phosphor-icons/web@2.1.1"></script>
+<style>
+:root{--bg:#0f1013;--sf:#17181d;--sf2:#1e2027;--sf3:#242732;--bd:#2f3342;--tx:#f1f3f8;--mut:#9aa2b5;--ac:#ff6a2b;--acg:rgba(255,106,43,.18);--ai:#7c6af7;--aig:rgba(124,106,247,.18);--ok:#31c48d;--danger:#ef4444;--r:14px;--stage:112px}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{font-family:'DM Sans',system-ui,sans-serif;background:linear-gradient(180deg,#0b0c10,#111319 24%,#111319);color:var(--tx);overflow:hidden}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+img{max-width:100%;display:block}
+.topbar{height:64px;padding:10px 14px;border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:12px;background:rgba(15,16,19,.92);backdrop-filter:blur(16px);position:sticky;top:0;z-index:50}
+.brand{font-family:'Syne',sans-serif;font-weight:800;font-size:20px;letter-spacing:-.04em;white-space:nowrap}.brand span{color:var(--ac)}
+.sourceRow,.actionRow{display:flex;align-items:center;gap:6px;min-width:0}.sourceRow{overflow:auto;scrollbar-width:none}.sourceRow::-webkit-scrollbar{display:none}
+.chip,.iconBtn,.seg button,.miniBtn,.ghost,.primary,.layerAction,.mobileBtn{border:1px solid var(--bd);background:var(--sf2);color:var(--tx);border-radius:12px;transition:.18s ease}
+.chip{padding:8px 10px;font-size:12px;white-space:nowrap}.chip.on{background:var(--ac);border-color:var(--ac);color:#fff}.chip.ai{border-color:rgba(124,106,247,.35);color:#c9c0ff}
+.ghost,.primary,.miniBtn,.iconBtn,.layerAction,.mobileBtn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:9px 12px;font-size:12px}
+.primary{background:var(--ac);border-color:var(--ac);color:#fff}.primary:hover{transform:translateY(-1px);box-shadow:0 10px 26px var(--acg)}
+.ghost:hover,.miniBtn:hover,.iconBtn:hover,.layerAction:hover,.mobileBtn:hover,.chip:hover{border-color:var(--ac);color:var(--ac)}
+.topbar .sp{flex:1}
+.app{height:calc(100dvh - 64px);display:grid;grid-template-columns:minmax(0,1fr) 380px;overflow:hidden}
+.stagePane{display:flex;flex-direction:column;min-width:0;overflow:hidden}
+.stageTop{padding:14px 18px 8px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.pills{display:flex;gap:8px;flex-wrap:wrap}.pill{padding:6px 10px;border-radius:999px;background:var(--sf);border:1px solid var(--bd);font-size:11px;color:var(--mut)}.pill b{color:var(--tx)}
+.stageWrap{flex:1;display:flex;align-items:center;justify-content:center;padding:20px;overflow:auto;background:radial-gradient(circle at 50% 30%,rgba(255,106,43,.08),transparent 38%),radial-gradient(circle at 70% 80%,rgba(124,106,247,.1),transparent 30%)}
+.stageArea{position:relative;min-width:320px;min-height:320px;display:flex;align-items:center;justify-content:center}
+#canvasWrap{position:relative;padding:26px;border-radius:28px;background:rgba(255,255,255,.02);border:1px dashed rgba(255,255,255,.06)}
+#canvas{position:relative;width:var(--stage);height:var(--stage);border-radius:24px;overflow:hidden;box-shadow:0 18px 56px rgba(0,0,0,.45),0 4px 14px rgba(0,0,0,.2);touch-action:none;user-select:none}
+#canvas.grid::before,#canvas.grid::after{content:'';position:absolute;inset:0;pointer-events:none}#canvas.grid::before{background-image:linear-gradient(rgba(255,255,255,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px);background-size:16px 16px;opacity:.55}#canvas.grid::after{border:1px dashed rgba(255,255,255,.08);border-radius:inherit}
+.layer{position:absolute;display:flex;align-items:center;justify-content:center;transform-origin:center;outline:1.5px solid transparent;outline-offset:2px;touch-action:none}.layer.sel{outline-color:rgba(255,255,255,.68)}.layer.locked{cursor:default}.layer:not(.locked){cursor:grab}.layer.dragging{cursor:grabbing}
+.snap{position:absolute;background:rgba(255,255,255,.46);pointer-events:none;opacity:0;z-index:90}.snap.h{left:0;right:0;height:1px;top:50%}.snap.v{top:0;bottom:0;width:1px;left:50%}
+.panel{border-left:1px solid var(--bd);background:rgba(20,21,27,.96);display:flex;flex-direction:column;min-height:0}.panelScroll{flex:1;overflow:auto;padding:14px;display:flex;flex-direction:column;gap:12px}.panelScroll::-webkit-scrollbar{width:6px}.panelScroll::-webkit-scrollbar-thumb{background:#2b3040;border-radius:999px}
+.card{background:var(--sf);border:1px solid var(--bd);border-radius:18px;padding:14px;display:flex;flex-direction:column;gap:12px}.secTitle{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--mut)}
+.row{display:flex;gap:8px;align-items:center}.row.wrap{flex-wrap:wrap}.row.between{justify-content:space-between}.grow{flex:1}
+label.t{font-size:12px;color:var(--tx)}.help{font-size:11px;color:var(--mut);line-height:1.5}.mono{font-family:'IBM Plex Mono',monospace}
+.text,.select,.hex,textarea.aiPrompt{width:100%;background:var(--sf2);border:1px solid var(--bd);border-radius:12px;color:var(--tx);padding:11px 12px;outline:none}.text:focus,.select:focus,.hex:focus,textarea.aiPrompt:focus{border-color:var(--ac);box-shadow:0 0 0 4px var(--acg)}
+.rangeWrap{display:flex;flex-direction:column;gap:6px}.rangeHead{display:flex;justify-content:space-between;gap:10px;font-size:12px}input[type=range]{width:100%;accent-color:var(--ac)}
+.swatchWrap{display:grid;grid-template-columns:1fr 110px;gap:8px}.swatch{height:44px;border-radius:12px;border:1px solid var(--bd);background:#fff}
+.seg{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}.seg button{padding:9px 8px;font-size:11px}.seg button.on{background:var(--sf3);color:#fff;border-color:var(--ac)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:8px}.three{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.toggle{width:44px;height:24px;background:#303547;border-radius:999px;position:relative;border:1px solid #394055;cursor:pointer}.toggle::after{content:'';width:18px;height:18px;position:absolute;top:2px;left:2px;border-radius:50%;background:#fff;transition:.18s}.toggle.on{background:var(--ac)}.toggle.on::after{transform:translateX(20px)}
+.layerCard{padding:0;overflow:hidden}.layerHead{padding:14px;border-bottom:1px solid var(--bd);display:flex;justify-content:space-between;align-items:center}.layerList{max-height:240px;overflow:auto;padding:10px;display:flex;flex-direction:column;gap:8px}.layerItem{display:grid;grid-template-columns:44px minmax(0,1fr) auto;gap:10px;align-items:center;padding:10px;border-radius:14px;background:var(--sf2);border:1px solid transparent}.layerItem.on{border-color:var(--ac);background:var(--acg)}.layerPreview{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.04);overflow:hidden}.layerMeta{min-width:0}.layerName{font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.layerSub{font-size:11px;color:var(--mut)}.layerBtns{display:flex;gap:6px}
+textarea.aiPrompt{min-height:80px;resize:vertical}.aiBox{display:none;border:1px solid rgba(124,106,247,.34);background:linear-gradient(180deg,rgba(124,106,247,.08),rgba(124,106,247,.02));border-radius:14px;overflow:hidden}.aiBox.show{display:block}.aiBox img{aspect-ratio:1/1;object-fit:cover;width:100%}.aiStatus{padding:10px 12px;font-size:12px;color:#c8c0ff}
+.modal{position:fixed;inset:0;background:rgba(5,8,14,.72);backdrop-filter:blur(12px);display:none;align-items:flex-end;justify-content:center;z-index:200}.modal.show{display:flex}.modalPanel{width:min(980px,100%);height:min(88dvh,860px);background:var(--sf);border:1px solid var(--bd);border-bottom:none;border-radius:24px 24px 0 0;display:flex;flex-direction:column;overflow:hidden}
+.modalHead{padding:14px;border-bottom:1px solid var(--bd);display:flex;flex-direction:column;gap:10px}.browserGrid{padding:14px;overflow:auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(86px,1fr));gap:8px}.browserTile{padding:10px 6px;border-radius:14px;border:1px solid var(--bd);background:var(--sf2);display:flex;flex-direction:column;align-items:center;gap:8px;min-height:86px}.browserTile:hover,.browserTile.on{border-color:var(--ac);background:var(--acg)}.browserTile .nm{font-size:9px;color:var(--mut);text-align:center;line-height:1.25;word-break:break-word}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(12px);padding:10px 14px;border-radius:999px;background:#f4f7ff;color:#0c1118;font-size:12px;opacity:0;pointer-events:none;transition:.2s;z-index:500}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}.toast.err{background:#ef4444;color:#fff}.toast.ai{background:#7c6af7;color:#fff}
+.mobileBar{display:none;position:fixed;left:12px;right:12px;bottom:calc(10px + env(safe-area-inset-bottom));z-index:120;background:rgba(20,21,27,.92);backdrop-filter:blur(16px);border:1px solid var(--bd);border-radius:18px;padding:8px;grid-template-columns:repeat(4,1fr);gap:8px}
+.kbd{display:inline-flex;align-items:center;justify-content:center;min-width:22px;height:22px;padding:0 6px;border-radius:8px;background:var(--sf3);border:1px solid var(--bd);font:11px 'IBM Plex Mono',monospace;color:var(--mut)}
+@media (max-width:1024px){.app{grid-template-columns:1fr 350px}}
+@media (max-width:840px){body{overflow:auto}.app{display:block;height:auto;min-height:calc(100dvh - 64px)}.panel{border-left:none;border-top:1px solid var(--bd)}.stageWrap{padding:14px 12px 92px}.stageArea{min-width:0;width:100%}.panelScroll{padding-bottom:92px}.mobileBar{display:grid}.topbar{padding:10px 12px;height:auto;min-height:64px;flex-wrap:wrap}.topbar .sp{display:none}.actionRow{width:100%;justify-content:space-between}}
+@media (max-width:520px){.three,.two,.seg{grid-template-columns:1fr}.swatchWrap{grid-template-columns:1fr}.browserGrid{grid-template-columns:repeat(auto-fill,minmax(72px,1fr))}.chip,.ghost,.primary,.miniBtn,.mobileBtn{font-size:11px;padding:9px 10px}}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">Rei<span>Icons</span></div>
+  <div class="sourceRow" id="topSources"></div>
+  <div class="sp"></div>
+  <div class="actionRow">
+    <button class="ghost" id="undoBtn">↶ Undo</button>
+    <button class="ghost" id="redoBtn">↷ Redo</button>
+    <button class="ghost" id="importBtn">Импорт JSON</button>
+    <button class="primary" id="exportPngTop">Экспорт PNG</button>
+  </div>
+</header>
+
+<div class="app">
+  <section class="stagePane">
+    <div class="stageTop">
+      <div class="pills">
+        <div class="pill">Слоёв: <b id="statLayers">0</b></div>
+        <div class="pill">Выбрано: <b id="statIcon">—</b></div>
+        <div class="pill">Источник: <b id="statSrc">—</b></div>
+        <div class="pill">Канвас: <b id="statCanvas">112×112</b></div>
+      </div>
+      <div class="row wrap">
+        <button class="miniBtn" id="centerBtn">Центр</button>
+        <button class="miniBtn" id="fitBtn">Fit</button>
+        <button class="miniBtn" id="browserBtn">Браузер иконок</button>
+      </div>
+    </div>
+    <div class="stageWrap">
+      <div class="stageArea">
+        <div id="canvasWrap">
+          <div id="canvas">
+            <div class="snap h" id="snapH"></div>
+            <div class="snap v" id="snapV"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <aside class="panel">
+    <div class="panelScroll">
+      <section class="card">
+        <div class="secTitle">Проект</div>
+        <div class="rangeWrap">
+          <div class="rangeHead"><span>Размер канваса</span><span class="mono" id="canvasSizeVal">112px</span></div>
+          <input type="range" id="canvasSize" min="64" max="256" step="8" value="112">
+        </div>
+        <div class="row wrap">
+          <label class="t grow">Тип фона</label>
+          <div class="seg grow">
+            <button data-bg="solid" class="on">Цвет</button>
+            <button data-bg="gradient">Градиент</button>
+            <button data-bg="none">Нет</button>
+          </div>
+        </div>
+        <div id="solidBgBox" class="two">
+          <div>
+            <div class="help">Цвет фона</div>
+            <div class="swatchWrap"><input type="color" id="bgColor" class="swatch" value="#ff6a2b"><input class="hex mono" id="bgColorHex" value="#FF6A2B"></div>
+          </div>
+          <div>
+            <div class="help">Цвет по умолчанию для новых слоёв</div>
+            <div class="swatchWrap"><input type="color" id="defaultIconColor" class="swatch" value="#ffffff"><input class="hex mono" id="defaultIconColorHex" value="#FFFFFF"></div>
+          </div>
+        </div>
+        <div id="gradientBgBox" class="three" style="display:none">
+          <div><div class="help">Градиент: цвет 1</div><div class="swatchWrap"><input type="color" id="grad1" class="swatch" value="#ff6a2b"><input class="hex mono" id="grad1Hex" value="#FF6A2B"></div></div>
+          <div><div class="help">Градиент: цвет 2</div><div class="swatchWrap"><input type="color" id="grad2" class="swatch" value="#ffb08b"><input class="hex mono" id="grad2Hex" value="#FFB08B"></div></div>
+          <div class="rangeWrap"><div class="rangeHead"><span>Угол</span><span class="mono" id="gradAngleVal">135°</span></div><input type="range" id="gradAngle" min="0" max="360" step="5" value="135"></div>
+        </div>
+        <div class="two">
+          <div class="rangeWrap"><div class="rangeHead"><span>Скругление</span><span class="mono" id="radiusVal">22%</span></div><input type="range" id="bgRadius" min="0" max="50" step="1" value="22"></div>
+          <div class="rangeWrap"><div class="rangeHead"><span>Zoom сцены</span><span class="mono" id="stageZoomVal">1×</span></div><input type="range" id="stageZoom" min="50" max="250" step="5" value="100"></div>
+        </div>
+        <div class="row between"><span>Тень</span><div class="toggle on" id="shadowToggle"></div></div>
+        <div class="row between"><span>Внутренняя рамка</span><div class="toggle" id="borderToggle"></div></div>
+        <div class="row between"><span>Сетка на сцене</span><div class="toggle on" id="gridToggle"></div></div>
+        <div class="secTitle">Быстрые компоновки</div>
+        <div class="three">
+          <button class="miniBtn" data-layout="solo">Solo</button>
+          <button class="miniBtn" data-layout="badge">Badge</button>
+          <button class="miniBtn" data-layout="split">Split</button>
+        </div>
+        <div class="help">Подсказка: на ПК колесо мыши меняет размер выбранного слоя, <span class="kbd">Shift</span> + колесо — поворот. На телефоне слой двигается пальцем, а панель снизу даёт быстрые действия.</div>
+      </section>
+
+      <section class="card">
+        <div class="secTitle">Выбранный слой</div>
+        <input class="text" id="layerName" placeholder="Название слоя">
+        <input class="text mono" id="iconInput" placeholder="home / house / mdi:home">
+        <div class="two">
+          <button class="ghost" id="browseLayerBtn">Открыть браузер</button>
+          <select class="select" id="layerBlend">
+            <option value="normal">normal</option>
+            <option value="multiply">multiply</option>
+            <option value="screen">screen</option>
+            <option value="overlay">overlay</option>
+            <option value="soft-light">soft-light</option>
+            <option value="difference">difference</option>
+          </select>
+        </div>
+        <div class="rangeWrap"><div class="rangeHead"><span>Размер</span><span class="mono" id="layerSizeVal">64px</span></div><input type="range" id="layerSize" min="12" max="200" step="1" value="64"></div>
+        <div class="two">
+          <div class="rangeWrap"><div class="rangeHead"><span>X</span><span class="mono" id="layerXVal">50%</span></div><input type="range" id="layerX" min="0" max="100" step="1" value="50"></div>
+          <div class="rangeWrap"><div class="rangeHead"><span>Y</span><span class="mono" id="layerYVal">50%</span></div><input type="range" id="layerY" min="0" max="100" step="1" value="50"></div>
+        </div>
+        <div class="two">
+          <div class="rangeWrap"><div class="rangeHead"><span>Поворот</span><span class="mono" id="layerRotVal">0°</span></div><input type="range" id="layerRot" min="0" max="360" step="1" value="0"></div>
+          <div class="rangeWrap"><div class="rangeHead"><span>Прозрачность</span><span class="mono" id="layerOpacityVal">100%</span></div><input type="range" id="layerOpacity" min="0" max="100" step="1" value="100"></div>
+        </div>
+        <div class="swatchWrap"><input type="color" id="layerColor" class="swatch" value="#ffffff"><input class="hex mono" id="layerColorHex" value="#FFFFFF"></div>
+        <div class="three">
+          <button class="miniBtn" id="flipBtn">Отразить</button>
+          <button class="miniBtn" id="toggleVisBtn">Скрыть</button>
+          <button class="miniBtn" id="toggleLockBtn">Блок.</button>
+          <button class="miniBtn" id="duplicateBtn">Дубль</button>
+          <button class="miniBtn" id="moveUpBtn">Наверх</button>
+          <button class="miniBtn" id="moveDownBtn">Вниз</button>
+          <button class="miniBtn" id="centerXBtn">Центр X</button>
+          <button class="miniBtn" id="centerYBtn">Центр Y</button>
+          <button class="miniBtn" id="deleteBtn" style="border-color:rgba(239,68,68,.4)">Удалить</button>
+        </div>
+        <div class="help" id="layerHint">Слой не выбран. Нажми на иконку в центре или добавь новый слой.</div>
+      </section>
+
+      <section class="card">
+        <div class="secTitle">AI-иконка</div>
+        <textarea class="aiPrompt" id="aiPrompt" placeholder="Например: minimal white rocket icon, bold geometric, no text"></textarea>
+        <div class="two">
+          <button class="ghost" id="aiGenBtn">Сгенерировать</button>
+          <button class="ghost" id="aiApplyBtn">Применить к слою</button>
+        </div>
+        <div class="aiBox" id="aiBox">
+          <div class="aiStatus" id="aiStatus">Ожидание…</div>
+          <img id="aiImg" alt="AI result">
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="secTitle">Экспорт и проект</div>
+        <div class="three">
+          <button class="primary" id="exportPngBtn">PNG</button>
+          <button class="ghost" id="exportJsonBtn">JSON</button>
+          <button class="ghost" id="copyCssBtn">CSS</button>
+        </div>
+        <div class="three">
+          <button class="ghost" id="saveLocalBtn">Сохранить</button>
+          <button class="ghost" id="loadLocalBtn">Загрузить</button>
+          <button class="ghost" id="shortcutsBtn">Шорткаты</button>
+        </div>
+        <button class="ghost" id="resetBtn">Сбросить проект</button>
+      </section>
+
+      <section class="card layerCard">
+        <div class="layerHead">
+          <div>
+            <div class="secTitle">Слои</div>
+            <div class="help">Список, видимость, блокировка</div>
+          </div>
+          <button class="primary" id="addLayerBtn">+ Новый слой</button>
+        </div>
+        <div class="layerList" id="layerList"></div>
+      </section>
+    </div>
+  </aside>
+</div>
+
+<div class="mobileBar">
+  <button class="mobileBtn" id="mobileAdd">+ Слой</button>
+  <button class="mobileBtn" id="mobileBrowse">Иконки</button>
+  <button class="mobileBtn" id="mobileUndo">Undo</button>
+  <button class="mobileBtn" id="mobileExport">PNG</button>
+</div>
+
+<div class="modal" id="browserModal">
+  <div class="modalPanel">
+    <div class="modalHead">
+      <div class="row between"><strong>Браузер иконок</strong><button class="ghost" id="closeBrowser">Закрыть</button></div>
+      <input class="text mono" id="browserSearch" placeholder="Поиск: home / star / cart / mdi:rocket">
+      <div class="sourceRow" id="modalSources"></div>
+      <div class="sourceRow" id="browserCats"></div>
+    </div>
+    <div class="browserGrid" id="browserGrid"></div>
+  </div>
+</div>
+
+<div class="modal" id="shortcutsModal">
+  <div class="modalPanel" style="height:auto;max-width:760px">
+    <div class="modalHead">
+      <div class="row between"><strong>Горячие клавиши</strong><button class="ghost" id="closeShortcuts">Закрыть</button></div>
+      <div class="help">
+        <div><span class="kbd">Del</span> удалить слой • <span class="kbd">⌘/Ctrl</span> + <span class="kbd">D</span> дублировать • <span class="kbd">⌘/Ctrl</span> + <span class="kbd">Z</span> undo • <span class="kbd">⌘/Ctrl</span> + <span class="kbd">Shift</span> + <span class="kbd">Z</span> redo</div>
+        <div><span class="kbd">←↑↓→</span> сдвиг слоя • <span class="kbd">Shift</span> + стрелки — быстрый сдвиг • <span class="kbd">Esc</span> закрыть модалку/снять выделение</div>
+        <div>Колесо мыши над сценой: размер слоя. <span class="kbd">Shift</span> + колесо: поворот.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<input type="file" id="projectFile" accept="application/json,.json" hidden>
+<div class="toast" id="toast"></div>
+
+<script>
+const ICONS={
+  mr:{Common:['home','search','favorite','star','settings','menu','close','check_circle','bolt','rocket_launch','shopping_bag','shopping_cart'],Media:['play_arrow','pause','mic','videocam','headphones','image','photo_camera','movie'],UI:['edit','delete','content_copy','download','upload','visibility','lock','palette','dashboard'],Brand:['android','auto_awesome','pets','lightbulb','travel_explore','sports_esports']},
+  ms:{Common:['home','search','favorite','star','settings','menu','close','check_circle','bolt','rocket_launch','shopping_bag','shopping_cart'],Media:['play_arrow','pause','mic','videocam','headphones','image','photo_camera','movie'],UI:['edit','delete','content_copy','download','upload','visibility','lock','palette','dashboard'],Brand:['android','auto_awesome','pets','lightbulb','travel_explore','sports_esports']},
+  ph:{Common:['house','magnifying-glass','heart','star','gear','list','x','check-circle','lightning','rocket-launch','shopping-bag','shopping-cart'],Media:['play','pause','microphone','video-camera','headphones','image','camera','film-strip'],UI:['pencil-simple','trash','copy','download-simple','upload-simple','eye','lock','palette','squares-four'],Brand:['android-logo','sparkle','paw-print','lightbulb','globe-hemisphere-west','game-controller']}
+};
+const SRC_LABELS={mr:'Mat. Round',ms:'Mat. Symbols',ph:'Phosphor',ify:'Iconify',ai:'AI'};
+let BG={type:'solid',color:'#ff6a2b',grad1:'#ff6a2b',grad2:'#ffb08b',angle:135,radius:22,shadow:true,border:false,grid:true,defaultIconColor:'#ffffff'};
+let cvSize=112,stageZoom=1,layers=[],selId=null,lid=0,history=[],future=[],drag=null,aiCurUrl='',browserSource='mr',browserCat='ALL',browserQuery='';
+const $=s=>document.querySelector(s),$$=s=>Array.from(document.querySelectorAll(s));
+function deep(v){return JSON.parse(JSON.stringify(v));}
+function mkLayer(o={}){lid+=1;return Object.assign({id:'l'+lid,name:'Layer '+lid,src:'mr',icon:'auto_awesome',aiUrl:'',x:50,y:50,size:64,rot:0,opacity:100,color:BG.defaultIconColor,blend:'normal',flipX:false,visible:true,locked:false},o);}
+function selected(){return layers.find(l=>l.id===selId)||null}
+function srcDefault(src){return src==='ph'?'house':src==='ify'?'mdi:home':'home'}
+function serialize(){return {BG,cvSize,stageZoom,layers,selId,lid};}
+function applyState(data){BG=Object.assign(BG,data.BG||{});cvSize=data.cvSize||112;stageZoom=data.stageZoom||1;layers=deep(data.layers||[]);selId=data.selId||null;lid=data.lid||layers.length||0;if(!selected()&&layers[0])selId=layers[0].id;syncControls();render();}
+function pushHistory(){history.push(deep(serialize()));if(history.length>80)history.shift();future=[];updateUndoRedo();autosave();}
+function undo(){if(!history.length)return;future.push(deep(serialize()));applyState(history.pop());updateUndoRedo();toast('Undo');}
+function redo(){if(!future.length)return;history.push(deep(serialize()));applyState(future.pop());updateUndoRedo();toast('Redo');}
+function updateUndoRedo(){$('#undoBtn').disabled=!history.length;$('#redoBtn').disabled=!future.length;}
+function toast(msg,type=''){const t=$('#toast');t.textContent=msg;t.className='toast'+(type?' '+type:'');t.classList.add('show');clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove('show'),2200)}
+function fmtHex(v){if(!v)return '#FFFFFF';v=v.trim();if(!v.startsWith('#'))v='#'+v;return /^#[0-9a-fA-F]{6}$/.test(v)?v.toUpperCase():null;}
+function bgCss(){if(BG.type==='none')return 'transparent';if(BG.type==='solid')return BG.color;return `linear-gradient(${BG.angle}deg, ${BG.grad1}, ${BG.grad2})`;}
+function setStageZoom(v){stageZoom=v;$('#canvasWrap').style.transform=`scale(${stageZoom})`;$('#stageZoomVal').textContent=(Math.round(stageZoom*100)/100)+'×';autosave();}
+function iconHtml(layer,size=24){
+  const col=layer.color||'#fff';
+  if(layer.aiUrl)return `<img src="${layer.aiUrl}" style="width:${size}px;height:${size}px;object-fit:contain;filter:drop-shadow(0 0 0 transparent)">`;
+  if(layer.src==='mr')return `<span class="material-icons-round" style="font-size:${size}px;color:${col};line-height:1">${layer.icon}</span>`;
+  if(layer.src==='ms')return `<span class="material-symbols-rounded" style="font-size:${size}px;color:${col};line-height:1;font-family:'Material Symbols Rounded';font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 48">${layer.icon}</span>`;
+  if(layer.src==='ph')return `<i class="ph ph-${layer.icon}" style="font-size:${size}px;color:${col};line-height:1"></i>`;
+  if(layer.src==='ify'){const p=layer.icon.split(':');if(p.length===2)return `<img src="https://api.iconify.design/${p[0]}/${p[1]}.svg?color=${col.replace('#','%23')}&width=${size}&height=${size}" style="width:${size}px;height:${size}px">`;}
+  return `<span class="material-icons-round" style="font-size:${size}px;color:${col}">help</span>`;
+}
+function render(){
+  document.documentElement.style.setProperty('--stage',cvSize+'px');
+  const cv=$('#canvas');
+  cv.style.background=bgCss();
+  cv.style.borderRadius=BG.radius+'%';
+  cv.style.boxShadow=BG.shadow?'0 18px 56px rgba(0,0,0,.45),0 4px 14px rgba(0,0,0,.2)':'none';
+  cv.style.outline=BG.border?'1px solid rgba(255,255,255,.18)':'none';
+  cv.classList.toggle('grid',BG.grid);
+  $$('#canvas .layer').forEach(el=>el.remove());
+  layers.forEach((layer,idx)=>{
+    if(!layer.visible)return;
+    const el=document.createElement('div');
+    el.className='layer'+(layer.id===selId?' sel':'')+(layer.locked?' locked':'');
+    el.dataset.id=layer.id;
+    el.style.left=layer.x+'%'; el.style.top=layer.y+'%';
+    el.style.width=layer.size+'px'; el.style.height=layer.size+'px';
+    el.style.opacity=layer.opacity/100; el.style.mixBlendMode=layer.blend;
+    el.style.transform=`translate(-50%,-50%) rotate(${layer.rot}deg) ${layer.flipX?'scaleX(-1)':''}`;
+    el.style.zIndex=idx+2;
+    el.innerHTML=iconHtml(layer,layer.size);
+    cv.appendChild(el);
+    el.addEventListener('pointerdown',startDrag);
+    el.addEventListener('dblclick',()=>openBrowser());
+  });
+  renderLayerList(); renderStats(); renderSourceChips(); syncControls();
+}
+function renderStats(){const sl=selected();$('#statLayers').textContent=layers.length;$('#statIcon').textContent=sl?(sl.aiUrl?'AI icon':sl.icon):'—';$('#statSrc').textContent=sl?SRC_LABELS[sl.src]:'—';$('#statCanvas').textContent=`${cvSize}×${cvSize}`}
+function renderSourceChips(){
+  const cur=selected()?.src||'mr';
+  const tpl=src=>`<button class="chip ${cur===src?'on':''} ${src==='ify'?'ai':''}" data-src="${src}">${SRC_LABELS[src]}</button>`;
+  $('#topSources').innerHTML=['mr','ms','ph','ify'].map(tpl).join('');
+  $('#modalSources').innerHTML=['mr','ms','ph','ify'].map(src=>`<button class="chip ${browserSource===src?'on':''}" data-msrc="${src}">${SRC_LABELS[src]}</button>`).join('');
+  $$('#topSources [data-src]').forEach(b=>b.onclick=()=>setSourceForSelection(b.dataset.src));
+  $$('#modalSources [data-msrc]').forEach(b=>b.onclick=()=>{browserSource=b.dataset.msrc;browserCat='ALL';renderBrowser();});
+}
+function renderLayerList(){
+  const box=$('#layerList');
+  box.innerHTML=layers.slice().reverse().map(layer=>`<div class="layerItem ${layer.id===selId?'on':''}" data-id="${layer.id}"><div class="layerPreview">${iconHtml(layer,22)}</div><div class="layerMeta"><div class="layerName">${layer.name}</div><div class="layerSub">${SRC_LABELS[layer.src]} · ${layer.aiUrl?'AI':layer.icon}</div></div><div class="layerBtns"><button class="miniBtn" data-vis="${layer.id}">${layer.visible?'👁':'🚫'}</button><button class="miniBtn" data-lock="${layer.id}">${layer.locked?'🔒':'🔓'}</button></div></div>`).join('');
+  $$('#layerList .layerItem').forEach(el=>el.onclick=e=>{if(e.target.closest('[data-vis]')||e.target.closest('[data-lock]'))return;selId=el.dataset.id;render();});
+  $$('#layerList [data-vis]').forEach(b=>b.onclick=e=>{e.stopPropagation();const l=layers.find(x=>x.id===b.dataset.vis);if(!l)return;pushHistory();l.visible=!l.visible;render();});
+  $$('#layerList [data-lock]').forEach(b=>b.onclick=e=>{e.stopPropagation();const l=layers.find(x=>x.id===b.dataset.lock);if(!l)return;pushHistory();l.locked=!l.locked;render();});
+}
+function syncControls(){
+  $('#canvasSize').value=cvSize; $('#canvasSizeVal').textContent=cvSize+'px';
+  $('#bgColor').value=BG.color; $('#bgColorHex').value=BG.color.toUpperCase();
+  $('#defaultIconColor').value=BG.defaultIconColor; $('#defaultIconColorHex').value=BG.defaultIconColor.toUpperCase();
+  $('#grad1').value=BG.grad1; $('#grad1Hex').value=BG.grad1.toUpperCase(); $('#grad2').value=BG.grad2; $('#grad2Hex').value=BG.grad2.toUpperCase();
+  $('#gradAngle').value=BG.angle; $('#gradAngleVal').textContent=BG.angle+'°'; $('#bgRadius').value=BG.radius; $('#radiusVal').textContent=BG.radius+'%';
+  setStageZoom(stageZoom); $('#stageZoom').value=Math.round(stageZoom*100);
+  $$('#shadowToggle,#borderToggle,#gridToggle').forEach(el=>el.classList.remove('on'));
+  if(BG.shadow)$('#shadowToggle').classList.add('on'); if(BG.border)$('#borderToggle').classList.add('on'); if(BG.grid)$('#gridToggle').classList.add('on');
+  $$('.seg button[data-bg]').forEach(b=>b.classList.toggle('on',b.dataset.bg===BG.type));
+  $('#solidBgBox').style.display=BG.type==='solid'?'grid':'none'; $('#gradientBgBox').style.display=BG.type==='gradient'?'grid':'none';
+  const sl=selected();
+  const dis=!sl; ['layerName','iconInput','layerBlend','layerSize','layerX','layerY','layerRot','layerOpacity','layerColor','layerColorHex'].forEach(id=>$('#'+id).disabled=dis);
+  ['flipBtn','toggleVisBtn','toggleLockBtn','duplicateBtn','moveUpBtn','moveDownBtn','centerXBtn','centerYBtn','deleteBtn','browseLayerBtn'].forEach(id=>$('#'+id).disabled=dis);
+  if(!sl){$('#layerHint').textContent='Слой не выбран. Нажми на иконку в центре или добавь новый слой.';return;}
+  $('#layerHint').textContent=`${SRC_LABELS[sl.src]} · ${sl.aiUrl?'AI-иконка':sl.icon}`;
+  $('#layerName').value=sl.name; $('#iconInput').value=sl.aiUrl?'AI result':sl.icon; $('#layerBlend').value=sl.blend; $('#layerSize').value=sl.size; $('#layerX').value=Math.round(sl.x); $('#layerY').value=Math.round(sl.y); $('#layerRot').value=sl.rot; $('#layerOpacity').value=sl.opacity; $('#layerColor').value=sl.color; $('#layerColorHex').value=sl.color.toUpperCase();
+  $('#layerSizeVal').textContent=sl.size+'px'; $('#layerXVal').textContent=Math.round(sl.x)+'%'; $('#layerYVal').textContent=Math.round(sl.y)+'%'; $('#layerRotVal').textContent=sl.rot+'°'; $('#layerOpacityVal').textContent=sl.opacity+'%';
+  $('#toggleVisBtn').textContent=sl.visible?'Скрыть':'Показать'; $('#toggleLockBtn').textContent=sl.locked?'Разблок.':'Блок.';
+}
+function addLayer(src=(selected()?.src||'mr')){pushHistory();const l=mkLayer({src,icon:srcDefault(src),color:BG.defaultIconColor});layers.push(l);selId=l.id;render();toast('Добавлен новый слой');}
+function duplicateLayer(){const sl=selected();if(!sl)return;pushHistory();const copy=deep(sl);copy.id='l'+(++lid);copy.name=sl.name+' copy';copy.x=Math.min(100,sl.x+6);copy.y=Math.min(100,sl.y+6);layers.push(copy);selId=copy.id;render();}
+function deleteLayer(){if(!selected())return;pushHistory();layers=layers.filter(l=>l.id!==selId);selId=layers[0]?.id||null;render();}
+function moveLayer(dir){const i=layers.findIndex(l=>l.id===selId);if(i<0)return;const j=i+dir;if(j<0||j>=layers.length)return;pushHistory();[layers[i],layers[j]]=[layers[j],layers[i]];render();}
+function centerLayer(axis='both'){const sl=selected();if(!sl)return;pushHistory();if(axis==='both'||axis==='x')sl.x=50;if(axis==='both'||axis==='y')sl.y=50;render();}
+function fitLayer(){const sl=selected();if(!sl)return;pushHistory();sl.x=50;sl.y=50;sl.size=Math.round(cvSize*0.58);render();}
+function setSourceForSelection(src,keepIcon=false){let sl=selected();if(!sl){addLayer(src);sl=selected();}pushHistory();sl.src=src;sl.aiUrl='';if(!keepIcon)sl.icon=srcDefault(src);sl.name=`${SRC_LABELS[src]} icon`;render();}
+function updateSelected(fn,msg){const sl=selected();if(!sl)return;pushHistory();fn(sl);render();if(msg)toast(msg)}
+function saveLocal(){localStorage.setItem('reiicons_improved_v1',JSON.stringify(serialize()));toast('Сохранено локально');}
+let autosaveTimer=null;function autosave(){clearTimeout(autosaveTimer);autosaveTimer=setTimeout(()=>localStorage.setItem('reiicons_improved_v1',JSON.stringify(serialize())),250)}
+function loadLocal(){const raw=localStorage.getItem('reiicons_improved_v1');if(!raw){toast('Нет сохранённого проекта','err');return;}applyState(JSON.parse(raw));toast('Проект загружен');}
+function resetProject(){pushHistory();BG={type:'solid',color:'#ff6a2b',grad1:'#ff6a2b',grad2:'#ffb08b',angle:135,radius:22,shadow:true,border:false,grid:true,defaultIconColor:'#ffffff'};cvSize=112;stageZoom=1;layers=[mkLayer({src:'mr',icon:'auto_awesome',name:'Main icon'})];selId=layers[0].id;render();toast('Проект сброшен');}
+function exportProject(){const blob=new Blob([JSON.stringify(serialize(),null,2)],{type:'application/json'});downloadBlob(blob,'reiicons-project.json')}
+function copyCss(){const sl=selected();const css=`.icon-card{width:${cvSize}px;height:${cvSize}px;border-radius:${BG.radius}%;background:${bgCss()};${BG.shadow?'box-shadow:0 18px 56px rgba(0,0,0,.45);':''}${BG.border?'outline:1px solid rgba(255,255,255,.18);':''}}\n/* selected layer: ${sl?sl.icon:'none'} */`;navigator.clipboard.writeText(css).then(()=>toast('CSS скопирован'));}
+function downloadBlob(blob,name){const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),800)}
+async function exportPNG(){try{const data=await renderToCanvas(4);const a=document.createElement('a');a.href=data;a.download='reiicons.png';a.click();toast('PNG готов');}catch(e){console.error(e);toast('Ошибка экспорта','err')}}
+async function renderToCanvas(scale=4){const can=document.createElement('canvas');can.width=cvSize*scale;can.height=cvSize*scale;const ctx=can.getContext('2d');ctx.scale(scale,scale);const radius=cvSize*(BG.radius/100);ctx.save();ctx.beginPath();ctx.roundRect(0,0,cvSize,cvSize,radius);ctx.clip();if(BG.type==='solid'){ctx.fillStyle=BG.color;ctx.fillRect(0,0,cvSize,cvSize)}else if(BG.type==='gradient'){const rad=BG.angle*Math.PI/180,x=Math.cos(rad),y=Math.sin(rad),cx=cvSize/2,cy=cvSize/2,len=cvSize/2;const grad=ctx.createLinearGradient(cx-x*len,cy-y*len,cx+x*len,cy+y*len);grad.addColorStop(0,BG.grad1);grad.addColorStop(1,BG.grad2);ctx.fillStyle=grad;ctx.fillRect(0,0,cvSize,cvSize)}ctx.restore();for(const layer of layers){if(!layer.visible)continue;ctx.save();ctx.globalAlpha=layer.opacity/100;ctx.globalCompositeOperation=layer.blend==='normal'?'source-over':layer.blend;ctx.translate(cvSize*layer.x/100,cvSize*layer.y/100);ctx.rotate(layer.rot*Math.PI/180);if(layer.flipX)ctx.scale(-1,1);await drawLayerToCtx(ctx,layer);ctx.restore()}return can.toDataURL('image/png')}
+async function drawLayerToCtx(ctx,layer){const size=layer.size,ox=-size/2,oy=-size/2;if(layer.aiUrl){await drawUrl(ctx,layer.aiUrl,ox,oy,size,size);return}if(layer.src==='ify'){const p=layer.icon.split(':');if(p.length===2){await drawUrl(ctx,`https://api.iconify.design/${p[0]}/${p[1]}.svg?color=${layer.color.replace('#','%23')}&width=${size}&height=${size}`,ox,oy,size,size)}return}if(layer.src==='ph'){await drawSvgText(ctx,`https://unpkg.com/@phosphor-icons/core@2.1.1/assets/regular/${layer.icon}.svg`,layer.color,ox,oy,size);return}const fam=layer.src==='ms'?'"Material Symbols Rounded"':'"Material Icons Round"';try{await document.fonts.load(`${size}px ${fam}`)}catch{}ctx.fillStyle=layer.color;ctx.font=`${size}px ${fam}`;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(layer.icon,0,0)}
+async function drawUrl(ctx,url,x,y,w,h){return new Promise(res=>{const im=new Image();im.crossOrigin='anonymous';im.onload=()=>{ctx.drawImage(im,x,y,w,h);res()};im.onerror=()=>res();im.src=url})}
+async function drawSvgText(ctx,url,color,x,y,size){return fetch(url).then(r=>r.text()).then(svg=>new Promise(res=>{const fixed=svg.replace(/currentColor/g,color).replace(/stroke="[^"]*"/g,`stroke="${color}"`).replace(/fill="[^"]*"/g,`fill="${color}"`);const blob=new Blob([fixed],{type:'image/svg+xml'});const u=URL.createObjectURL(blob);const im=new Image();im.onload=()=>{ctx.drawImage(im,x,y,size,size);URL.revokeObjectURL(u);res()};im.onerror=()=>{URL.revokeObjectURL(u);res()};im.src=u})).catch(()=>{})}
+function openBrowser(){$('#browserModal').classList.add('show');const sl=selected();browserSource=(sl&&sl.src!=='ai')?sl.src:'mr';browserCat='ALL';browserQuery='';$('#browserSearch').value='';renderBrowser()}
+function closeBrowser(){$('#browserModal').classList.remove('show')}
+function renderBrowser(){renderSourceChips();const cats=browserSource==='ify'?['ALL']:['ALL',...Object.keys(ICONS[browserSource]||{})];$('#browserCats').innerHTML=cats.map(c=>`<button class="chip ${browserCat===c?'on':''}" data-cat="${c}">${c}</button>`).join('');$$('#browserCats [data-cat]').forEach(b=>b.onclick=()=>{browserCat=b.dataset.cat;renderBrowser()});const grid=$('#browserGrid');if(browserSource==='ify'){const q=$('#browserSearch').value.trim();if(!q){grid.innerHTML='<div class="help">Для Iconify введи запрос, например <b>mdi:rocket</b>, <b>lucide:heart</b> или просто <b>cart</b>.</div>';return}grid.innerHTML='<div class="help">Поиск Iconify…</div>';fetch(`https://api.iconify.design/search?query=${encodeURIComponent(q)}&limit=120`).then(r=>r.json()).then(data=>{const arr=data.icons||[];grid.innerHTML=arr.map(ic=>`<button class="browserTile" data-ic="${ic}"><img src="https://api.iconify.design/${ic.replace(':','/')}.svg?color=%23ffffff&width=24&height=24"><div class="nm">${ic}</div></button>`).join('')||'<div class="help">Ничего не найдено</div>';$$('#browserGrid [data-ic]').forEach(b=>b.onclick=()=>applyBrowserIcon(b.dataset.ic,'ify'));}).catch(()=>grid.innerHTML='<div class="help">Ошибка поиска</div>');return}
+  let arr=[];const data=ICONS[browserSource]||{};Object.entries(data).forEach(([cat,list])=>{if(browserCat==='ALL'||browserCat===cat)arr.push(...list.map(ic=>({cat,ic})))});const q=$('#browserSearch').value.trim().toLowerCase();if(q)arr=arr.filter(x=>x.ic.toLowerCase().includes(q));grid.innerHTML=arr.map(x=>`<button class="browserTile" data-ic="${x.ic}" data-src="${browserSource}">${iconHtml({src:browserSource,icon:x.ic,color:'#ffffff'},24)}<div class="nm">${x.ic}</div></button>`).join('')||'<div class="help">Ничего не найдено</div>';$$('#browserGrid [data-ic]').forEach(b=>b.onclick=()=>applyBrowserIcon(b.dataset.ic,b.dataset.src||browserSource))}
+function applyBrowserIcon(icon,src){let sl=selected();if(!sl){addLayer(src);sl=selected()}pushHistory();sl.src=src;sl.aiUrl='';sl.icon=icon;sl.name=icon.split(':').pop();render();closeBrowser();toast('Иконка выбрана')}
+function startDrag(e){const id=e.currentTarget.dataset.id;const layer=layers.find(l=>l.id===id);if(!layer||layer.locked)return;selId=id;const rect=$('#canvas').getBoundingClientRect();drag={id,startX:e.clientX,startY:e.clientY,ox:layer.x,oy:layer.y,rect};e.currentTarget.classList.add('dragging');e.currentTarget.setPointerCapture(e.pointerId);render()}
+window.addEventListener('pointermove',e=>{if(!drag)return;const l=layers.find(x=>x.id===drag.id);if(!l)return;const dx=(e.clientX-drag.startX)/drag.rect.width*100,dy=(e.clientY-drag.startY)/drag.rect.height*100;let nx=drag.ox+dx,ny=drag.oy+dy;const sx=Math.abs(nx-50)<3,sy=Math.abs(ny-50)<3;l.x=sx?50:Math.max(0,Math.min(100,nx));l.y=sy?50:Math.max(0,Math.min(100,ny));$('#snapV').style.opacity=sx?1:0;$('#snapH').style.opacity=sy?1:0;render()});
+window.addEventListener('pointerup',()=>{if(!drag)return;drag=null;$('#snapV').style.opacity=0;$('#snapH').style.opacity=0;autosave()});
+$('#canvas').addEventListener('click',e=>{if(e.target.id==='canvas'){selId=null;render()}});
+$('#canvas').addEventListener('wheel',e=>{const sl=selected();if(!sl)return;e.preventDefault();pushHistory();if(e.shiftKey){sl.rot=(sl.rot+(e.deltaY>0?4:-4)+360)%360}else{sl.size=Math.max(12,Math.min(200,sl.size+(e.deltaY>0?-2:2)))}render()},{passive:false});
+function wire(){
+  $('#addLayerBtn').onclick=()=>addLayer(); $('#mobileAdd').onclick=()=>addLayer(); $('#browserBtn').onclick=openBrowser; $('#browseLayerBtn').onclick=openBrowser; $('#mobileBrowse').onclick=openBrowser; $('#closeBrowser').onclick=closeBrowser; $('#browserModal').onclick=e=>{if(e.target.id==='browserModal')closeBrowser()}; $('#browserSearch').addEventListener('input',renderBrowser);
+  $('#undoBtn').onclick=undo; $('#redoBtn').onclick=redo; $('#mobileUndo').onclick=undo; $('#centerBtn').onclick=()=>centerLayer('both'); $('#fitBtn').onclick=fitLayer; $('#duplicateBtn').onclick=duplicateLayer; $('#deleteBtn').onclick=deleteLayer; $('#moveUpBtn').onclick=()=>moveLayer(1); $('#moveDownBtn').onclick=()=>moveLayer(-1); $('#centerXBtn').onclick=()=>centerLayer('x'); $('#centerYBtn').onclick=()=>centerLayer('y'); $('#flipBtn').onclick=()=>updateSelected(sl=>sl.flipX=!sl.flipX); $('#toggleVisBtn').onclick=()=>updateSelected(sl=>sl.visible=!sl.visible); $('#toggleLockBtn').onclick=()=>updateSelected(sl=>sl.locked=!sl.locked);
+  $('#exportPngBtn').onclick=exportPNG; $('#exportPngTop').onclick=exportPNG; $('#mobileExport').onclick=exportPNG; $('#exportJsonBtn').onclick=exportProject; $('#copyCssBtn').onclick=copyCss; $('#saveLocalBtn').onclick=saveLocal; $('#loadLocalBtn').onclick=loadLocal; $('#resetBtn').onclick=resetProject;
+  $('#shortcutsBtn').onclick=()=>$('#shortcutsModal').classList.add('show'); $('#closeShortcuts').onclick=()=>$('#shortcutsModal').classList.remove('show'); $('#shortcutsModal').onclick=e=>{if(e.target.id==='shortcutsModal')$('#shortcutsModal').classList.remove('show')};
+  $('#importBtn').onclick=()=>$('#projectFile').click(); $('#projectFile').addEventListener('change',e=>{const f=e.target.files[0];if(!f)return;const fr=new FileReader();fr.onload=()=>{try{applyState(JSON.parse(fr.result));toast('JSON импортирован')}catch{toast('Неверный JSON','err')}};fr.readAsText(f)});
+  $('#canvasSize').oninput=e=>{cvSize=+e.target.value;render()}; $('#stageZoom').oninput=e=>setStageZoom(+e.target.value/100); $('#gradAngle').oninput=e=>{BG.angle=+e.target.value;render()}; $('#bgRadius').oninput=e=>{BG.radius=+e.target.value;render()};
+  [['bgColor','bgColorHex','color'],['defaultIconColor','defaultIconColorHex','defaultIconColor'],['grad1','grad1Hex','grad1'],['grad2','grad2Hex','grad2'],['layerColor','layerColorHex','layerColor']].forEach(([c,h,key])=>{const color=$('#'+c),hex=$('#'+h);color.oninput=()=>{const val=color.value.toUpperCase();hex.value=val;if(key==='layerColor'){const sl=selected();if(sl){sl.color=val;render()}}else{BG[key]=val;render()}};hex.onchange=()=>{const val=fmtHex(hex.value);if(!val){syncControls();return;}color.value=val;if(key==='layerColor'){const sl=selected();if(sl){pushHistory();sl.color=val;render()}}else{BG[key]=val;render()}}});
+  $$('.seg button[data-bg]').forEach(b=>b.onclick=()=>{BG.type=b.dataset.bg;render()}); $('#shadowToggle').onclick=()=>{BG.shadow=!BG.shadow;render()}; $('#borderToggle').onclick=()=>{BG.border=!BG.border;render()}; $('#gridToggle').onclick=()=>{BG.grid=!BG.grid;render()};
+  $('#layerName').onchange=e=>updateSelected(sl=>sl.name=e.target.value||sl.name); $('#iconInput').onchange=e=>updateSelected(sl=>{if(sl.src==='ify'&&e.target.value.includes(':'))sl.icon=e.target.value.trim();else sl.icon=e.target.value.trim().replace(/\s+/g,sl.src==='ph'?'-':'_')||srcDefault(sl.src)});
+  $('#layerBlend').onchange=e=>updateSelected(sl=>sl.blend=e.target.value); $('#layerSize').oninput=e=>{const sl=selected();if(sl){sl.size=+e.target.value;render()}}; $('#layerX').oninput=e=>{const sl=selected();if(sl){sl.x=+e.target.value;render()}}; $('#layerY').oninput=e=>{const sl=selected();if(sl){sl.y=+e.target.value;render()}}; $('#layerRot').oninput=e=>{const sl=selected();if(sl){sl.rot=+e.target.value;render()}}; $('#layerOpacity').oninput=e=>{const sl=selected();if(sl){sl.opacity=+e.target.value;render()}};
+  $$('[data-layout]').forEach(b=>b.onclick=()=>{pushHistory();if(b.dataset.layout==='solo'){layers=[mkLayer({src:'mr',icon:'auto_awesome',name:'Main icon'})]}if(b.dataset.layout==='badge'){layers=[mkLayer({src:'mr',icon:'home',name:'Main icon',size:64}),mkLayer({src:'mr',icon:'star',name:'Badge',x:78,y:78,size:26,color:'#ffd54a'})]}if(b.dataset.layout==='split'){layers=[mkLayer({src:'mr',icon:'favorite',name:'Left',x:28,y:50,size:44}),mkLayer({src:'mr',icon:'bolt',name:'Right',x:72,y:50,size:44})]}selId=layers[0].id;render();toast('Компоновка применена')});
+  $('#aiGenBtn').onclick=generateAI; $('#aiApplyBtn').onclick=applyAI;
+  document.addEventListener('keydown',e=>{const tag=(document.activeElement?.tagName||'').toLowerCase();const editing=tag==='input'||tag==='textarea'||tag==='select';if(e.key==='Escape'){closeBrowser();$('#shortcutsModal').classList.remove('show');if(!editing){selId=null;render()}return}if(editing)return; if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==='z'){e.preventDefault();e.shiftKey?redo():undo();return} if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==='d'){e.preventDefault();duplicateLayer();return} if(['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(e.key)){const sl=selected();if(!sl)return;e.preventDefault();pushHistory();const step=(e.shiftKey?10:2)/cvSize*100;if(e.key==='ArrowLeft')sl.x=Math.max(0,sl.x-step);if(e.key==='ArrowRight')sl.x=Math.min(100,sl.x+step);if(e.key==='ArrowUp')sl.y=Math.max(0,sl.y-step);if(e.key==='ArrowDown')sl.y=Math.min(100,sl.y+step);render();return} if(e.key==='Delete' || e.key==='Backspace'){e.preventDefault();deleteLayer()}})
+}
+function generateAI(){const prompt=$('#aiPrompt').value.trim();if(!prompt){toast('Опиши иконку для AI','err');return}const seed=Math.floor(Math.random()*9999999);const p=`flat vector icon, centered, white background, bold silhouette, no text, no shadow, ${prompt}`;const url=`https://image.pollinations.ai/prompt/${encodeURIComponent(p)}?width=512&height=512&model=flux&seed=${seed}`;$('#aiBox').classList.add('show');$('#aiStatus').textContent='Генерация…';const img=$('#aiImg');img.onload=()=>{$('#aiStatus').textContent='Готово. Можно применить к слою.';aiCurUrl=url;toast('AI-иконка готова','ai')};img.onerror=()=>{$('#aiStatus').textContent='Ошибка генерации';toast('AI не ответил','err')};img.src=url}
+function applyAI(){if(!aiCurUrl){toast('Сначала сгенерируй изображение','err');return}let sl=selected();if(!sl){addLayer('mr');sl=selected()}pushHistory();sl.aiUrl=aiCurUrl;sl.src='ai';sl.name='AI icon';render();toast('AI-иконка применена','ai')}
+(function init(){const raw=localStorage.getItem('reiicons_improved_v1');if(raw){try{applyState(JSON.parse(raw))}catch{resetProject()}}else{layers=[mkLayer({src:'mr',icon:'auto_awesome',name:'Main icon'})];selId=layers[0].id}wire();render();updateUndoRedo()})();
+</script>
+</body>
+</html>
